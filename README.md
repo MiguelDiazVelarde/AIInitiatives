@@ -1,153 +1,186 @@
-# Products App - Aplicación Simple con Login y Gestión de Productos
+# Products App - Simple Application with Login and Product Management
 
-Una aplicación web simple desarrollada con **TypeScript**, **Express.js** y **Node.js** que incluye sistema de autenticación y gestión de productos.
+A simple web application built with **TypeScript**, **Express.js** and **Node.js** that includes authentication system and product management.
 
-## 🚀 Características
+## 🚀 Features
 
-- ✅ **Sistema de Login/Registro** - Autenticación segura con sesiones
-- ✅ **Gestión de Productos** - CRUD completo (Crear, Leer, Actualizar, Eliminar)
-- ✅ **Formularios Interactivos** - Interfaz web responsive
-- ✅ **TypeScript** - Tipado estático para mayor robustez
-- ✅ **Seguridad** - Contraseñas encriptadas con bcrypt
-- ✅ **Sesiones** - Manejo de estado de usuario
+- ✅ **Login/Registration System** - Secure authentication with sessions
+- ✅ **Product Management** - Complete CRUD (Create, Read, Update, Delete)
+- ✅ **Interactive Forms** - Responsive web interface
+- ✅ **TypeScript** - Static typing for enhanced robustness
+- ✅ **Security** - Encrypted passwords with bcrypt
+- ✅ **Sessions** - User state management
+- ✅ **Testing** - Complete functional test suite with Gherkin/Playwright
 
-## 🛠️ Tecnologías Utilizadas
+## 🛠️ Technologies Used
 
 - **Backend**: Node.js + Express.js + TypeScript
-- **Autenticación**: express-session + bcryptjs
+- **Authentication**: express-session + bcryptjs
 - **Frontend**: HTML5 + CSS3 + JavaScript vanilla
-- **Base de Datos**: En memoria (para simplicidad)
+- **Database**: In-memory (for simplicity)
+- **Testing**: Cucumber (Gherkin) + Playwright
+- **Build**: TypeScript compiler
 
-## 📋 Prerrequisitos
+## 📋 Prerequisites
 
-- Node.js (v14 o superior)
-- npm o yarn
+- Node.js (v14 or higher)
+- npm or yarn
 
-## 🔧 Instalación y Configuración
+## 🔧 Installation and Setup
 
-1. **Clonar el repositorio**:
+1. **Clone the repository**:
 ```bash
 git clone https://github.com/MiguelDiazVelarde/iainitiatives.git
 cd iainitiatives
 ```
 
-2. **Instalar dependencias**:
+2. **Install dependencies**:
 ```bash
 npm install
 ```
 
-3. **Compilar TypeScript**:
+3. **Compile TypeScript**:
 ```bash
 npm run build
 ```
 
-4. **Iniciar la aplicación**:
+4. **Start the application**:
 ```bash
 npm start
 ```
 
-5. **Abrir en el navegador**:
-   - Ir a: http://localhost:3000
+5. **Open in browser**:
+   - Go to: http://localhost:3000
 
-## 🎯 Uso de la Aplicación
+## 🎯 Application Usage
 
-### Inicio de Sesión
-- **Usuario de prueba**: `admin`
-- **Contraseña**: `password`
+### Login
+- **Test user**: `admin`
+- **Password**: `password`
 
-O puedes registrar un nuevo usuario.
+Or you can register a new user.
 
-### Funcionalidades Disponibles
+### Available Features
 
-1. **Autenticación**:
-   - Registro de nuevos usuarios
-   - Inicio de sesión
-   - Cierre de sesión
+1. **Authentication**:
+   - New user registration
+   - Login
+   - Logout
 
-2. **Gestión de Productos**:
-   - Agregar productos con formulario
-   - Ver lista de productos
-   - Eliminar productos
-   - Campos: nombre, descripción, precio, categoría, stock
+2. **Product Management**:
+   - Add products with form
+   - View product list
+   - Delete products
+   - Fields: name, description, price, category, stock
 
-## 📁 Estructura del Proyecto
+## 📁 Project Structure
 
 ```
 src/
-├── index.ts              # Servidor principal
-├── models/               # Interfaces TypeScript
+├── index.ts              # Main server
+├── models/               # TypeScript interfaces
 │   ├── User.ts
 │   └── Product.ts
-├── services/             # Lógica de negocio
+├── services/             # Business logic
 │   ├── UserService.ts
 │   └── ProductService.ts
-├── routes/               # Rutas HTTP
+├── routes/               # HTTP routes
 │   ├── auth.ts
 │   └── products.ts
-└── middleware/           # Middleware personalizado
-    └── auth.ts
+├── middleware/           # Custom middleware
+│   └── auth.ts
+└── tests/                # Test suite
+    ├── features/         # Gherkin feature files
+    ├── step-definitions/ # Test step implementations
+    └── support/          # Test configuration
 ```
 
-## 🚀 Scripts Disponibles
+## 🚀 Available Scripts
 
+### Application
 ```bash
-npm run build    # Compilar TypeScript
-npm start        # Ejecutar en producción
-npm run dev      # Ejecutar en desarrollo (con nodemon)
-npm run clean    # Limpiar archivos compilados
+npm run build    # Compile TypeScript
+npm start        # Run in production
+npm run dev      # Run in development (with nodemon)
+npm run clean    # Clean compiled files
 ```
 
-## 🔐 Características de Seguridad
+### Testing
+```bash
+npm run test              # Run all tests
+npm run test:full         # Run tests with HTML report
+npm run test:auth         # Authentication tests only
+npm run test:products     # Product tests only
+npm run test:navigation   # Navigation tests only
+npm run test:smoke        # Quick smoke tests
+npm run test:headed       # Run tests in visible browser
+```
 
-- Contraseñas encriptadas con bcrypt
-- Sesiones seguras con express-session
-- Validación de entrada en formularios
-- Middleware de autenticación
+## 🔐 Security Features
 
-## 🌟 Próximas Mejoras
+- Encrypted passwords with bcrypt
+- Secure sessions with express-session
+- Form input validation
+- Authentication middleware
 
-- [ ] Base de datos persistente (MongoDB/PostgreSQL)
-- [ ] JWT para autenticación
-- [ ] API REST completa
-- [ ] Frontend con React/Vue
-- [ ] Subida de imágenes
-- [ ] Búsqueda y filtros
-- [ ] Roles de usuario
+## 🧪 Testing
+
+This project includes a comprehensive test suite with:
+
+- **Gherkin/BDD scenarios** in English
+- **Playwright automation** for browser testing
+- **Complete coverage** of authentication, products, and navigation
+- **HTML reports** with detailed results
+- **Cross-browser testing** (Chrome, Firefox, Safari)
+
+See [TESTING.md](TESTING.md) for detailed testing documentation.
+
+## 🌟 Future Improvements
+
+- [ ] Persistent database (MongoDB/PostgreSQL)
+- [ ] JWT for authentication
+- [ ] Complete REST API
+- [ ] Frontend with React/Vue
+- [ ] Image upload
+- [ ] Search and filters
+- [ ] User roles
+- [ ] Docker containerization
+- [ ] CI/CD pipeline
 
 ## 📝 API Endpoints
 
-### Autenticación
-- `GET /auth/login` - Página de login
-- `POST /auth/login` - Procesar login
-- `GET /auth/register` - Página de registro
-- `POST /auth/register` - Procesar registro
-- `POST /auth/logout` - Cerrar sesión
+### Authentication
+- `GET /auth/login` - Login page
+- `POST /auth/login` - Process login
+- `GET /auth/register` - Registration page
+- `POST /auth/register` - Process registration
+- `POST /auth/logout` - Logout
 
-### Productos
-- `GET /dashboard` - Dashboard principal
-- `POST /products` - Crear producto
-- `GET /api/products` - Obtener todos los productos (JSON)
-- `GET /api/products/:id` - Obtener producto por ID (JSON)
-- `PUT /api/products/:id` - Actualizar producto
-- `DELETE /products/:id` - Eliminar producto
+### Products
+- `GET /dashboard` - Main dashboard
+- `POST /products` - Create product
+- `GET /api/products` - Get all products (JSON)
+- `GET /api/products/:id` - Get product by ID (JSON)
+- `PUT /api/products/:id` - Update product
+- `DELETE /products/:id` - Delete product
 
-## 🤝 Contribuir
+## 🤝 Contributing
 
-1. Fork el proyecto
-2. Crear una rama para tu feature (`git checkout -b feature/AmazingFeature`)
-3. Commit tus cambios (`git commit -m 'Add some AmazingFeature'`)
-4. Push a la rama (`git push origin feature/AmazingFeature`)
-5. Abrir un Pull Request
+1. Fork the project
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
 
-## 📄 Licencia
+## 📄 License
 
-Este proyecto está bajo la Licencia MIT - ver el archivo [LICENSE](LICENSE) para detalles.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## 👨‍💻 Autor
+## 👨‍💻 Author
 
 **Miguel Diaz Velarde**
 - GitHub: [@MiguelDiazVelarde](https://github.com/MiguelDiazVelarde)
 
 ---
 
-⭐ ¡Si te gusta este proyecto, dale una estrella en GitHub!
+⭐ If you like this project, give it a star on GitHub!
