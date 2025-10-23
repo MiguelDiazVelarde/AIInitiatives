@@ -1,0 +1,171 @@
+[
+  {
+    "description": "  As a developer\n  I want to verify that the application works\n  So that I can ensure tests are configured correctly",
+    "elements": [
+      {
+        "description": "",
+        "id": "basic-functionality-smoke-test;verify-application-responds",
+        "keyword": "Scenario",
+        "line": 7,
+        "name": "Verify application responds",
+        "steps": [
+          {
+            "keyword": "Before",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 4834619600
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 8,
+            "name": "the application is running at \"http://localhost:3000\"",
+            "match": {
+              "location": "tests\\step-definitions\\common.steps.js:5"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 17274099
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 9,
+            "name": "I navigate to the main page",
+            "match": {
+              "location": "tests\\step-definitions\\common.steps.js:30"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 512338899
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 10,
+            "name": "I should be redirected to the login page",
+            "match": {
+              "location": "tests\\step-definitions\\common.steps.js:40"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 20097600
+            }
+          },
+          {
+            "keyword": "After",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 66788800
+            }
+          }
+        ],
+        "tags": [],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "basic-functionality-smoke-test;basic-functional-login",
+        "keyword": "Scenario",
+        "line": 12,
+        "name": "Basic functional login",
+        "steps": [
+          {
+            "keyword": "Before",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 4768961000
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 13,
+            "name": "the application is running at \"http://localhost:3000\"",
+            "match": {
+              "location": "tests\\step-definitions\\common.steps.js:5"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 11577600
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 14,
+            "name": "I am on the login page",
+            "match": {
+              "location": "tests\\step-definitions\\common.steps.js:10"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 510837300
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 15,
+            "name": "I enter username \"admin\" and password \"password\"",
+            "match": {
+              "location": "tests\\step-definitions\\common.steps.js:16"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 29840200
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 16,
+            "name": "I click the \"Login\" button",
+            "match": {
+              "location": "tests\\step-definitions\\common.steps.js:21"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 633590499
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 17,
+            "name": "I should be redirected to the dashboard",
+            "match": {
+              "location": "tests\\step-definitions\\common.steps.js:36"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 8951399
+            }
+          },
+          {
+            "keyword": "After",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 80143399
+            }
+          }
+        ],
+        "tags": [],
+        "type": "scenario"
+      }
+    ],
+    "id": "basic-functionality-smoke-test",
+    "line": 2,
+    "keyword": "Feature",
+    "name": "Basic functionality smoke test",
+    "tags": [],
+    "uri": "tests\\features\\smoke.feature"
+  }
+]

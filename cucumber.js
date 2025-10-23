@@ -1,6 +1,9 @@
 module.exports = {
   default: {
-    require: ['tests/step-definitions/**/*.ts'],
+    require: [
+      'tests/support/hooks.js',
+      'tests/step-definitions/**/*.ts'
+    ],
     requireModule: ['ts-node/register'],
     format: [
       'progress-bar',

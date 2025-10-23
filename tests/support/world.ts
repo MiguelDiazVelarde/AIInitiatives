@@ -1,7 +1,7 @@
 import { Browser, BrowserContext, Page, chromium } from '@playwright/test';
 import { setWorldConstructor, setDefaultTimeout, Before, After } from '@cucumber/cucumber';
 
-setDefaultTimeout(60 * 1000); // 60 segundos
+setDefaultTimeout(60 * 1000); // 60 seconds
 
 export class CustomWorld {
   public browser!: Browser;
@@ -12,7 +12,7 @@ export class CustomWorld {
   async init() {
     this.browser = await chromium.launch({ 
       headless: process.env.HEADLESS !== 'false',
-      slowMo: process.env.SLOW_MO ? parseInt(process.env.SLOW_MO) : 0
+      slowMo: process.env.SLOW_MO ? Number.parseInt(process.env.SLOW_MO, 10) : 0
     });
     this.context = await this.browser.newContext({
       viewport: { width: 1280, height: 720 },

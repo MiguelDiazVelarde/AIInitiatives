@@ -147,7 +147,7 @@ Then('the product {string} should remain in the list', async function (this: Cus
 Then('I should see validation messages for required fields', async function (this: CustomWorld) {
   // Check that HTML required fields are triggered
   const nameField = this.page.locator('input[name="name"]');
-  const isInvalid = await nameField.evaluate((el: HTMLInputElement) => !el.validity.valid);
+  const isInvalid = await nameField.evaluate((el: any) => !el.validity.valid);
   expect(isInvalid).toBeTruthy();
 });
 
