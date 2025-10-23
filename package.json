@@ -7,26 +7,47 @@
     "build": "tsc",
     "start": "node dist/index.js",
     "dev": "nodemon src/index.ts",
-    "clean": "rimraf dist"
+    "clean": "rimraf dist",
+    "test": "npm run test:cucumber",
+    "test:cucumber": "cucumber-js tests/features --require-module ts-node/register --require tests/step-definitions/**/*.ts --format progress-bar --format json:reports/cucumber_report.json",
+    "test:playwright": "playwright test",
+    "test:ui": "playwright test --ui",
+    "test:debug": "playwright test --debug",
+    "test:headed": "HEADLESS=false npm run test:cucumber",
+    "test:report": "node generate-report.js",
+    "test:full": "npm run test:cucumber && npm run test:report",
+    "test:auth": "cucumber-js tests/features/authentication.feature --require-module ts-node/register --require tests/step-definitions/**/*.ts",
+    "test:products": "cucumber-js tests/features/products.feature --require-module ts-node/register --require tests/step-definitions/**/*.ts",
+    "test:navigation": "cucumber-js tests/features/navigation.feature --require-module ts-node/register --require tests/step-definitions/**/*.ts",
+    "test:smoke": "cucumber-js tests/features/smoke.feature --require-module ts-node/register --require tests/step-definitions/**/*.ts"
   },
-  "keywords": ["typescript", "express", "login", "products"],
+  "keywords": [
+    "typescript",
+    "express",
+    "login",
+    "products"
+  ],
   "author": "MiguelDiazVelarde",
   "license": "MIT",
   "dependencies": {
+    "bcryptjs": "^2.4.3",
     "express": "^4.18.2",
     "express-session": "^1.17.3",
-    "bcryptjs": "^2.4.3",
     "uuid": "^9.0.0"
   },
   "devDependencies": {
+    "@cucumber/cucumber": "^12.2.0",
+    "@cucumber/pretty-formatter": "^2.3.0",
+    "@playwright/test": "^1.56.1",
+    "@types/bcryptjs": "^2.4.2",
     "@types/express": "^4.17.17",
     "@types/express-session": "^1.17.7",
-    "@types/bcryptjs": "^2.4.2",
-    "@types/uuid": "^9.0.2",
     "@types/node": "^20.4.5",
-    "typescript": "^5.1.6",
+    "@types/uuid": "^9.0.2",
+    "cucumber-html-reporter": "^7.2.0",
     "nodemon": "^3.0.1",
-    "ts-node": "^10.9.1",
-    "rimraf": "^5.0.1"
+    "rimraf": "^5.0.1",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.1.6"
   }
 }
