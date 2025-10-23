@@ -1,14 +1,12 @@
-import express, { Response } from 'express';
+import express, { Request, Response } from 'express';
 import { ProductService } from '../services/ProductService';
 import { requireAuth, AuthenticatedRequest } from '../middleware/auth';
 
 const router = express.Router();
 
-// Aplicar middleware de autenticación a todas las rutas
-router.use(requireAuth);
-
 // Dashboard con lista de productos y formulario
-router.get('/dashboard', (req: AuthenticatedRequest, res: Response) => {
+router.get('/dashboard', requireAuth, (req: Request, res: Response) => {
+  const authReq = req as AuthenticatedRequest;
   const products = ProductService.getAllProducts();
   
   res.send(`
@@ -45,7 +43,7 @@ router.get('/dashboard', (req: AuthenticatedRequest, res: Response) => {
     <body>
       <div class="container">
         <div class="header">
-          <h1>Dashboard - Bienvenido ${req.user?.username}</h1>
+          <h1>Dashboard - Bienvenido ${authReq.user?.username}</h1>
           <form action="/auth/logout" method="POST" style="margin: 0;">
             <button type="submit" class="logout-btn">Cerrar Sesión</button>
           </form>
@@ -141,8 +139,9 @@ router.get('/dashboard', (req: AuthenticatedRequest, res: Response) => {
 });
 
 // Crear producto
-router.post('/products', (req: AuthenticatedRequest, res: Response) => {
+router.post('/products', requireAuth, (req: Request, res: Response) => {
   try {
+    const authReq = req as AuthenticatedRequest;
     const { name, description, price, category, stock } = req.body;
     
     if (!name || !description || !price || !category || stock === undefined) {
@@ -152,12 +151,12 @@ router.post('/products', (req: AuthenticatedRequest, res: Response) => {
     const productData = {
       name,
       description,
-      price: parseFloat(price),
+      price: Number.parseFloat(price),
       category,
-      stock: parseInt(stock)
+      stock: Number.parseInt(stock, 10)
     };
 
-    ProductService.createProduct(productData, req.user!.id);
+    ProductService.createProduct(productData, authReq.user!.id);
     res.redirect('/dashboard');
   } catch (error) {
     console.error('Error al crear producto:', error);
@@ -166,13 +165,13 @@ router.post('/products', (req: AuthenticatedRequest, res: Response) => {
 });
 
 // Obtener todos los productos (API)
-router.get('/api/products', (req: AuthenticatedRequest, res: Response) => {
+router.get('/api/products', requireAuth, (req: Request, res: Response) => {
   const products = ProductService.getAllProducts();
   res.json(products);
 });
 
 // Obtener producto por ID (API)
-router.get('/api/products/:id', (req: AuthenticatedRequest, res: Response) => {
+router.get('/api/products/:id', requireAuth, (req: Request, res: Response) => {
   const product = ProductService.getProductById(req.params.id);
   if (!product) {
     return res.status(404).json({ error: 'Producto no encontrado' });
@@ -181,7 +180,7 @@ router.get('/api/products/:id', (req: AuthenticatedRequest, res: Response) => {
 });
 
 // Actualizar producto
-router.put('/api/products/:id', (req: AuthenticatedRequest, res: Response) => {
+router.put('/api/products/:id', requireAuth, (req: Request, res: Response) => {
   try {
     const updatedProduct = ProductService.updateProduct(req.params.id, req.body);
     if (!updatedProduct) {
@@ -195,7 +194,7 @@ router.put('/api/products/:id', (req: AuthenticatedRequest, res: Response) => {
 });
 
 // Eliminar producto
-router.delete('/products/:id', (req: AuthenticatedRequest, res: Response) => {
+router.delete('/products/:id', requireAuth, (req: Request, res: Response) => {
   try {
     const deleted = ProductService.deleteProduct(req.params.id);
     if (!deleted) {

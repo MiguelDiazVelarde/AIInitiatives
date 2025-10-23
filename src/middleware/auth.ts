@@ -1,4 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
+import 'express-session';
 
 declare module 'express-session' {
   interface SessionData {
@@ -14,12 +15,12 @@ export interface AuthenticatedRequest extends Request {
   };
 }
 
-export const requireAuth = (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
-  if (!req.session.userId) {
+export const requireAuth = (req: Request, res: Response, next: NextFunction) => {
+  if (!req.session || !req.session.userId) {
     return res.status(401).json({ error: 'Acceso no autorizado. Por favor inicia sesión.' });
   }
 
-  req.user = {
+  (req as AuthenticatedRequest).user = {
     id: req.session.userId,
     username: req.session.username || ''
   };
@@ -28,7 +29,7 @@ export const requireAuth = (req: AuthenticatedRequest, res: Response, next: Next
 };
 
 export const redirectIfAuthenticated = (req: Request, res: Response, next: NextFunction) => {
-  if (req.session.userId) {
+  if (req.session && req.session.userId) {
     return res.redirect('/dashboard');
   }
   next();

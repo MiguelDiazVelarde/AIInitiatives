@@ -28,8 +28,8 @@ app.use('/auth', authRoutes);
 app.use('/', productRoutes);
 
 // Ruta raíz - redirigir al login o dashboard
-app.get('/', (req, res) => {
-  if (req.session.userId) {
+app.get('/', (req: express.Request, res: express.Response) => {
+  if (req.session && req.session.userId) {
     res.redirect('/dashboard');
   } else {
     res.redirect('/auth/login');
@@ -46,6 +46,7 @@ app.use((err: Error, req: express.Request, res: express.Response, next: express.
 app.listen(PORT, () => {
   console.log(`🚀 Servidor ejecutándose en http://localhost:${PORT}`);
   console.log(`📝 Usuario de prueba: admin / password`);
+  console.log(`🌐 Abre tu navegador en: http://localhost:${PORT}`);
 });
 
 export default app;
