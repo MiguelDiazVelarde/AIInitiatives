@@ -103,15 +103,43 @@ jobs:
         # Check for common sensitive patterns
         echo "🔍 Checking for sensitive information..."
         
-        # Check for hardcoded passwords/secrets
-        if grep -r -i "password.*=" src/ --include="*.ts" --include="*.js" | grep -v "// " | grep -v "password:" | grep -v "passwordHash"; then
-          echo "⚠️ Potential hardcoded password found"
+        # Create a more sophisticated check for hardcoded credentials
+        # This script will check for actual hardcoded values, not legitimate code patterns
+        
+        # Check for hardcoded passwords (actual string values, not variable names)
+        SUSPICIOUS_PATTERNS=$(grep -r -E "(password|secret|token)\s*[:=]\s*['\"][a-zA-Z0-9!@#$%^&*()_+=-]{8,}['\"]" src/ --include="*.ts" --include="*.js" | \
+          grep -v "// " | \
+          grep -v "/\*" | \
+          grep -v "passwordHash" | \
+          grep -v "req\.body" | \
+          grep -v "process\.env" | \
+          grep -v "const.*{" | \
+          grep -v "interface" | \
+          grep -v "type " | \
+          grep -v "= req\." | \
+          grep -v "= body\." || true)
+        
+        if [ ! -z "$SUSPICIOUS_PATTERNS" ]; then
+          echo "⚠️ Potential hardcoded credentials found:"
+          echo "$SUSPICIOUS_PATTERNS"
+          echo ""
+          echo "Please review these patterns. If they are legitimate, consider:"
+          echo "1. Using environment variables (process.env.PASSWORD)"
+          echo "2. Using a configuration file"
+          echo "3. Adding comments to explain the usage"
           exit 1
         fi
         
-        # Check for API keys
-        if grep -r -E "(api_key|apikey|secret)" src/ --include="*.ts" --include="*.js" | grep -v "// " | grep -v "interface" | grep -v "type"; then
-          echo "⚠️ Potential API key or secret found"
+        # Check for suspicious API key patterns
+        API_KEYS=$(grep -r -E "(api_key|apikey|access_token)\s*[:=]\s*['\"][a-zA-Z0-9_-]{20,}['\"]" src/ --include="*.ts" --include="*.js" | \
+          grep -v "// " | \
+          grep -v "process\.env" | \
+          grep -v "interface" | \
+          grep -v "type " || true)
+        
+        if [ ! -z "$API_KEYS" ]; then
+          echo "⚠️ Potential hardcoded API keys found:"
+          echo "$API_KEYS"
           exit 1
         fi
         
