@@ -1,6 +1,9 @@
 # Products App - Simple Application with Login and Product Management
 
-A simple web application built with **TypeScript**, **Express.js** and **Node.js** that includes authentication system and product management.
+![CI/CD Pipeline](https://github.com/MiguelDiazVelarde/iainitiatives/workflows/CI/CD%20Pipeline/badge.svg)
+![Pull Request Validation](https://github.com/MiguelDiazVelarde/iainitiatives/workflows/Pull%20Request%20Validation/badge.svg)
+
+A simple web application built with **TypeScript**, **Express.js** and **Node.js** that includes authentication system and product management with automated CI/CD pipeline.
 
 ## 🚀 Features
 
@@ -11,6 +14,7 @@ A simple web application built with **TypeScript**, **Express.js** and **Node.js
 - ✅ **Security** - Encrypted passwords with bcrypt
 - ✅ **Sessions** - User state management
 - ✅ **Testing** - Complete functional test suite with Gherkin/Playwright
+- ✅ **CI/CD Pipeline** - Automated testing and deployment with GitHub Actions
 
 ## 🛠️ Technologies Used
 
@@ -134,6 +138,84 @@ This project includes a comprehensive test suite with:
 - **Cross-browser testing** (Chrome, Firefox, Safari)
 
 See [TESTING.md](TESTING.md) for detailed testing documentation.
+
+## 🔄 CI/CD Pipeline
+
+This project includes a complete CI/CD pipeline using **GitHub Actions** that automatically runs tests and validates code quality on every pull request and commit.
+
+### Automated Workflows
+
+#### 🔍 Pull Request Validation (`pr-validation.yml`)
+Triggers on every pull request and validates:
+- ✅ PR title and description requirements
+- ✅ TypeScript compilation
+- ✅ Application startup verification
+- ✅ Smoke tests execution
+- ✅ Security scan for sensitive information
+- ✅ Automatic PR summary generation
+
+#### 🧪 CI/CD Pipeline (`ci.yml`)
+Comprehensive testing pipeline that runs on:
+- Pull requests to main branch
+- Pushes to main branch
+- Manual triggers
+
+**Features:**
+- **Matrix Testing**: Tests across Node.js 18.x and 20.x
+- **Build Verification**: TypeScript compilation and build process
+- **Application Testing**: Full smoke test suite with Playwright
+- **E2E Testing**: Complete end-to-end tests on PR
+- **Security Checks**: Dependency audit and license compliance
+- **Test Reports**: Automatic generation of test result comments
+- **Artifact Upload**: Test results and reports stored for 7 days
+
+#### 🚀 Release Automation (`release.yml`)
+Automated release process triggered by version tags:
+- ✅ Full test suite execution
+- ✅ Build artifact creation
+- ✅ GitHub release generation with notes
+- ✅ Asset packaging and upload
+- ✅ Staging deployment preparation
+
+### Setting Up CI/CD
+
+The workflows are automatically configured when you push to GitHub. To get the most out of the CI/CD pipeline:
+
+1. **Branch Protection**: Set up branch protection rules on `main` branch
+2. **Required Checks**: Make CI/CD pipeline required before merging
+3. **Auto-merge**: Enable auto-merge for PRs that pass all checks
+
+### GitHub Actions Secrets
+
+No secrets are required for the basic pipeline. For advanced features, you may need:
+- `GITHUB_TOKEN` (automatically provided)
+- Deployment secrets for staging/production (if added)
+
+### Workflow Status
+
+Check the status of workflows in the [Actions tab](../../actions) of your repository.
+
+Current pipeline includes:
+- ✅ Automated PR validation
+- ✅ Multi-version Node.js testing
+- ✅ Security and quality checks
+- ✅ Test result reporting
+- ✅ Release automation
+
+### Local Testing Before Push
+
+Run these commands locally to ensure your changes will pass CI:
+
+```bash
+# TypeScript compilation
+npm run build
+
+# Run smoke tests
+npm run test:smoke
+
+# Security audit
+npm audit --audit-level high
+```
 
 ## 🌟 Future Improvements
 

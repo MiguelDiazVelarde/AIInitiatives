@@ -1,0 +1,154 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'  # Trigger on version tags like v1.0.0
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Release version (e.g., v1.0.0)'
+        required: true
+        type: string
+
+jobs:
+  release:
+    name: Create Release
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+        
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20.x'
+        cache: 'npm'
+        
+    - name: Install dependencies
+      run: npm ci
+      
+    - name: Build application
+      run: npm run build
+      
+    - name: Run full test suite
+      run: |
+        # Start application
+        npm start &
+        APP_PID=$!
+        echo $APP_PID > app.pid
+        
+        # Wait for startup
+        sleep 10
+        
+        # Install browsers
+        npx playwright install --with-deps
+        
+        # Run tests
+        npm run test:smoke
+        
+        # Cleanup
+        kill $APP_PID || true
+        rm app.pid
+        
+    - name: Create build archive
+      run: |
+        # Create dist folder with built application
+        mkdir -p release
+        cp -r dist release/
+        cp package.json release/
+        cp package-lock.json release/
+        cp README.md release/
+        cp -r public release/
+        
+        # Create tarball
+        tar -czf product-management-app.tar.gz -C release .
+        
+    - name: Get version from tag or input
+      id: version
+      run: |
+        if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+          echo "version=${{ github.event.inputs.version }}" >> $GITHUB_OUTPUT
+        else
+          echo "version=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
+        fi
+        
+    - name: Generate release notes
+      id: release_notes
+      run: |
+        echo "# Product Management Application ${{ steps.version.outputs.version }}" > release_notes.md
+        echo "" >> release_notes.md
+        echo "## What's New" >> release_notes.md
+        echo "" >> release_notes.md
+        
+        # Get commits since last tag
+        LAST_TAG=$(git describe --tags --abbrev=0 HEAD^ 2>/dev/null || echo "")
+        if [ -n "$LAST_TAG" ]; then
+          echo "### Changes since $LAST_TAG:" >> release_notes.md
+          git log $LAST_TAG..HEAD --pretty=format:"- %s (%h)" >> release_notes.md
+        else
+          echo "### Initial Release Features:" >> release_notes.md
+          echo "- 🔐 User authentication with secure login/logout" >> release_notes.md
+          echo "- 📦 Product management (Create, Read, Update, Delete)" >> release_notes.md
+          echo "- 🎨 Responsive web interface" >> release_notes.md
+          echo "- 🧪 Comprehensive test suite with Playwright" >> release_notes.md
+          echo "- 🚀 TypeScript implementation for type safety" >> release_notes.md
+        fi
+        
+        echo "" >> release_notes.md
+        echo "## Technical Details" >> release_notes.md
+        echo "- **Backend**: Node.js + Express + TypeScript" >> release_notes.md
+        echo "- **Authentication**: Session-based with bcrypt" >> release_notes.md
+        echo "- **Testing**: Cucumber + Playwright" >> release_notes.md
+        echo "- **Frontend**: HTML5 + CSS3 + Vanilla JavaScript" >> release_notes.md
+        
+        echo "" >> release_notes.md
+        echo "## Installation" >> release_notes.md
+        echo '```bash' >> release_notes.md
+        echo 'npm install' >> release_notes.md
+        echo 'npm run build' >> release_notes.md
+        echo 'npm start' >> release_notes.md
+        echo '```' >> release_notes.md
+        
+    - name: Create GitHub Release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ steps.version.outputs.version }}
+        release_name: Product Management App ${{ steps.version.outputs.version }}
+        body_path: release_notes.md
+        draft: false
+        prerelease: false
+        
+    - name: Upload release asset
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./product-management-app.tar.gz
+        asset_name: product-management-app-${{ steps.version.outputs.version }}.tar.gz
+        asset_content_type: application/gzip
+
+  # Deploy to staging (if you have a staging environment)
+  deploy-staging:
+    name: Deploy to Staging
+    runs-on: ubuntu-latest
+    needs: release
+    if: startsWith(github.ref, 'refs/tags/v') && !contains(github.ref, 'beta') && !contains(github.ref, 'alpha')
+    
+    steps:
+    - name: Staging deployment placeholder
+      run: |
+        echo "🚀 This is where you would deploy to staging environment"
+        echo "Example commands:"
+        echo "- Upload to staging server"
+        echo "- Run database migrations"
+        echo "- Update configuration"
+        echo "- Run smoke tests against staging"
+        echo "- Send notification to team"

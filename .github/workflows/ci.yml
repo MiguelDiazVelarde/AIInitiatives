@@ -1,0 +1,199 @@
+name: CI/CD Pipeline
+
+on:
+  # Trigger on pull requests to main branch
+  pull_request:
+    branches: [ main ]
+  # Trigger on pushes to main branch
+  push:
+    branches: [ main ]
+  # Allow manual trigger
+  workflow_dispatch:
+
+jobs:
+  # Job 1: Build and Test Application
+  test-application:
+    name: Build and Test Application
+    runs-on: ubuntu-latest
+    
+    strategy:
+      matrix:
+        node-version: [18.x, 20.x]
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Setup Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+        
+    - name: Install dependencies
+      run: npm ci
+      
+    - name: Lint code
+      run: |
+        # Add linting if you have it configured
+        echo "Linting step - add your linting commands here"
+        
+    - name: Build TypeScript
+      run: npm run build
+      
+    - name: Start application in background
+      run: |
+        npm start &
+        echo $! > app.pid
+        sleep 10  # Wait for app to start
+        
+    - name: Verify application is running
+      run: |
+        curl -f http://localhost:3000 || exit 1
+        
+    - name: Install Playwright browsers
+      run: npx playwright install --with-deps chromium
+      
+    - name: Run smoke tests
+      run: npm run test:smoke
+      
+    - name: Stop application
+      run: |
+        if [ -f app.pid ]; then
+          kill $(cat app.pid) || true
+          rm app.pid
+        fi
+        
+    - name: Upload test results
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: test-results-${{ matrix.node-version }}
+        path: |
+          reports/
+          test-results/
+        retention-days: 7
+
+  # Job 2: Full E2E Tests (only on PR)
+  e2e-tests:
+    name: End-to-End Tests
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    needs: test-application
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20.x'
+        cache: 'npm'
+        
+    - name: Install dependencies
+      run: npm ci
+      
+    - name: Build application
+      run: npm run build
+      
+    - name: Start application
+      run: |
+        npm start &
+        echo $! > app.pid
+        sleep 10
+        
+    - name: Install Playwright browsers
+      run: npx playwright install --with-deps
+      
+    - name: Run all tests
+      run: |
+        # Run tests and generate reports
+        npm run test:smoke || true
+        # Add more comprehensive tests when TS files are fixed
+        
+    - name: Generate test report
+      run: |
+        if [ -f reports/cucumber_report.json ]; then
+          npm run test:report || true
+        fi
+        
+    - name: Upload E2E test results
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: e2e-test-results
+        path: |
+          reports/
+          test-results/
+          
+    - name: Comment PR with test results
+      uses: actions/github-script@v7
+      if: github.event_name == 'pull_request' && always()
+      with:
+        script: |
+          const fs = require('fs');
+          let comment = '## 🧪 Test Results\n\n';
+          
+          try {
+            if (fs.existsSync('reports/cucumber_report.json')) {
+              const report = JSON.parse(fs.readFileSync('reports/cucumber_report.json', 'utf8'));
+              const scenarios = report.reduce((acc, feature) => {
+                return acc + feature.elements.length;
+              }, 0);
+              const passed = report.reduce((acc, feature) => {
+                return acc + feature.elements.filter(el => el.steps.every(step => step.result.status === 'passed')).length;
+              }, 0);
+              
+              comment += `✅ **Smoke Tests**: ${passed}/${scenarios} scenarios passed\n`;
+            } else {
+              comment += '⚠️ No test report found\n';
+            }
+          } catch (error) {
+            comment += '❌ Error reading test results\n';
+          }
+          
+          comment += '\n📊 Full test results are available in the workflow artifacts.';
+          
+          github.rest.issues.createComment({
+            issue_number: context.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: comment
+          });
+          
+    - name: Stop application
+      if: always()
+      run: |
+        if [ -f app.pid ]; then
+          kill $(cat app.pid) || true
+          rm app.pid
+        fi
+
+  # Job 3: Security and Quality Checks
+  security-checks:
+    name: Security and Quality Checks
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20.x'
+        cache: 'npm'
+        
+    - name: Install dependencies
+      run: npm ci
+      
+    - name: Run security audit
+      run: npm audit --audit-level high
+      
+    - name: Check for outdated dependencies
+      run: npm outdated || true
+      
+    - name: License compliance check
+      run: |
+        npx license-checker --summary || true

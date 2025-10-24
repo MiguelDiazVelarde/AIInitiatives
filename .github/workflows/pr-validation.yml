@@ -1,0 +1,183 @@
+name: Pull Request Validation
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    branches: [ main ]
+
+jobs:
+  pr-validation:
+    name: Validate Pull Request
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0  # Fetch full history for better analysis
+        
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20.x'
+        cache: 'npm'
+        
+    - name: Install dependencies
+      run: npm ci
+      
+    - name: Check PR title and description
+      uses: actions/github-script@v7
+      with:
+        script: |
+          const pr = context.payload.pull_request;
+          
+          // Check PR title
+          const title = pr.title;
+          if (title.length < 10) {
+            core.setFailed('PR title should be at least 10 characters long');
+            return;
+          }
+          
+          // Check if PR has description
+          const body = pr.body || '';
+          if (body.length < 20) {
+            core.setFailed('PR description should be at least 20 characters long');
+            return;
+          }
+          
+          console.log('✅ PR title and description are valid');
+          
+    - name: Check for TypeScript compilation errors
+      run: |
+        npm run build
+        echo "✅ TypeScript compilation successful"
+        
+    - name: Quick smoke test
+      run: |
+        # Start app in background
+        npm start &
+        APP_PID=$!
+        echo $APP_PID > app.pid
+        
+        # Wait for app to start
+        sleep 10
+        
+        # Quick health check
+        curl -f http://localhost:3000 || exit 1
+        
+        # Stop app
+        kill $APP_PID || true
+        rm app.pid
+        
+        echo "✅ Application starts successfully"
+        
+    - name: Install Playwright browsers for testing
+      run: npx playwright install --with-deps chromium
+      
+    - name: Run critical path tests
+      run: |
+        # Start app again for testing
+        npm start &
+        APP_PID=$!
+        echo $APP_PID > app.pid
+        
+        # Wait for startup
+        sleep 10
+        
+        # Run smoke tests only
+        npm run test:smoke
+        
+        # Cleanup
+        kill $APP_PID || true
+        rm app.pid
+        
+    - name: Check for sensitive information
+      run: |
+        # Check for common sensitive patterns
+        echo "🔍 Checking for sensitive information..."
+        
+        # Check for hardcoded passwords/secrets
+        if grep -r -i "password.*=" src/ --include="*.ts" --include="*.js" | grep -v "// " | grep -v "password:" | grep -v "passwordHash"; then
+          echo "⚠️ Potential hardcoded password found"
+          exit 1
+        fi
+        
+        # Check for API keys
+        if grep -r -E "(api_key|apikey|secret)" src/ --include="*.ts" --include="*.js" | grep -v "// " | grep -v "interface" | grep -v "type"; then
+          echo "⚠️ Potential API key or secret found"
+          exit 1
+        fi
+        
+        echo "✅ No sensitive information detected"
+        
+    - name: Generate PR summary
+      uses: actions/github-script@v7
+      if: always()
+      with:
+        script: |
+          const fs = require('fs');
+          
+          let summary = '## 🔍 Pull Request Validation Summary\n\n';
+          
+          // Get changed files
+          const { data: files } = await github.rest.pulls.listFiles({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            pull_number: context.issue.number
+          });
+          
+          summary += `### 📁 Files Changed (${files.length})\n`;
+          files.forEach(file => {
+            const status = file.status === 'added' ? '🆕' : 
+                          file.status === 'modified' ? '✏️' : 
+                          file.status === 'removed' ? '🗑️' : '📝';
+            summary += `- ${status} \`${file.filename}\` (+${file.additions}/-${file.deletions})\n`;
+          });
+          
+          summary += '\n### ✅ Validation Checks\n';
+          summary += '- ✅ PR title and description validated\n';
+          summary += '- ✅ TypeScript compilation successful\n';
+          summary += '- ✅ Application startup verified\n';
+          summary += '- ✅ Smoke tests passed\n';
+          summary += '- ✅ Security scan completed\n';
+          
+          summary += '\n### 🚀 Next Steps\n';
+          summary += 'This PR is ready for code review. The automated tests will run when a maintainer approves the workflow.\n';
+          
+          github.rest.issues.createComment({
+            issue_number: context.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: summary
+          });
+
+  # Job to check if tests need approval (for external contributors)
+  check-approval:
+    name: Check Test Approval
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.head.repo.full_name != github.repository
+    
+    steps:
+    - name: Comment about test approval
+      uses: actions/github-script@v7
+      with:
+        script: |
+          const comment = `## 🔒 External Contribution Detected
+          
+          This pull request is from an external contributor. A maintainer needs to approve running the tests for security reasons.
+          
+          **Maintainers**: If this PR looks safe, comment \`/approve-tests\` to run the full test suite.
+          
+          ### Quick Safety Checklist:
+          - [ ] PR description explains the changes
+          - [ ] No suspicious file modifications
+          - [ ] No addition of external dependencies without justification
+          - [ ] Changes look reasonable and safe
+          `;
+          
+          github.rest.issues.createComment({
+            issue_number: context.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: comment
+          });

@@ -1,0 +1,15 @@
+{
+  "name": "ci-helper",
+  "version": "1.0.0",
+  "description": "Helper script to run CI checks locally",
+  "scripts": {
+    "ci:check": "npm run ci:build && npm run ci:test && npm run ci:security",
+    "ci:build": "echo '🔨 Building...' && npm run build",
+    "ci:test": "echo '🧪 Testing...' && npm run test:smoke",
+    "ci:security": "echo '🔒 Security check...' && npm audit --audit-level high",
+    "ci:quick": "npm run build && npm run test:smoke",
+    "ci:full": "npm run ci:check && echo '✅ All CI checks passed!'",
+    "pre-commit": "npm run ci:quick && echo '✅ Ready to commit!'",
+    "pre-push": "npm run ci:full && echo '✅ Ready to push!'"
+  }
+}
