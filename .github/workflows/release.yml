@@ -1,5 +1,11 @@
 name: Release
 
+# Add permissions for the workflow
+permissions:
+  contents: write
+  pull-requests: read
+  issues: read
+
 on:
   push:
     tags:
