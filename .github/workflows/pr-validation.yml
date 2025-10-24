@@ -131,7 +131,7 @@ jobs:
         fi
         
         # Check for suspicious API key patterns
-        API_KEYS=$(grep -r -E "(api_key|apikey|access_token)\s*[:=]\s*['\"][a-zA-Z0-9_-]{20,}['\"]" src/ --include="*.ts" --include="*.js" | \
+        API_KEYS=$(grep -r -E "(api_key|apikey|access_token)\s*[:=]\s*['\"][a-zA-Z0-9_-]{16,}['\"]" src/ --include="*.ts" --include="*.js" | \
           grep -v "// " | \
           grep -v "process\.env" | \
           grep -v "interface" | \
