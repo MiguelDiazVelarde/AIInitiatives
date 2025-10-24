@@ -1,5 +1,12 @@
 name: Pull Request Validation
 
+# Add permissions for the workflow
+permissions:
+  contents: read
+  pull-requests: write
+  issues: write
+  checks: write
+
 on:
   pull_request:
     types: [opened, synchronize, reopened]
@@ -144,12 +151,17 @@ jobs:
           summary += '\n### 🚀 Next Steps\n';
           summary += 'This PR is ready for code review. The automated tests will run when a maintainer approves the workflow.\n';
           
-          github.rest.issues.createComment({
-            issue_number: context.issue.number,
-            owner: context.repo.owner,
-            repo: context.repo.repo,
-            body: summary
-          });
+          try {
+            await github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: summary
+            });
+            console.log('✅ Successfully posted PR summary comment');
+          } catch (error) {
+            console.log('⚠️ Failed to post comment:', error.message);
+          }
 
   # Job to check if tests need approval (for external contributors)
   check-approval:
@@ -175,9 +187,14 @@ jobs:
           - [ ] Changes look reasonable and safe
           `;
           
-          github.rest.issues.createComment({
-            issue_number: context.issue.number,
-            owner: context.repo.owner,
-            repo: context.repo.repo,
-            body: comment
-          });
+          try {
+            await github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: comment
+            });
+            console.log('✅ Successfully posted external contributor notice');
+          } catch (error) {
+            console.log('⚠️ Failed to post comment:', error.message);
+          }

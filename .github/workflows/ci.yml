@@ -1,5 +1,12 @@
 name: CI/CD Pipeline
 
+# Add permissions for the workflow
+permissions:
+  contents: read
+  pull-requests: write
+  issues: write
+  checks: write
+
 on:
   # Trigger on pull requests to main branch
   pull_request:
@@ -155,12 +162,18 @@ jobs:
           
           comment += '\n📊 Full test results are available in the workflow artifacts.';
           
-          github.rest.issues.createComment({
-            issue_number: context.issue.number,
-            owner: context.repo.owner,
-            repo: context.repo.repo,
-            body: comment
-          });
+          try {
+            await github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: comment
+            });
+            console.log('✅ Successfully posted test results comment');
+          } catch (error) {
+            console.log('⚠️ Failed to post comment:', error.message);
+            console.log('This might be due to insufficient permissions or the PR being from a fork');
+          }
           
     - name: Stop application
       if: always()
