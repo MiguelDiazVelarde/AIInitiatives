@@ -6,7 +6,7 @@
 
 1. **`.github/workflows/ci.yml`** - Main CI/CD Pipeline
    - Runs on PR and push to main
-   - Matrix testing (Node.js 18.x, 20.x)
+   - Matrix testing (Node.js 20.x, 22.x)
    - Full test suite with Playwright
    - Security audits
    - Test result reporting

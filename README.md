@@ -27,7 +27,7 @@ A simple web application built with **TypeScript**, **Express.js** and **Node.js
 
 ## 📋 Prerequisites
 
-- Node.js (v14 or higher)
+- Node.js (v20 or higher)
 - npm or yarn
 
 ## 🔧 Installation and Setup
@@ -161,7 +161,7 @@ Comprehensive testing pipeline that runs on:
 - Manual triggers
 
 **Features:**
-- **Matrix Testing**: Tests across Node.js 18.x and 20.x
+- **Matrix Testing**: Tests across Node.js 20.x and 22.x
 - **Build Verification**: TypeScript compilation and build process
 - **Application Testing**: Full smoke test suite with Playwright
 - **E2E Testing**: Complete end-to-end tests on PR

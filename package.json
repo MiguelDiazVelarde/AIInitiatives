@@ -37,6 +37,10 @@
   ],
   "author": "MiguelDiazVelarde",
   "license": "MIT",
+  "engines": {
+    "node": ">=20.0.0",
+    "npm": ">=8.0.0"
+  },
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "express": "^4.18.2",

@@ -58,7 +58,7 @@ If you're contributing from a forked repository:
 - Manual workflow dispatch
 
 **Jobs:**
-1. **Build and Test** (Node.js 18.x, 20.x)
+1. **Build and Test** (Node.js 20.x, 22.x)
    - Install dependencies
    - Build TypeScript
    - Start application
@@ -226,7 +226,7 @@ PR Validation Workflow
       ↓
 Main CI/CD Pipeline
       ↓
-├── Matrix Testing (Node 18.x, 20.x)
+├── Matrix Testing (Node 20.x, 22.x)
 ├── Full Test Suite
 ├── E2E Tests
 ├── Security Audit
