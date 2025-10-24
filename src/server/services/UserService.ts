@@ -51,4 +51,8 @@ export class UserService {
   static getAllUsers(): Omit<User, 'password'>[] {
     return users.map(({ password, ...user }) => user);
   }
+
+  static findByUsername(username: string): User | undefined {
+    return users.find(u => u.username === username);
+  }
 }

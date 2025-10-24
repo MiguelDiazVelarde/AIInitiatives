@@ -4,10 +4,14 @@
   "description": "Simple app with login and product form",
   "main": "dist/index.js",
   "scripts": {
-    "build": "tsc",
-    "start": "node dist/index.js",
-    "dev": "nodemon src/index.ts",
-    "clean": "rimraf dist",
+    "build": "npm run build:server && npm run build:client",
+    "build:server": "tsc -p tsconfig.server.json",
+    "build:client": "cd client && vite build",
+    "start": "node dist/server/index.js",
+    "dev": "concurrently \"npm run dev:server\" \"npm run dev:client\"",
+    "dev:server": "nodemon src/server/index.ts",
+    "dev:client": "cd client && vite",
+    "clean": "rimraf dist client/dist",
     "test": "npm run test:cucumber",
     "test:cucumber": "cucumber-js tests/features --require-module ts-node/register --require tests/step-definitions/**/*.ts --format progress-bar --format json:reports/cucumber_report.json",
     "test:playwright": "playwright test",
@@ -45,7 +49,11 @@
     "bcryptjs": "^2.4.3",
     "express": "^4.18.2",
     "express-session": "^1.17.3",
-    "uuid": "^9.0.0"
+    "uuid": "^9.0.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^6.8.1",
+    "cors": "^2.8.5"
   },
   "devDependencies": {
     "@cucumber/cucumber": "^12.2.0",
@@ -56,10 +64,16 @@
     "@types/express-session": "^1.17.7",
     "@types/node": "^20.4.5",
     "@types/uuid": "^9.0.2",
+    "@types/react": "^18.2.6",
+    "@types/react-dom": "^18.2.4",
+    "@types/cors": "^2.8.13",
     "cucumber-html-reporter": "^6.0.0",
     "nodemon": "^3.0.1",
     "rimraf": "^5.0.1",
     "ts-node": "^10.9.2",
-    "typescript": "^5.1.6"
+    "typescript": "^5.1.6",
+    "vite": "^4.3.9",
+    "@vitejs/plugin-react": "^4.0.0",
+    "concurrently": "^8.2.0"
   }
 }
