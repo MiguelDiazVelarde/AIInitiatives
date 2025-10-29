@@ -146,7 +146,7 @@ npm run test:full         # Run tests with HTML report
 npm run test:auth         # Authentication tests only
 npm run test:products     # Product tests only
 npm run test:navigation   # Navigation tests only
-npm run test:smoke        # Quick smoke tests
+        # Quick smoke tests
 npm run test:headed       # Run tests in visible browser
 ```
 
@@ -205,7 +205,7 @@ Automated release process triggered by version tags:
 - ✅ Build artifact creation
 - ✅ GitHub release generation with notes
 - ✅ Asset packaging and upload
-- ✅ Staging deployment preparation
+- ✅ Staging depnpm run test:smokeloyment preparation
 
 ### Setting Up CI/CD
 

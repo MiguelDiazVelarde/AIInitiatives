@@ -14,7 +14,7 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 4834619600
+              "duration": 4669716400
             }
           },
           {
@@ -27,7 +27,7 @@
             },
             "result": {
               "status": "passed",
-              "duration": 17274099
+              "duration": 26556800
             }
           },
           {
@@ -36,11 +36,11 @@
             "line": 9,
             "name": "I navigate to the main page",
             "match": {
-              "location": "tests\\step-definitions\\common.steps.js:30"
+              "location": "tests\\step-definitions\\common.steps.js:34"
             },
             "result": {
               "status": "passed",
-              "duration": 512338899
+              "duration": 2543042300
             }
           },
           {
@@ -49,11 +49,11 @@
             "line": 10,
             "name": "I should be redirected to the login page",
             "match": {
-              "location": "tests\\step-definitions\\common.steps.js:40"
+              "location": "tests\\step-definitions\\common.steps.js:46"
             },
             "result": {
               "status": "passed",
-              "duration": 20097600
+              "duration": 26859499
             }
           },
           {
@@ -61,7 +61,7 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 66788800
+              "duration": 123970299
             }
           }
         ],
@@ -80,7 +80,7 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 4768961000
+              "duration": 4774899199
             }
           },
           {
@@ -93,7 +93,7 @@
             },
             "result": {
               "status": "passed",
-              "duration": 11577600
+              "duration": 19576100
             }
           },
           {
@@ -106,7 +106,7 @@
             },
             "result": {
               "status": "passed",
-              "duration": 510837300
+              "duration": 521984099
             }
           },
           {
@@ -119,7 +119,7 @@
             },
             "result": {
               "status": "passed",
-              "duration": 29840200
+              "duration": 49081599
             }
           },
           {
@@ -128,11 +128,11 @@
             "line": 16,
             "name": "I click the \"Login\" button",
             "match": {
-              "location": "tests\\step-definitions\\common.steps.js:21"
+              "location": "tests\\step-definitions\\common.steps.js:23"
             },
             "result": {
               "status": "passed",
-              "duration": 633590499
+              "duration": 1036258599
             }
           },
           {
@@ -141,11 +141,11 @@
             "line": 17,
             "name": "I should be redirected to the dashboard",
             "match": {
-              "location": "tests\\step-definitions\\common.steps.js:36"
+              "location": "tests\\step-definitions\\common.steps.js:42"
             },
             "result": {
               "status": "passed",
-              "duration": 8951399
+              "duration": 3938299
             }
           },
           {
@@ -153,7 +153,7 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 80143399
+              "duration": 77857499
             }
           }
         ],
