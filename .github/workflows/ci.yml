@@ -40,23 +40,38 @@ jobs:
     - name: Install dependencies
       run: npm ci
       
+    - name: Install client dependencies
+      run: |
+        cd client
+        npm ci
+        
     - name: Lint code
       run: |
         # Add linting if you have it configured
         echo "Linting step - add your linting commands here"
         
-    - name: Build TypeScript
+    - name: Build application
       run: npm run build
       
-    - name: Start application in background
+    - name: Start backend server in background
       run: |
-        npm start &
+        npm run start:test &
         echo $! > app.pid
-        sleep 10  # Wait for app to start
+        sleep 15  # Wait longer for app to start
         
-    - name: Verify application is running
+    - name: Verify backend is running
       run: |
-        curl -f http://localhost:3000 || exit 1
+        # Check if the server is responding
+        for i in {1..30}; do
+          if curl -f http://localhost:3000/api/health; then
+            echo "Server is running!"
+            break
+          fi
+          echo "Waiting for server... attempt $i"
+          sleep 2
+        done
+        # Final check
+        curl -f http://localhost:3000/api/health || exit 1
         
     - name: Install Playwright browsers
       run: npx playwright install --with-deps chromium
@@ -101,14 +116,29 @@ jobs:
     - name: Install dependencies
       run: npm ci
       
+    - name: Install client dependencies
+      run: |
+        cd client
+        npm ci
+        
     - name: Build application
       run: npm run build
       
-    - name: Start application
+    - name: Start backend server
       run: |
-        npm start &
+        npm run start:test &
         echo $! > app.pid
-        sleep 10
+        sleep 15
+        
+        # Verify backend is running
+        for i in {1..30}; do
+          if curl -f http://localhost:3000/api/health; then
+            echo "Backend is ready for E2E tests!"
+            break
+          fi
+          echo "Waiting for backend... attempt $i"
+          sleep 2
+        done
         
     - name: Install Playwright browsers
       run: npx playwright install --with-deps

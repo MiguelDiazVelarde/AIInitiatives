@@ -32,6 +32,11 @@ jobs:
     - name: Install dependencies
       run: npm ci
       
+    - name: Install client dependencies
+      run: |
+        cd client
+        npm ci
+      
     - name: Check PR title and description
       uses: actions/github-script@v7
       with:
@@ -61,16 +66,26 @@ jobs:
         
     - name: Quick smoke test
       run: |
-        # Start app in background
-        npm start &
+        # Start backend in background
+        npm run start:test &
         APP_PID=$!
         echo $APP_PID > app.pid
         
-        # Wait for app to start
-        sleep 10
+        # Wait for backend to start
+        sleep 15
         
-        # Quick health check
-        curl -f http://localhost:3000 || exit 1
+        # Health check with retry logic
+        for i in {1..30}; do
+          if curl -f http://localhost:3000/api/health; then
+            echo "✅ Backend is running!"
+            break
+          fi
+          echo "Waiting for backend... attempt $i"
+          sleep 2
+        done
+        
+        # Final verification
+        curl -f http://localhost:3000/api/health || exit 1
         
         # Stop app
         kill $APP_PID || true
@@ -83,13 +98,21 @@ jobs:
       
     - name: Run critical path tests
       run: |
-        # Start app again for testing
-        npm start &
+        # Start backend again for testing
+        npm run start:test &
         APP_PID=$!
         echo $APP_PID > app.pid
         
-        # Wait for startup
-        sleep 10
+        # Wait for backend startup with health check
+        sleep 15
+        for i in {1..30}; do
+          if curl -f http://localhost:3000/api/health; then
+            echo "Backend ready for testing!"
+            break
+          fi
+          echo "Waiting for backend... attempt $i"
+          sleep 2
+        done
         
         # Run smoke tests only
         npm run test:smoke

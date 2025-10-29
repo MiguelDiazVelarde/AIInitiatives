@@ -37,18 +37,31 @@ jobs:
     - name: Install dependencies
       run: npm ci
       
+    - name: Install client dependencies
+      run: |
+        cd client
+        npm ci
+      
     - name: Build application
       run: npm run build
       
     - name: Run full test suite
       run: |
-        # Start application
-        npm start &
+        # Start backend server
+        npm run start:test &
         APP_PID=$!
         echo $APP_PID > app.pid
         
-        # Wait for startup
-        sleep 10
+        # Wait for startup with health check
+        sleep 15
+        for i in {1..30}; do
+          if curl -f http://localhost:3000/api/health; then
+            echo "Backend is ready!"
+            break
+          fi
+          echo "Waiting for backend... attempt $i"
+          sleep 2
+        done
         
         # Install browsers
         npx playwright install --with-deps

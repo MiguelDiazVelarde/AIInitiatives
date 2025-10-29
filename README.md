@@ -3,27 +3,31 @@
 ![CI/CD Pipeline](https://github.com/MiguelDiazVelarde/iainitiatives/workflows/CI/CD%20Pipeline/badge.svg)
 ![Pull Request Validation](https://github.com/MiguelDiazVelarde/iainitiatives/workflows/Pull%20Request%20Validation/badge.svg)
 
-A simple web application built with **TypeScript**, **Express.js** and **Node.js** that includes authentication system and product management with automated CI/CD pipeline.
+A simple web application built with **React**, **TypeScript**, **Express.js** and **Node.js** that includes authentication system and product management with automated CI/CD pipeline.
 
 ## 🚀 Features
 
 - ✅ **Login/Registration System** - Secure authentication with sessions
 - ✅ **Product Management** - Complete CRUD (Create, Read, Update, Delete)
-- ✅ **Interactive Forms** - Responsive web interface
+- ✅ **React Frontend** - Modern Single Page Application (SPA)
+- ✅ **Interactive Forms** - Responsive web interface with React components
 - ✅ **TypeScript** - Static typing for enhanced robustness
 - ✅ **Security** - Encrypted passwords with bcrypt
 - ✅ **Sessions** - User state management
+- ✅ **REST API** - JSON-based backend API
 - ✅ **Testing** - Complete functional test suite with Gherkin/Playwright
 - ✅ **CI/CD Pipeline** - Automated testing and deployment with GitHub Actions
 
 ## 🛠️ Technologies Used
 
-- **Backend**: Node.js + Express.js + TypeScript
+- **Backend**: Node.js + Express.js + TypeScript (REST API)
+- **Frontend**: React + TypeScript + Vite
 - **Authentication**: express-session + bcryptjs
-- **Frontend**: HTML5 + CSS3 + JavaScript vanilla
+- **Routing**: React Router
+- **State Management**: React Context API
 - **Database**: In-memory (for simplicity)
 - **Testing**: Cucumber (Gherkin) + Playwright
-- **Build**: TypeScript compiler
+- **Build Tools**: TypeScript compiler + Vite
 
 ## 📋 Prerequisites
 
@@ -54,7 +58,8 @@ npm start
 ```
 
 5. **Open in browser**:
-   - Go to: http://localhost:3000
+   - **React App**: <http://localhost:5173> (Development)
+   - **API Server**: <http://localhost:3000> (Backend)
 
 ## 🎯 Application Usage
 
@@ -80,7 +85,29 @@ Or you can register a new user.
 ## 📁 Project Structure
 
 ```
-src/
+client/                   # React Frontend
+├── src/
+│   ├── components/       # React components
+│   │   ├── LoginForm.tsx
+│   │   ├── RegisterForm.tsx
+│   │   ├── ProductList.tsx
+│   │   └── ProductForm.tsx
+│   ├── pages/            # Page components
+│   │   └── Dashboard.tsx
+│   ├── context/          # React Context
+│   │   └── AuthContext.tsx
+│   ├── services/         # API services
+│   │   └── api.ts
+│   ├── types/            # TypeScript types
+│   │   └── index.ts
+│   ├── App.tsx           # Main App component
+│   ├── main.tsx          # React entry point
+│   └── index.css         # Global styles
+├── index.html            # HTML template
+├── vite.config.ts        # Vite configuration
+└── package.json          # Frontend dependencies
+
+src/server/               # Express Backend
 ├── index.ts              # Main server
 ├── models/               # TypeScript interfaces
 │   ├── User.ts
@@ -91,25 +118,28 @@ src/
 ├── routes/               # HTTP routes
 │   ├── auth.ts
 │   └── products.ts
-├── middleware/           # Custom middleware
-│   └── auth.ts
-└── tests/                # Test suite
-    ├── features/         # Gherkin feature files
-    ├── step-definitions/ # Test step implementations
-    └── support/          # Test configuration
+└── middleware/           # Custom middleware
+    └── auth.ts
+
+tests/                    # Test suite
+├── features/             # Gherkin feature files
+├── step-definitions/     # Test step implementations
+└── support/              # Test configuration
 ```
 
 ## 🚀 Available Scripts
 
 ### Application
+
 ```bash
-npm run build    # Compile TypeScript
-npm start        # Run in production
-npm run dev      # Run in development (with nodemon)
+npm run build    # Compile both frontend and backend
+npm start        # Run in production (backend only)
+npm run dev      # Run in development (both frontend and backend)
 npm run clean    # Clean compiled files
 ```
 
 ### Testing
+
 ```bash
 npm run test              # Run all tests
 npm run test:full         # Run tests with HTML report
@@ -222,29 +252,28 @@ npm audit --audit-level high
 - [ ] Persistent database (MongoDB/PostgreSQL)
 - [ ] JWT for authentication
 - [ ] Complete REST API
-- [ ] Frontend with React/Vue
+- [x] ~~Frontend with React/Vue~~ ✅ **Completed with React**
 - [ ] Image upload
 - [ ] Search and filters
 - [ ] User roles
 - [ ] Docker containerization
-- [ ] CI/CD pipeline
+- [x] ~~CI/CD pipeline~~ ✅ **Already implemented**
 
 ## 📝 API Endpoints
 
 ### Authentication
-- `GET /auth/login` - Login page
-- `POST /auth/login` - Process login
-- `GET /auth/register` - Registration page
-- `POST /auth/register` - Process registration
-- `POST /auth/logout` - Logout
+
+- `POST /api/auth/login` - User login (JSON)
+- `POST /api/auth/register` - User registration (JSON)
+- `POST /api/auth/logout` - User logout (JSON)
+- `GET /api/auth/me` - Check authentication status (JSON)
 
 ### Products
-- `GET /dashboard` - Main dashboard
-- `POST /products` - Create product
+
 - `GET /api/products` - Get all products (JSON)
+- `POST /api/products` - Create product (JSON)
 - `GET /api/products/:id` - Get product by ID (JSON)
-- `PUT /api/products/:id` - Update product
-- `DELETE /products/:id` - Delete product
+- `DELETE /api/products/:id` - Delete product (JSON)
 
 ## 🤝 Contributing
 

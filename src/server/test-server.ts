@@ -8,9 +8,9 @@ import productRoutes from './routes/products';
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Configuración de CORS para permitir requests desde React
+// Configuración de CORS más permisiva para tests
 app.use(cors({
-  origin: 'http://localhost:5173', // Puerto de Vite en desarrollo
+  origin: true,
   credentials: true
 }));
 
@@ -20,11 +20,11 @@ app.use(express.urlencoded({ extended: true }));
 
 // Configuración de sesiones
 app.use(session({
-  secret: 'tu-secreto-super-seguro-aqui', // En producción usar variable de entorno
+  secret: 'tu-secreto-super-seguro-aqui',
   resave: false,
   saveUninitialized: false,
   cookie: {
-    secure: false, // En producción con HTTPS poner en true
+    secure: false,
     maxAge: 24 * 60 * 60 * 1000 // 24 horas
   }
 }));
@@ -35,21 +35,19 @@ app.use('/api', productRoutes);
 
 // Ruta para verificar estado del servidor
 app.get('/api/health', (req, res) => {
-  res.json({ status: 'OK', message: 'Server is running' });
+  res.json({ status: 'OK', message: 'Server is running in test mode' });
 });
 
-// Servir archivos estáticos de React en producción
-if (process.env.NODE_ENV === 'production') {
-  const clientDistPath = path.join(__dirname, '../../client/dist');
-  app.use(express.static(clientDistPath));
-  
-  // Todas las rutas no-API deben servir el index.html de React
-  app.get('*', (req, res) => {
-    if (!req.path.startsWith('/api')) {
-      res.sendFile(path.join(clientDistPath, 'index.html'));
-    }
-  });
-}
+// Servir archivos estáticos de React para tests
+const clientDistPath = path.join(__dirname, '../../client/dist');
+app.use(express.static(clientDistPath));
+
+// Todas las rutas no-API deben servir el index.html de React
+app.get('*', (req, res) => {
+  if (!req.path.startsWith('/api')) {
+    res.sendFile(path.join(clientDistPath, 'index.html'));
+  }
+});
 
 // Middleware de manejo de errores
 app.use((err: Error, req: express.Request, res: express.Response, next: express.NextFunction) => {
@@ -57,11 +55,15 @@ app.use((err: Error, req: express.Request, res: express.Response, next: express.
   res.status(500).json({ error: 'Algo salió mal!' });
 });
 
-// Iniciar servidor
+// Manejo de rutas no encontradas
+app.use((req: express.Request, res: express.Response) => {
+  res.status(404).json({ error: 'Ruta no encontrada' });
+});
+
 app.listen(PORT, () => {
-  console.log(`🚀 Servidor ejecutándose en http://localhost:${PORT}`);
+  console.log(`🚀 Servidor de pruebas ejecutándose en http://localhost:${PORT}`);
   console.log(`📝 Usuario de prueba: admin / password`);
-  console.log(`🌐 Abre tu navegador en: http://localhost:${PORT}`);
+  console.log(`🧪 Modo: Tests con archivos estáticos de React`);
 });
 
 export default app;
