@@ -245,7 +245,7 @@ When('I fill out registration or product forms', async function (this: CustomWor
 Then('forms should provide real-time validation', async function (this: CustomWorld) {
   // Test validation feedback
   await this.page.fill('[data-testid="email-input"], input[name="email"]', 'invalid-email');
-  await this.page.blur('[data-testid="email-input"], input[name="email"]');
+  await this.page.locator('[data-testid="email-input"], input[name="email"]').evaluate(el => el.blur());
   const errorMessage = await this.page.locator('[data-testid*="error"], .error').count();
   expect(errorMessage).toBeGreaterThanOrEqual(0);
 });

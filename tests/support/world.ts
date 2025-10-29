@@ -36,6 +36,7 @@ export class CustomWorld {
   public authSystem: boolean = false;
   public authEndpoints: any = {};
   public productSystem: boolean = false;
+  public productEndpoints: any = {};
   // Frontend testing properties
   public reactElements: number = 0;
   public frontendAvailable: boolean = false;

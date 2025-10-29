@@ -279,7 +279,7 @@ When('I inspect the application structure', async function (this: CustomWorld) {
   const hasReactRoot = await this.page.evaluate(() => {
     return document.getElementById('root') !== null ||
            document.querySelector('[data-reactroot]') !== null ||
-           window.React !== undefined;
+           (window as any).React !== undefined;
   });
   
   (this as any).hasReactStructure = hasReactRoot;

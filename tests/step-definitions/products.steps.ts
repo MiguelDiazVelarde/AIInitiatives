@@ -1,5 +1,6 @@
 import { Given, When, Then } from '@cucumber/cucumber';
 import { expect } from '@playwright/test';
+import type { Dialog } from '@playwright/test';
 
 // Product management actions (removed duplicate Given('I am on the dashboard'))
 
@@ -435,7 +436,7 @@ When('I click the delete button for the product', async function () {
 
 Then('I should see a confirmation dialog', async function () {
   // Check for confirmation dialog
-  this.page.on('dialog', dialog => {
+  this.page.on('dialog', (dialog: Dialog) => {
     expect(dialog.type()).toBe('confirm');
   });
 });
@@ -540,7 +541,7 @@ Then('the product counter should update to {string}', async function (count: str
 When('I delete a product', async function () {
   await this.page.click('.delete-btn, button:has-text("Eliminar")');
   // Handle confirmation dialog
-  this.page.on('dialog', async dialog => {
+  this.page.on('dialog', async (dialog: Dialog) => {
     await dialog.accept();
   });
   await this.page.waitForTimeout(1000);
@@ -588,7 +589,7 @@ When('I delete product {string}', async function (productName: string) {
 });
 
 When('I confirm the deletion', async function () {
-  this.page.on('dialog', async dialog => {
+  this.page.on('dialog', async (dialog: Dialog) => {
     await dialog.accept();
   });
   await this.page.waitForTimeout(1000);
