@@ -9,6 +9,48 @@ export class CustomWorld {
   public page!: Page;
   public baseURL: string = 'http://localhost:3000';
   
+  // Properties for test data
+  public invalidRegistrationData: any;
+  public lastResponse: any;
+  public maliciousInput: string = '';
+  public testPassword: string = '';
+  public testUser: any;
+  public registrationComplete: boolean = false;
+  public newProduct: any;
+  public errorScenario: string = '';
+  public caughtError: any;
+  public concurrentUsers: boolean = false;
+  public multiStepOperation: boolean = false;
+  public operationFailed: boolean = false;
+  
+  // Backend testing properties
+  public serverResponse: any;
+  public apiEndpoints: any;
+  public backendAvailable: boolean = false;
+  public codeExamination: any;
+  public endpoints: string[] = [];
+  public requestResponses: any = {};
+  public protectedEndpoints: string[] = [];
+  public unauthenticatedResponse: any;
+  public validationResponses: any = {};
+  public authSystem: boolean = false;
+  public authEndpoints: any = {};
+  public productSystem: boolean = false;
+  // Frontend testing properties
+  public reactElements: number = 0;
+  public frontendAvailable: boolean = false;
+  public clientSideErrors: number = 0;
+  public globalStateRequired: boolean = false;
+  public stateManagementTested: boolean = false;
+  public multipleViews: string[] = [];
+  public navigationTested: boolean = false;
+  public navigationTime: number = 0;
+  public appStructure: boolean = false;
+  public componentCount: number = 0;
+  public apiIntegration: boolean = false;
+  public apiCallsMade: boolean = false;
+  public responsiveTested: boolean = false;
+  
   async init() {
     this.browser = await chromium.launch({ 
       headless: process.env.HEADLESS !== 'false',
@@ -52,6 +94,23 @@ export class CustomWorld {
     await this.page.fill('input[name="password"]', password);
     await this.page.click('button[type="submit"]');
     await this.page.waitForLoadState('networkidle');
+  }
+
+  async loginAsTestUser() {
+    // Create or use existing test user
+    const testUser = {
+      username: 'testuser123',
+      email: 'testuser123@example.com',
+      password: 'password123'
+    };
+    
+    // Try to register (will fail if already exists, that's ok)
+    await this.page.request.post('/api/auth/register', {
+      data: testUser
+    });
+    
+    // Login with test user
+    await this.login(testUser.username, testUser.password);
   }
 
   async logout() {
