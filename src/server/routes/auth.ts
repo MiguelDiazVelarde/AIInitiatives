@@ -11,7 +11,7 @@ router.post('/login', async (req: Request, res: Response) => {
     if (!username || !password) {
       return res.status(400).json({ 
         success: false, 
-        message: 'Usuario y contraseña son requeridos' 
+        message: 'Username and password are required' 
       });
     }
 
@@ -22,7 +22,7 @@ router.post('/login', async (req: Request, res: Response) => {
       req.session!.username = user.username;
       res.json({ 
         success: true, 
-        message: 'Login exitoso',
+        message: 'Login successful',
         user: {
           id: user.id,
           username: user.username,
@@ -32,14 +32,14 @@ router.post('/login', async (req: Request, res: Response) => {
     } else {
       res.status(401).json({ 
         success: false, 
-        message: 'Credenciales inválidas' 
+        message: 'Invalid credentials' 
       });
     }
   } catch (error) {
-    console.error('Error en login:', error);
+    console.error('Login error:', error);
     res.status(500).json({ 
       success: false, 
-      message: 'Error interno del servidor' 
+      message: 'Internal server error' 
     });
   }
 });
@@ -60,7 +60,7 @@ router.post('/register', async (req: Request, res: Response) => {
     if (existingUser) {
       return res.status(409).json({ 
         success: false, 
-        message: 'El usuario ya existe' 
+        message: 'User already exists' 
       });
     }
 
@@ -70,7 +70,7 @@ router.post('/register', async (req: Request, res: Response) => {
     
     res.status(201).json({ 
       success: true, 
-      message: 'Usuario registrado exitosamente',
+      message: 'User registered successfully',
       user: {
         id: newUser.id,
         username: newUser.username,
@@ -78,10 +78,10 @@ router.post('/register', async (req: Request, res: Response) => {
       }
     });
   } catch (error) {
-    console.error('Error en registro:', error);
+    console.error('Registration error:', error);
     res.status(500).json({ 
       success: false, 
-      message: 'Error interno del servidor' 
+      message: 'Internal server error' 
     });
   }
 });
@@ -90,15 +90,15 @@ router.post('/register', async (req: Request, res: Response) => {
 router.post('/logout', (req: Request, res: Response) => {
   req.session?.destroy((err) => {
     if (err) {
-      console.error('Error al cerrar sesión:', err);
+      console.error('Logout error:', err);
       return res.status(500).json({ 
         success: false, 
-        message: 'Error al cerrar sesión' 
+        message: 'Logout error' 
       });
     }
     res.json({ 
       success: true, 
-      message: 'Sesión cerrada exitosamente' 
+      message: 'Session closed successfully' 
     });
   });
 });

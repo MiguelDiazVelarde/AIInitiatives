@@ -44,12 +44,12 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSwitchToRegister }) => {
 
   return (
     <div className="auth-container">
-      <h2>Iniciar Sesión</h2>
+      <h2>Login</h2>
       <form onSubmit={handleSubmit} className="auth-form">
         <input
           type="text"
           name="username"
-          placeholder="Usuario"
+          placeholder="Username"
           value={formData.username}
           onChange={handleChange}
           required
@@ -57,24 +57,24 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSwitchToRegister }) => {
         <input
           type="password"
           name="password"
-          placeholder="Contraseña"
+          placeholder="Password"
           value={formData.password}
           onChange={handleChange}
           required
         />
         {error && <div className="error">{error}</div>}
         <button type="submit" disabled={loading}>
-          {loading ? 'Iniciando sesión...' : 'Iniciar Sesión'}
+          {loading ? 'Logging in...' : 'Login'}
         </button>
       </form>
       <p>
-        ¿No tienes cuenta?{' '}
+        Don't have an account?{' '}
         <button type="button" onClick={onSwitchToRegister} className="link-button">
-          Regístrate
+          Register
         </button>
       </p>
       <p className="demo-credentials">
-        <small>Usuario de prueba: admin / Contraseña: password</small>
+        <small>Test user: admin / Password: password</small>
       </p>
     </div>
   );

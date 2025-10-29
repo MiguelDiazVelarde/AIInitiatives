@@ -10,15 +10,15 @@ Feature: User Authentication
   Scenario: Login with valid credentials
     Given I am on the login page
     When I enter username "admin" and password "password"
-    And I click the "Iniciar Sesión" button
+    And I click the auth button "Login"
     Then I should be redirected to the dashboard
-    And I should see the message "Dashboard - Bienvenido admin"
+    And I should see the message "Dashboard - Welcome admin"
 
   Scenario: Login with invalid credentials
     Given I am on the login page
     When I enter username "wrong_user" and password "wrong_password"
-    And I click the "Iniciar Sesión" button
-    Then I should see an error message "Credenciales inválidas"
+    And I click the auth button "Login"
+    Then I should see an error message "Invalid credentials"
 
   Scenario: Register new user
     Given I am on the registration page
@@ -27,9 +27,9 @@ Feature: User Authentication
       | username  | new_user               |
       | email     | new@example.com        |
       | password  | secure_password        |
-    And I click the "Registrarse" button
+    And I click the auth button "Register"
     Then I should be redirected to the dashboard
-    And I should see the message "Dashboard - Bienvenido new_user"
+    And I should see the message "Dashboard - Welcome new_user"
 
   Scenario: Register with existing user
     Given I am on the registration page
@@ -38,12 +38,12 @@ Feature: User Authentication
       | username  | admin              |
       | email     | admin@example.com  |
       | password  | password           |
-    And I click the "Registrarse" button
-    Then I should see an error message "Usuario o email ya existe"
+    And I click the auth button "Register"
+    Then I should see an error message "User already exists"
 
   Scenario: Logout
     Given I am authenticated as "admin"
-    When I click the "Cerrar Sesión" button
+    When I click the "Logout" button
     Then I should be redirected to the login page
     And I should not have access to the dashboard
 

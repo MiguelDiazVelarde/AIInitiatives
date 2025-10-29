@@ -33,17 +33,17 @@ app.use(session({
 app.use('/api/auth', authRoutes);
 app.use('/api', productRoutes);
 
-// Ruta para verificar estado del servidor
+// Route to verify server status
 app.get('/api/health', (req, res) => {
   res.json({ status: 'OK', message: 'Server is running' });
 });
 
-// Servir archivos estáticos de React en producción
+// Serve React static files in production
 if (process.env.NODE_ENV === 'production') {
   const clientDistPath = path.join(__dirname, '../../client/dist');
   app.use(express.static(clientDistPath));
   
-  // Todas las rutas no-API deben servir el index.html de React
+  // All non-API routes should serve React's index.html
   app.get('*', (req, res) => {
     if (!req.path.startsWith('/api')) {
       res.sendFile(path.join(clientDistPath, 'index.html'));
@@ -51,17 +51,17 @@ if (process.env.NODE_ENV === 'production') {
   });
 }
 
-// Middleware de manejo de errores
+// Error handling middleware
 app.use((err: Error, req: express.Request, res: express.Response, next: express.NextFunction) => {
   console.error('Error:', err.stack);
-  res.status(500).json({ error: 'Algo salió mal!' });
+  res.status(500).json({ error: 'Something went wrong!' });
 });
 
-// Iniciar servidor
+// Start server
 app.listen(PORT, () => {
-  console.log(`🚀 Servidor ejecutándose en http://localhost:${PORT}`);
-  console.log(`📝 Usuario de prueba: admin / password`);
-  console.log(`🌐 Abre tu navegador en: http://localhost:${PORT}`);
+  console.log(`🚀 Server running on http://localhost:${PORT}`);
+  console.log(`📝 Test user: admin / password`);
+  console.log(`🌐 Open browser at: http://localhost:${PORT}`);
 });
 
 export default app;

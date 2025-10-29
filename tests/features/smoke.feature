@@ -13,5 +13,5 @@ Feature: Basic functionality smoke test
     Given the application is running at "http://localhost:3000"
     And I am on the login page
     When I enter username "admin" and password "password"
-    And I click the "Login" button
+    And I click the auth button "Login"
     Then I should be redirected to the dashboard

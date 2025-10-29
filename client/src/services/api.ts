@@ -1,4 +1,4 @@
-import { AuthResponse, LoginData, RegisterData, User, Product } from '../types';
+import { AuthResponse, LoginData, RegisterData, Product } from '../types';
 
 const API_BASE_URL = 'http://localhost:3000/api';
 

@@ -17,7 +17,7 @@ Feature: Product Management
       | price       | 999.99                          |
       | category    | electronics                     |
       | stock       | 50                              |
-    And I click "Agregar Producto"
+    And I click "Add Product"
     Then the product "iPhone 15 Pro" should appear in the list
     And it should show the price "$999.99"
     And it should show the stock "50"
@@ -25,7 +25,7 @@ Feature: Product Management
   Scenario: View empty product list
     Given there are no registered products
     When I am on the dashboard
-    Then I should see the message "No hay productos registrados."
+    Then I should see the message "No products registered."
     And the product counter should show "(0)"
 
   Scenario: View product list with items
@@ -36,14 +36,14 @@ Feature: Product Management
 
   Scenario: Delete an existing product
     Given there is a product "Test Product" in the list
-    When I click the "Eliminar" button for product "Test Product"
+    When I click the "Delete" button for product "Test Product"
     And I confirm the deletion in the dialog
     Then the product "Test Product" should not appear in the list
     And the product counter should decrease
 
   Scenario: Cancel product deletion
     Given there is a product "Test Product" in the list
-    When I click the "Eliminar" button for product "Test Product"
+    When I click the "Delete" button for product "Test Product"
     And I cancel the deletion in the dialog
     Then the product "Test Product" should remain in the list
 

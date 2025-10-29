@@ -17,7 +17,7 @@ export class UserService {
   static async createUser(userData: CreateUserRequest): Promise<User> {
     const existingUser = users.find(u => u.username === userData.username || u.email === userData.email);
     if (existingUser) {
-      throw new Error('Usuario o email ya existe');
+      throw new Error('User or email already exists');
     }
 
     const hashedPassword = await bcrypt.hash(userData.password, 10);

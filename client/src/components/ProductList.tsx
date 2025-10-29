@@ -23,8 +23,8 @@ const ProductList: React.FC<ProductListProps> = ({ products, onProductDeleted })
   if (products.length === 0) {
     return (
       <div className="no-products">
-        <p>No hay productos registrados.</p>
-        <p>¡Agrega tu primer producto!</p>
+        <p>No products registered.</p>
+        <p>Add your first product!</p>
       </div>
     );
   }

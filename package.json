@@ -24,7 +24,7 @@
     "test:auth": "cucumber-js tests/features/authentication.feature --require-module ts-node/register --require tests/step-definitions/**/*.ts",
     "test:products": "cucumber-js tests/features/products.feature --require-module ts-node/register --require tests/step-definitions/**/*.ts",
     "test:navigation": "cucumber-js tests/features/navigation.feature --require-module ts-node/register --require tests/step-definitions/**/*.ts",
-    "test:smoke": "cucumber-js tests/features/smoke.feature --require tests/support/hooks.js --require tests/step-definitions/common.steps.js",
+    "test:smoke": "cucumber-js tests/features/smoke.feature --require-module ts-node/register --require tests/step-definitions/**/*.ts",
     "test:smoke:full": "node run-smoke-tests.js",
     "ci:check": "npm run ci:build && npm run ci:test && npm run ci:security",
     "ci:build": "echo '🔨 Building...' && npm run build",

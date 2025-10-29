@@ -48,7 +48,7 @@ const Dashboard: React.FC = () => {
   };
 
   if (loading) {
-    return <div className="loading">Cargando productos...</div>;
+    return <div className="loading">Loading products...</div>;
   }
 
   return (
@@ -56,9 +56,9 @@ const Dashboard: React.FC = () => {
       <header className="dashboard-header">
         <h1>Dashboard - Products App</h1>
         <div className="user-info">
-          <span>Bienvenido, {user?.username}!</span>
+          <span>Welcome, {user?.username}!</span>
           <button onClick={handleLogout} className="logout-btn">
-            Cerrar Sesión
+            Logout
           </button>
         </div>
       </header>
@@ -66,12 +66,12 @@ const Dashboard: React.FC = () => {
       <main className="dashboard-main">
         <div className="products-section">
           <div className="products-header">
-            <h2>Productos</h2>
+            <h2>Products</h2>
             <button 
               onClick={() => setShowForm(!showForm)} 
               className="add-product-btn"
             >
-              {showForm ? 'Cancelar' : 'Agregar Producto'}
+              {showForm ? 'Cancel' : 'Add Product'}
             </button>
           </div>
 

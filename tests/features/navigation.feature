@@ -13,9 +13,9 @@ Feature: Navigation and UI
 
   Scenario: Navigation between login and registration
     Given I am on the login page
-    When I click "¿No tienes cuenta? Regístrate"
+    When I click "Don't have an account? Register"
     Then I should be on the registration page
-    When I click "¿Ya tienes cuenta? Inicia sesión"
+    When I click "Already have an account? Login"
     Then I should be on the login page
 
   Scenario: Interface responsiveness
@@ -27,9 +27,9 @@ Feature: Navigation and UI
   Scenario: UI elements validation in dashboard
     Given I am authenticated as "admin"
     When I am on the dashboard
-    Then I should see the "Agregar Producto" form
-    And I should see the "Lista de Productos" section
-    And I should see the "Cerrar Sesión" button
+    Then I should see the "Add Product" form
+    And I should see the "Product List" section
+    And I should see the "Logout" button
     And I should see the welcome message with my username
 
   Scenario: Form fields validation

@@ -49,21 +49,21 @@ app.get('*', (req, res) => {
   }
 });
 
-// Middleware de manejo de errores
+// Error handling middleware
 app.use((err: Error, req: express.Request, res: express.Response, next: express.NextFunction) => {
   console.error('Error:', err.stack);
-  res.status(500).json({ error: 'Algo salió mal!' });
+  res.status(500).json({ error: 'Something went wrong!' });
 });
 
-// Manejo de rutas no encontradas
+// Handle not found routes
 app.use((req: express.Request, res: express.Response) => {
-  res.status(404).json({ error: 'Ruta no encontrada' });
+  res.status(404).json({ error: 'Route not found' });
 });
 
 app.listen(PORT, () => {
-  console.log(`🚀 Servidor de pruebas ejecutándose en http://localhost:${PORT}`);
-  console.log(`📝 Usuario de prueba: admin / password`);
-  console.log(`🧪 Modo: Tests con archivos estáticos de React`);
+  console.log(`🚀 Test server running on http://localhost:${PORT}`);
+  console.log(`📝 Test user: admin / password`);
+  console.log(`🧪 Mode: Tests with React static files`);
 });
 
 export default app;

@@ -52,7 +52,7 @@ const ProductForm: React.FC<ProductFormProps> = ({ onProductAdded, onCancel }) =
         stock: '',
       });
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Error al crear el producto');
+      setError(err instanceof Error ? err.message : 'Error creating product');
     } finally {
       setLoading(false);
     }
@@ -60,13 +60,13 @@ const ProductForm: React.FC<ProductFormProps> = ({ onProductAdded, onCancel }) =
 
   return (
     <div className="product-form-container">
-      <h3>Agregar Nuevo Producto</h3>
+      <h3>Add New Product</h3>
       <form onSubmit={handleSubmit} className="product-form">
         <div className="form-group">
           <input
             type="text"
             name="name"
-            placeholder="Nombre del producto"
+            placeholder="Product name"
             value={formData.name}
             onChange={handleChange}
             required
@@ -76,7 +76,7 @@ const ProductForm: React.FC<ProductFormProps> = ({ onProductAdded, onCancel }) =
         <div className="form-group">
           <textarea
             name="description"
-            placeholder="Descripción"
+            placeholder="Description"
             value={formData.description}
             onChange={handleChange}
             required
@@ -89,7 +89,7 @@ const ProductForm: React.FC<ProductFormProps> = ({ onProductAdded, onCancel }) =
             <input
               type="number"
               name="price"
-              placeholder="Precio"
+              placeholder="Price"
               value={formData.price}
               onChange={handleChange}
               required
@@ -102,7 +102,7 @@ const ProductForm: React.FC<ProductFormProps> = ({ onProductAdded, onCancel }) =
             <input
               type="text"
               name="category"
-              placeholder="Categoría"
+              placeholder="Category"
               value={formData.category}
               onChange={handleChange}
               required
@@ -126,10 +126,10 @@ const ProductForm: React.FC<ProductFormProps> = ({ onProductAdded, onCancel }) =
 
         <div className="form-actions">
           <button type="button" onClick={onCancel} className="cancel-btn">
-            Cancelar
+            Cancel
           </button>
           <button type="submit" disabled={loading} className="submit-btn">
-            {loading ? 'Agregando...' : 'Agregar Producto'}
+            {loading ? 'Adding...' : 'Add Product'}
           </button>
         </div>
       </form>
