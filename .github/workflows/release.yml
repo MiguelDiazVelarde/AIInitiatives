@@ -48,7 +48,7 @@ jobs:
     - name: Run full test suite
       run: |
         # Start backend server
-        npm run start:test &
+        npm start &
         APP_PID=$!
         echo $APP_PID > app.pid
         
@@ -67,7 +67,7 @@ jobs:
         npx playwright install --with-deps
         
         # Run tests
-        npm run test:smoke
+        npm run test:smoke:ci
         
         # Cleanup
         kill $APP_PID || true
@@ -134,25 +134,16 @@ jobs:
         
     - name: Create GitHub Release
       id: create_release
-      uses: actions/create-release@v1
+      uses: softprops/action-gh-release@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         tag_name: ${{ steps.version.outputs.version }}
-        release_name: Product Management App ${{ steps.version.outputs.version }}
+        name: Product Management App ${{ steps.version.outputs.version }}
         body_path: release_notes.md
         draft: false
         prerelease: false
-        
-    - name: Upload release asset
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./product-management-app.tar.gz
-        asset_name: product-management-app-${{ steps.version.outputs.version }}.tar.gz
-        asset_content_type: application/gzip
+        files: ./product-management-app.tar.gz
 
   # Deploy to staging (if you have a staging environment)
   deploy-staging:

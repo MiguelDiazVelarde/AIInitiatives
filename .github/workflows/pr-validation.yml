@@ -67,7 +67,7 @@ jobs:
     - name: Quick smoke test
       run: |
         # Start backend in background
-        npm run start:test &
+        npm start &
         APP_PID=$!
         echo $APP_PID > app.pid
         
@@ -99,7 +99,7 @@ jobs:
     - name: Run critical path tests
       run: |
         # Start backend again for testing
-        npm run start:test &
+        npm start &
         APP_PID=$!
         echo $APP_PID > app.pid
         
@@ -115,7 +115,7 @@ jobs:
         done
         
         # Run smoke tests only
-        npm run test:smoke
+        npm run test:smoke:ci
         
         # Cleanup
         kill $APP_PID || true
