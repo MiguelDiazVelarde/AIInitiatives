@@ -3,11 +3,6 @@ import { expect } from '@playwright/test';
 import { CustomWorld } from '../support/world';
 
 // Data Validation Steps
-Given('I am on the registration page', async function (this: CustomWorld) {
-  await this.page.goto('/register');
-  await expect(this.page).toHaveURL(/.*register/);
-});
-
 When('I enter invalid data in the form fields', async function (this: CustomWorld) {
   // Enter invalid email format
   await this.page.fill('[data-testid="email-input"]', 'invalid-email');

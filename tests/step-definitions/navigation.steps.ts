@@ -142,12 +142,6 @@ Then('the form should have the fields:', async function (dataTable: any) {
   }
 });
 
-Then('I should remain authenticated', async function () {
-  // Should stay on dashboard or be able to access protected content
-  const currentUrl = this.page.url();
-  expect(currentUrl).toMatch(/dashboard|admin/);
-});
-
 Then('I should stay on the dashboard', async function () {
   await expect(this.page).toHaveURL(/.*dashboard/, { timeout: 5000 });
 });
@@ -165,14 +159,13 @@ When('I try to perform a protected action', async function () {
   await this.page.waitForLoadState('networkidle');
 });
 
-When('I click {string}', async function (linkText: string) {
-  if (linkText.includes("Don't have an account")) {
-    await this.page.click('button:has-text("Register"), a:has-text("Register")');
-  } else if (linkText.includes("Already have an account")) {
-    await this.page.click('button:has-text("Login"), a:has-text("Login")');
-  } else {
-    await this.page.click(`text="${linkText}"`);
-  }
+When('I click the register link', async function () {
+  await this.page.click('button:has-text("Register"), a:has-text("Register")');
+  await this.page.waitForTimeout(500);
+});
+
+When('I click the login link', async function () {
+  await this.page.click('button:has-text("Login"), a:has-text("Login")');
   await this.page.waitForTimeout(500);
 });
 
@@ -576,4 +569,51 @@ When('loading large amounts of data', async function () {
 Then('the interface should handle it gracefully without freezing', async function () {
   const notFrozen = await this.page.locator('h1').isVisible();
   expect(notFrozen).toBe(true);
+});
+
+// Additional missing steps
+When('I try to visit the login page', async function () {
+  await this.page.goto(`${this.baseURL}/auth/login`);
+  await this.page.waitForLoadState('networkidle');
+});
+
+Then('I should be automatically redirected to the dashboard', async function () {
+  await expect(this.page).toHaveURL(/.*dashboard/, { timeout: 5000 });
+});
+
+Then('I should not see the login form', async function () {
+  const loginForm = await this.page.locator('form[data-testid="login-form"], input[name="username"]').count();
+  expect(loginForm).toBe(0);
+});
+
+When('I switch to registration', async function () {
+  await this.page.click('button:has-text("Register"), a:has-text("Register")');
+  await this.page.waitForTimeout(500);
+});
+
+When('I am authenticated and on the dashboard', async function () {
+  await this.login('admin', 'password');
+  await this.navigateToDashboard();
+});
+
+When('I click the logout button', async function () {
+  await this.page.click('button:has-text("Logout"), .logout-btn');
+});
+
+Then('redirected to the login page', async function () {
+  await expect(this.page).toHaveURL(/.*auth/, { timeout: 5000 });
+});
+
+When('I switch to registration page', async function () {
+  await this.page.click('button:has-text("Register"), a:has-text("Register")');
+  await this.page.waitForTimeout(500);
+});
+
+When('the login completes', async function () {
+  await this.page.waitForLoadState('networkidle');
+});
+
+When('I am authenticated and on the dashboard', async function () {
+  await this.login('admin', 'password');
+  await this.navigateToDashboard();
 });

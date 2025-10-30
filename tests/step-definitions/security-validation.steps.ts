@@ -213,11 +213,6 @@ Then('session data should be protected', async function (this: CustomWorld) {
   expect(sessionData).toBeTruthy();
 });
 
-When('I logout', async function (this: CustomWorld) {
-  await this.page.click('.logout-btn, button:has-text("Logout"), button:has-text("Cerrar Sesión")');
-  await this.page.waitForLoadState('networkidle');
-});
-
 Then('the session should be completely destroyed', async function (this: CustomWorld) {
   // Try to access dashboard directly
   await this.page.goto(`${this.baseURL}/dashboard`);
@@ -286,12 +281,6 @@ Then('the application should remain secure', async function (this: CustomWorld) 
 });
 
 // REQ-SEC-005: Authentication enforcement
-Given('I am not authenticated', async function (this: CustomWorld) {
-  await this.clearSessionData();
-  await this.page.goto(`${this.baseURL}/auth`);
-  await this.page.waitForLoadState('networkidle');
-});
-
 When('I try to access any protected resource:', async function (this: CustomWorld, dataTable) {
   const endpoints = dataTable.hashes();
   

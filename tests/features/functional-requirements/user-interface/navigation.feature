@@ -3,10 +3,10 @@ Feature: User Interface Navigation and Responsiveness
   # REQ-UI-001: Intuitive navigation between login and registration
   Scenario: Easy switching between auth forms
     Given I am on the login page
-    When I click "Don't have an account? Register"
+    When I click the register link
     Then I should smoothly transition to the registration page
     And the registration form should be clearly visible
-    When I click "Already have an account? Login"
+    When I click the login link
     Then I should smoothly transition back to the login page
     And the login form should be clearly visible
 
