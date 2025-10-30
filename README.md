@@ -240,8 +240,8 @@ Run these commands locally to ensure your changes will pass CI:
 # TypeScript compilation
 npm run build
 
-# Run smoke tests
-npm run test:smoke
+# Run smoke tests (full suite)
+npm run test:smoke:full
 
 # Security audit
 npm audit --audit-level high
