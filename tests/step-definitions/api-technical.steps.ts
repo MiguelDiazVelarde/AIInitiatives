@@ -242,9 +242,22 @@ When('I make requests with different conditions:', async function (this: CustomW
         response = await this.page.request.get(`${this.baseURL}/api/products/nonexistent-id`);
         break;
         
-      case 'unauthorized access':
-        response = await this.page.request.get(`${this.baseURL}/api/products`);
+      case 'unauthorized access': {
+        // Create a new request context without cookies/session
+        const browser = this.page.context().browser();
+        if (browser) {
+          const newContext = await browser.newContext();
+          const apiRequestContext = newContext.request;
+          response = await apiRequestContext.get(`${this.baseURL}/api/products`);
+          await newContext.close();
+        } else {
+          // Fallback if browser is not available
+          response = await this.page.request.get(`${this.baseURL}/api/products`, {
+            headers: {} // Clear any authentication headers
+          });
+        }
         break;
+      }
         
       default:
         response = await this.page.request.get(`${this.baseURL}/api/invalid-endpoint`);
@@ -252,7 +265,7 @@ When('I make requests with different conditions:', async function (this: CustomW
     
     results.push({
       scenario: scenario.scenario,
-      expectedStatus: parseInt(scenario.expected_status),
+      expectedStatus: Number.parseInt(scenario.expected_status),
       actualStatus: response.status()
     });
   }
@@ -279,7 +292,7 @@ When('I inspect the application structure', async function (this: CustomWorld) {
   const hasReactRoot = await this.page.evaluate(() => {
     return document.getElementById('root') !== null ||
            document.querySelector('[data-reactroot]') !== null ||
-           (window as any).React !== undefined;
+           (globalThis as any).React !== undefined;
   });
   
   (this as any).hasReactStructure = hasReactRoot;
@@ -406,13 +419,16 @@ When('I access the application from different browsers:', async function (this: 
   const browsers = dataTable.hashes();
   
   // Test basic functionality in current browser (simulating multi-browser test)
-  for (const browser of browsers) {
+  for (const browserName of browsers) {
     await this.page.goto(this.baseURL);
     await this.page.waitForLoadState('networkidle');
     
     // Test basic functionality
     const hasContent = await this.page.locator('body').textContent();
     expect(hasContent).toBeTruthy();
+    
+    // Test navigation (simulating test for browser: ${browserName})
+    console.log(`Testing in browser: ${browserName}`);
     
     // Test navigation
     await this.navigateToLogin();
