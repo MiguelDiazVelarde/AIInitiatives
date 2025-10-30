@@ -9,7 +9,7 @@ interface ProductListProps {
 
 const ProductList: React.FC<ProductListProps> = ({ products, onProductDeleted }) => {
   const handleDelete = async (productId: string) => {
-    if (window.confirm('¿Estás seguro de que deseas eliminar este producto?')) {
+    if (window.confirm('Are you sure you want to delete this product?')) {
       try {
         await apiService.deleteProduct(productId);
         onProductDeleted(productId);
