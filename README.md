@@ -58,8 +58,8 @@ npm start
 ```
 
 5. **Open in browser**:
-   - **React App**: <http://localhost:5173> (Development)
-   - **API Server**: <http://localhost:3000> (Backend)
+   - **React App**: <http://localhost:5173> (Development with `npm run dev`)
+   - **API Server**: <http://localhost:3000> (Backend with `npm start`)
 
 ## 🎯 Application Usage
 
@@ -146,7 +146,7 @@ npm run test:full         # Run tests with HTML report
 npm run test:auth         # Authentication tests only
 npm run test:products     # Product tests only
 npm run test:navigation   # Navigation tests only
-        # Quick smoke tests
+npm run test:smoke:full   # Full smoke test suite (requires server)
 npm run test:headed       # Run tests in visible browser
 ```
 
@@ -205,7 +205,7 @@ Automated release process triggered by version tags:
 - ✅ Build artifact creation
 - ✅ GitHub release generation with notes
 - ✅ Asset packaging and upload
-- ✅ Staging depnpm run test:smokeloyment preparation
+- ✅ Staging deployment preparation
 
 ### Setting Up CI/CD
 
