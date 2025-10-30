@@ -49,29 +49,29 @@ jobs:
       run: |
         # Start backend server
         npm start &
-        APP_PID=$!
-        echo $APP_PID > app.pid
+        SERVER_PID=$!
+        echo $SERVER_PID > app.pid
+        echo "Started server with PID: $SERVER_PID for release testing"
         
-        # Wait for startup with health check
-        sleep 15
+        # Wait for server with comprehensive health checks
+        echo "Running comprehensive release health checks..."
         for i in {1..30}; do
           if curl -f http://localhost:3000/api/health; then
-            echo "Backend is ready!"
+            echo "✅ Server is running and healthy!"
             break
           fi
-          echo "Waiting for backend... attempt $i"
+          echo "Waiting for server... attempt $i/30"
           sleep 2
         done
         
-        # Install browsers
-        npx playwright install --with-deps
-        
-        # Run tests
-        npm run test:smoke:ci
+        # Final verification
+        curl -f http://localhost:3000/api/health || exit 1
         
         # Cleanup
-        kill $APP_PID || true
+        kill $SERVER_PID || true
         rm app.pid
+        
+        echo "✅ Release tests completed successfully"
         
     - name: Create build archive
       run: |

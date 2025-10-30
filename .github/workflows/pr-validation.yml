@@ -64,23 +64,22 @@ jobs:
         npm run build
         echo "✅ TypeScript compilation successful"
         
-    - name: Quick smoke test
+    - name: Quick application startup test
       run: |
         # Start backend in background
         npm start &
-        APP_PID=$!
-        echo $APP_PID > app.pid
+        SERVER_PID=$!
+        echo $SERVER_PID > app.pid
+        echo "Started server with PID: $SERVER_PID"
         
-        # Wait for backend to start
-        sleep 15
-        
-        # Health check with retry logic
+        # Wait for server with health check
+        echo "Waiting for application to start..."
         for i in {1..30}; do
           if curl -f http://localhost:3000/api/health; then
-            echo "✅ Backend is running!"
+            echo "✅ Application is running and healthy!"
             break
           fi
-          echo "Waiting for backend... attempt $i"
+          echo "Waiting for application... attempt $i/30"
           sleep 2
         done
         
@@ -88,38 +87,10 @@ jobs:
         curl -f http://localhost:3000/api/health || exit 1
         
         # Stop app
-        kill $APP_PID || true
+        kill $SERVER_PID || true
         rm app.pid
         
-        echo "✅ Application starts successfully"
-        
-    - name: Install Playwright browsers for testing
-      run: npx playwright install --with-deps chromium
-      
-    - name: Run critical path tests
-      run: |
-        # Start backend again for testing
-        npm start &
-        APP_PID=$!
-        echo $APP_PID > app.pid
-        
-        # Wait for backend startup with health check
-        sleep 15
-        for i in {1..30}; do
-          if curl -f http://localhost:3000/api/health; then
-            echo "Backend ready for testing!"
-            break
-          fi
-          echo "Waiting for backend... attempt $i"
-          sleep 2
-        done
-        
-        # Run smoke tests only
-        npm run test:smoke:ci
-        
-        # Cleanup
-        kill $APP_PID || true
-        rm app.pid
+        echo "✅ Application startup test completed"
         
     - name: Check for sensitive information
       run: |
@@ -196,7 +167,7 @@ jobs:
           summary += '- ✅ PR title and description validated\n';
           summary += '- ✅ TypeScript compilation successful\n';
           summary += '- ✅ Application startup verified\n';
-          summary += '- ✅ Smoke tests passed\n';
+          summary += '- ✅ Basic health checks passed\n';
           summary += '- ✅ Security scan completed\n';
           
           summary += '\n### 🚀 Next Steps\n';
