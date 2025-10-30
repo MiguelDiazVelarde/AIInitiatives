@@ -237,14 +237,22 @@ Current pipeline includes:
 Run these commands locally to ensure your changes will pass CI:
 
 ```bash
-# TypeScript compilation
+# TypeScript compilation (essential - validates code builds)
 npm run build
 
-# Run smoke tests (full suite)
-npm run test:smoke:full
-
-# Security audit
+# Security audit (checks for vulnerabilities)
 npm audit --audit-level high
+```
+
+**Optional full testing** (requires separate server):
+```bash
+# Terminal 1: Start server
+npm start
+
+# Terminal 2: Run tests  
+npm run test:auth        # Authentication tests
+npm run test:products    # Product management tests
+npm run test:navigation  # UI navigation tests
 ```
 
 ## 🌟 Future Improvements

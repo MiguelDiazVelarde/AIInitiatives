@@ -1,0 +1,1604 @@
+[
+  {
+    "description": "  As an authenticated user\n  I want to manage products\n  So that I can maintain my product catalog",
+    "elements": [
+      {
+        "description": "",
+        "id": "product-management;add-product-with-all-required-fields",
+        "keyword": "Scenario",
+        "line": 11,
+        "name": "Add product with all required fields",
+        "steps": [
+          {
+            "keyword": "Before",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 4717899400
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 8,
+            "name": "I am authenticated as \"admin\"",
+            "match": {
+              "location": "tests\\step-definitions\\authentication.steps.ts:30"
+            },
+            "result": {
+              "status": "failed",
+              "duration": 12560279000,
+              "error_message": "page.waitForSelector: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('input[name=\"username\"]') to be visible\u001b[22m\n\n    at World.<anonymous> (C:\\Workspaces\\iainitiatives\\tests\\step-definitions\\authentication.steps.ts:37:19)"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 12,
+            "name": "I am on the dashboard",
+            "match": {
+              "location": "tests\\step-definitions\\navigation.steps.ts:12"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "arguments": [
+              {
+                "rows": [
+                  {
+                    "cells": [
+                      "field",
+                      "value"
+                    ]
+                  },
+                  {
+                    "cells": [
+                      "name",
+                      "Gaming Laptop"
+                    ]
+                  },
+                  {
+                    "cells": [
+                      "description",
+                      "High-performance laptop"
+                    ]
+                  },
+                  {
+                    "cells": [
+                      "price",
+                      "1299.99"
+                    ]
+                  },
+                  {
+                    "cells": [
+                      "category",
+                      "electronics"
+                    ]
+                  },
+                  {
+                    "cells": [
+                      "stock",
+                      "25"
+                    ]
+                  }
+                ]
+              }
+            ],
+            "keyword": "When ",
+            "line": 13,
+            "name": "I complete the product form with:",
+            "match": {
+              "location": "tests\\step-definitions\\products.steps.ts:54"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 20,
+            "name": "I submit the product form",
+            "result": {
+              "status": "undefined",
+              "duration": 0
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 21,
+            "name": "the product should be created successfully",
+            "result": {
+              "status": "undefined",
+              "duration": 0
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 22,
+            "name": "should appear in the product list",
+            "result": {
+              "status": "undefined",
+              "duration": 0
+            }
+          },
+          {
+            "keyword": "After",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 75351399
+            }
+          }
+        ],
+        "tags": [],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "product-management;add-product-with-invalid-price",
+        "keyword": "Scenario",
+        "line": 25,
+        "name": "Add product with invalid price",
+        "steps": [
+          {
+            "keyword": "Before",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 4552763499
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 8,
+            "name": "I am authenticated as \"admin\"",
+            "match": {
+              "location": "tests\\step-definitions\\authentication.steps.ts:30"
+            },
+            "result": {
+              "status": "failed",
+              "duration": 12536470600,
+              "error_message": "page.waitForSelector: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('input[name=\"username\"]') to be visible\u001b[22m\n\n    at World.<anonymous> (C:\\Workspaces\\iainitiatives\\tests\\step-definitions\\authentication.steps.ts:37:19)"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 26,
+            "name": "I am on the dashboard",
+            "match": {
+              "location": "tests\\step-definitions\\navigation.steps.ts:12"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "arguments": [
+              {
+                "rows": [
+                  {
+                    "cells": [
+                      "field",
+                      "value"
+                    ]
+                  },
+                  {
+                    "cells": [
+                      "name",
+                      "Invalid Product"
+                    ]
+                  },
+                  {
+                    "cells": [
+                      "description",
+                      "Test product"
+                    ]
+                  },
+                  {
+                    "cells": [
+                      "price",
+                      "-10.99"
+                    ]
+                  },
+                  {
+                    "cells": [
+                      "category",
+                      "electronics"
+                    ]
+                  },
+                  {
+                    "cells": [
+                      "stock",
+                      "5"
+                    ]
+                  }
+                ]
+              }
+            ],
+            "keyword": "When ",
+            "line": 27,
+            "name": "I complete the product form with:",
+            "match": {
+              "location": "tests\\step-definitions\\products.steps.ts:54"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 34,
+            "name": "I submit the product form",
+            "result": {
+              "status": "undefined",
+              "duration": 0
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 35,
+            "name": "I should see a price validation error",
+            "result": {
+              "status": "undefined",
+              "duration": 0
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 36,
+            "name": "the product should not be created",
+            "match": {
+              "location": "tests\\step-definitions\\products.steps.ts:247"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "keyword": "After",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 72310599
+            }
+          }
+        ],
+        "tags": [],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "product-management;add-product-with-invalid-stock",
+        "keyword": "Scenario",
+        "line": 39,
+        "name": "Add product with invalid stock",
+        "steps": [
+          {
+            "keyword": "Before",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 4727133600
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 8,
+            "name": "I am authenticated as \"admin\"",
+            "match": {
+              "location": "tests\\step-definitions\\authentication.steps.ts:30"
+            },
+            "result": {
+              "status": "failed",
+              "duration": 12534637499,
+              "error_message": "page.waitForSelector: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('input[name=\"username\"]') to be visible\u001b[22m\n\n    at World.<anonymous> (C:\\Workspaces\\iainitiatives\\tests\\step-definitions\\authentication.steps.ts:37:19)"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 40,
+            "name": "I am on the dashboard",
+            "match": {
+              "location": "tests\\step-definitions\\navigation.steps.ts:12"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "arguments": [
+              {
+                "rows": [
+                  {
+                    "cells": [
+                      "field",
+                      "value"
+                    ]
+                  },
+                  {
+                    "cells": [
+                      "name",
+                      "Invalid Stock"
+                    ]
+                  },
+                  {
+                    "cells": [
+                      "description",
+                      "Test product"
+                    ]
+                  },
+                  {
+                    "cells": [
+                      "price",
+                      "29.99"
+                    ]
+                  },
+                  {
+                    "cells": [
+                      "category",
+                      "electronics"
+                    ]
+                  },
+                  {
+                    "cells": [
+                      "stock",
+                      "-5"
+                    ]
+                  }
+                ]
+              }
+            ],
+            "keyword": "When ",
+            "line": 41,
+            "name": "I complete the product form with:",
+            "match": {
+              "location": "tests\\step-definitions\\products.steps.ts:54"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 48,
+            "name": "I submit the product form",
+            "result": {
+              "status": "undefined",
+              "duration": 0
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 49,
+            "name": "I should see a stock validation error",
+            "result": {
+              "status": "undefined",
+              "duration": 0
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 50,
+            "name": "the product should not be created",
+            "match": {
+              "location": "tests\\step-definitions\\products.steps.ts:247"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "keyword": "After",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 94667300
+            }
+          }
+        ],
+        "tags": [],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "product-management;multiple-products-have-unique-ids",
+        "keyword": "Scenario",
+        "line": 53,
+        "name": "Multiple products have unique IDs",
+        "steps": [
+          {
+            "keyword": "Before",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 5545094000
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 8,
+            "name": "I am authenticated as \"admin\"",
+            "match": {
+              "location": "tests\\step-definitions\\authentication.steps.ts:30"
+            },
+            "result": {
+              "status": "failed",
+              "duration": 12542637599,
+              "error_message": "page.waitForSelector: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('input[name=\"username\"]') to be visible\u001b[22m\n\n    at World.<anonymous> (C:\\Workspaces\\iainitiatives\\tests\\step-definitions\\authentication.steps.ts:37:19)"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 54,
+            "name": "I have created multiple products",
+            "result": {
+              "status": "undefined",
+              "duration": 0
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 55,
+            "name": "I check the product identifiers",
+            "result": {
+              "status": "undefined",
+              "duration": 0
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 56,
+            "name": "each product should have a unique ID",
+            "result": {
+              "status": "undefined",
+              "duration": 0
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 57,
+            "name": "no ID collisions should exist",
+            "result": {
+              "status": "undefined",
+              "duration": 0
+            }
+          },
+          {
+            "keyword": "After",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 119733599
+            }
+          }
+        ],
+        "tags": [],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "product-management;product-creation-metadata",
+        "keyword": "Scenario",
+        "line": 60,
+        "name": "Product creation metadata",
+        "steps": [
+          {
+            "keyword": "Before",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 5503031800
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 8,
+            "name": "I am authenticated as \"admin\"",
+            "match": {
+              "location": "tests\\step-definitions\\authentication.steps.ts:30"
+            },
+            "result": {
+              "status": "failed",
+              "duration": 12537072899,
+              "error_message": "page.waitForSelector: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('input[name=\"username\"]') to be visible\u001b[22m\n\n    at World.<anonymous> (C:\\Workspaces\\iainitiatives\\tests\\step-definitions\\authentication.steps.ts:37:19)"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 61,
+            "name": "I am on the dashboard",
+            "match": {
+              "location": "tests\\step-definitions\\navigation.steps.ts:12"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 62,
+            "name": "I create a new product",
+            "match": {
+              "location": "tests\\step-definitions\\data-management.steps.ts:165"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 63,
+            "name": "the product should include creation timestamp",
+            "result": {
+              "status": "undefined",
+              "duration": 0
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 64,
+            "name": "should record the creator information",
+            "result": {
+              "status": "undefined",
+              "duration": 0
+            }
+          },
+          {
+            "keyword": "After",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 120009700
+            }
+          }
+        ],
+        "tags": [],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "product-management;product-display-includes-all-information",
+        "keyword": "Scenario",
+        "line": 67,
+        "name": "Product display includes all information",
+        "steps": [
+          {
+            "keyword": "Before",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 5567080800
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 8,
+            "name": "I am authenticated as \"admin\"",
+            "match": {
+              "location": "tests\\step-definitions\\authentication.steps.ts:30"
+            },
+            "result": {
+              "status": "failed",
+              "duration": 12544697799,
+              "error_message": "page.waitForSelector: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('input[name=\"username\"]') to be visible\u001b[22m\n\n    at World.<anonymous> (C:\\Workspaces\\iainitiatives\\tests\\step-definitions\\authentication.steps.ts:37:19)"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 68,
+            "name": "I have products in the system",
+            "match": {
+              "location": "tests\\step-definitions\\products.steps.ts:662"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 69,
+            "name": "I view the product list",
+            "result": {
+              "status": "ambiguous",
+              "duration": 0
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 70,
+            "name": "each product should display name, description, price, category, and stock",
+            "match": {
+              "location": "tests\\step-definitions\\products.steps.ts:752"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 71,
+            "name": "all information should be clearly formatted",
+            "match": {
+              "location": "tests\\step-definitions\\products.steps.ts:759"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "keyword": "After",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 101226999
+            }
+          }
+        ],
+        "tags": [],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "product-management;product-list-responsive-layout",
+        "keyword": "Scenario",
+        "line": 74,
+        "name": "Product list responsive layout",
+        "steps": [
+          {
+            "keyword": "Before",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 5099428199
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 8,
+            "name": "I am authenticated as \"admin\"",
+            "match": {
+              "location": "tests\\step-definitions\\authentication.steps.ts:30"
+            },
+            "result": {
+              "status": "failed",
+              "duration": 12544203900,
+              "error_message": "page.waitForSelector: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('input[name=\"username\"]') to be visible\u001b[22m\n\n    at World.<anonymous> (C:\\Workspaces\\iainitiatives\\tests\\step-definitions\\authentication.steps.ts:37:19)"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 75,
+            "name": "I have multiple products in the system",
+            "match": {
+              "location": "tests\\step-definitions\\products.steps.ts:693"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 76,
+            "name": "I view the product list on different screen sizes",
+            "match": {
+              "location": "tests\\step-definitions\\products.steps.ts:355"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 77,
+            "name": "products should be displayed in a responsive grid",
+            "match": {
+              "location": "tests\\step-definitions\\products.steps.ts:764"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 78,
+            "name": "layout should adapt to screen dimensions",
+            "match": {
+              "location": "tests\\step-definitions\\products.steps.ts:769"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "keyword": "After",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 127011700
+            }
+          }
+        ],
+        "tags": [],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "product-management;empty-product-list-display",
+        "keyword": "Scenario",
+        "line": 81,
+        "name": "Empty product list display",
+        "steps": [
+          {
+            "keyword": "Before",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 5411195500
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 8,
+            "name": "I am authenticated as \"admin\"",
+            "match": {
+              "location": "tests\\step-definitions\\authentication.steps.ts:30"
+            },
+            "result": {
+              "status": "failed",
+              "duration": 12555535200,
+              "error_message": "page.waitForSelector: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('input[name=\"username\"]') to be visible\u001b[22m\n\n    at World.<anonymous> (C:\\Workspaces\\iainitiatives\\tests\\step-definitions\\authentication.steps.ts:37:19)"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 82,
+            "name": "I have no products in the system",
+            "match": {
+              "location": "tests\\step-definitions\\products.steps.ts:715"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 83,
+            "name": "I view the product list",
+            "result": {
+              "status": "ambiguous",
+              "duration": 0
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 84,
+            "name": "I should see an appropriate empty state message",
+            "match": {
+              "location": "tests\\step-definitions\\products.steps.ts:777"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 85,
+            "name": "guidance on how to add the first product",
+            "match": {
+              "location": "tests\\step-definitions\\products.steps.ts:782"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "keyword": "After",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 123752999
+            }
+          }
+        ],
+        "tags": [],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "product-management;product-list-updates-after-operations",
+        "keyword": "Scenario",
+        "line": 88,
+        "name": "Product list updates after operations",
+        "steps": [
+          {
+            "keyword": "Before",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 5357990400
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 8,
+            "name": "I am authenticated as \"admin\"",
+            "match": {
+              "location": "tests\\step-definitions\\authentication.steps.ts:30"
+            },
+            "result": {
+              "status": "failed",
+              "duration": 12550661400,
+              "error_message": "page.waitForSelector: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('input[name=\"username\"]') to be visible\u001b[22m\n\n    at World.<anonymous> (C:\\Workspaces\\iainitiatives\\tests\\step-definitions\\authentication.steps.ts:37:19)"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 89,
+            "name": "I am viewing the product list",
+            "result": {
+              "status": "undefined",
+              "duration": 0
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 90,
+            "name": "I add or delete a product",
+            "result": {
+              "status": "undefined",
+              "duration": 0
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 91,
+            "name": "the list should update immediately",
+            "result": {
+              "status": "undefined",
+              "duration": 0
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 92,
+            "name": "reflect the changes without requiring a page refresh",
+            "result": {
+              "status": "undefined",
+              "duration": 0
+            }
+          },
+          {
+            "keyword": "After",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 123622899
+            }
+          }
+        ],
+        "tags": [],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "product-management;product-deletion-requires-confirmation",
+        "keyword": "Scenario",
+        "line": 95,
+        "name": "Product deletion requires confirmation",
+        "steps": [
+          {
+            "keyword": "Before",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 5315828500
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 8,
+            "name": "I am authenticated as \"admin\"",
+            "match": {
+              "location": "tests\\step-definitions\\authentication.steps.ts:30"
+            },
+            "result": {
+              "status": "failed",
+              "duration": 12535444900,
+              "error_message": "page.waitForSelector: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('input[name=\"username\"]') to be visible\u001b[22m\n\n    at World.<anonymous> (C:\\Workspaces\\iainitiatives\\tests\\step-definitions\\authentication.steps.ts:37:19)"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 96,
+            "name": "I have products in the system",
+            "match": {
+              "location": "tests\\step-definitions\\products.steps.ts:662"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 97,
+            "name": "I attempt to delete a product",
+            "match": {
+              "location": "tests\\step-definitions\\products.steps.ts:721"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 98,
+            "name": "I should see a confirmation dialog",
+            "match": {
+              "location": "tests\\step-definitions\\products.steps.ts:437"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 99,
+            "name": "be able to confirm or cancel the deletion",
+            "match": {
+              "location": "tests\\step-definitions\\products.steps.ts:733"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "keyword": "After",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 83373699
+            }
+          }
+        ],
+        "tags": [],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "product-management;handle-deletion-errors-gracefully",
+        "keyword": "Scenario",
+        "line": 102,
+        "name": "Handle deletion errors gracefully",
+        "steps": [
+          {
+            "keyword": "Before",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 5260815200
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 8,
+            "name": "I am authenticated as \"admin\"",
+            "match": {
+              "location": "tests\\step-definitions\\authentication.steps.ts:30"
+            },
+            "result": {
+              "status": "failed",
+              "duration": 12537185100,
+              "error_message": "page.waitForSelector: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('input[name=\"username\"]') to be visible\u001b[22m\n\n    at World.<anonymous> (C:\\Workspaces\\iainitiatives\\tests\\step-definitions\\authentication.steps.ts:37:19)"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 103,
+            "name": "I have products in the system",
+            "match": {
+              "location": "tests\\step-definitions\\products.steps.ts:662"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 104,
+            "name": "deletion fails due to an error",
+            "result": {
+              "status": "undefined",
+              "duration": 0
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 105,
+            "name": "I should see an appropriate error message",
+            "match": {
+              "location": "tests\\step-definitions\\products.steps.ts:459"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 106,
+            "name": "the product should remain in the list",
+            "match": {
+              "location": "tests\\step-definitions\\products.steps.ts:465"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "keyword": "After",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 120884599
+            }
+          }
+        ],
+        "tags": [],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "product-management;comprehensive-form-validation-feedback",
+        "keyword": "Scenario",
+        "line": 109,
+        "name": "Comprehensive form validation feedback",
+        "steps": [
+          {
+            "keyword": "Before",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 5069284199
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 8,
+            "name": "I am authenticated as \"admin\"",
+            "match": {
+              "location": "tests\\step-definitions\\authentication.steps.ts:30"
+            },
+            "result": {
+              "status": "failed",
+              "duration": 12540289799,
+              "error_message": "page.waitForSelector: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('input[name=\"username\"]') to be visible\u001b[22m\n\n    at World.<anonymous> (C:\\Workspaces\\iainitiatives\\tests\\step-definitions\\authentication.steps.ts:37:19)"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 110,
+            "name": "I am on the dashboard",
+            "match": {
+              "location": "tests\\step-definitions\\navigation.steps.ts:12"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 111,
+            "name": "I submit the product form with missing or invalid data",
+            "result": {
+              "status": "undefined",
+              "duration": 0
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 112,
+            "name": "I should see specific validation errors for each field",
+            "result": {
+              "status": "undefined",
+              "duration": 0
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 113,
+            "name": "clear guidance on how to correct the errors",
+            "result": {
+              "status": "undefined",
+              "duration": 0
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 114,
+            "name": "the form should prevent submission until valid",
+            "result": {
+              "status": "undefined",
+              "duration": 0
+            }
+          },
+          {
+            "keyword": "After",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 96443100
+            }
+          }
+        ],
+        "tags": [],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "product-management;product-counter-shows-correct-count",
+        "keyword": "Scenario",
+        "line": 124,
+        "name": "Product counter shows correct count",
+        "steps": [
+          {
+            "keyword": "Before",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 5651923699
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 8,
+            "name": "I am authenticated as \"admin\"",
+            "match": {
+              "location": "tests\\step-definitions\\authentication.steps.ts:30"
+            },
+            "result": {
+              "status": "failed",
+              "duration": 12529196400,
+              "error_message": "page.waitForSelector: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('input[name=\"username\"]') to be visible\u001b[22m\n\n    at World.<anonymous> (C:\\Workspaces\\iainitiatives\\tests\\step-definitions\\authentication.steps.ts:37:19)"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 118,
+            "name": "I have products in the system",
+            "match": {
+              "location": "tests\\step-definitions\\products.steps.ts:662"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 119,
+            "name": "I view the dashboard",
+            "match": {
+              "location": "tests\\step-definitions\\products.steps.ts:383"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 120,
+            "name": "the product counter should show the correct number of products",
+            "match": {
+              "location": "tests\\step-definitions\\products.steps.ts:787"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 121,
+            "name": "update when products are added or removed",
+            "match": {
+              "location": "tests\\step-definitions\\products.steps.ts:792"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "keyword": "After",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 80617800
+            }
+          }
+        ],
+        "tags": [],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "product-management;product-counter-shows-correct-count",
+        "keyword": "Scenario",
+        "line": 125,
+        "name": "Product counter shows correct count",
+        "steps": [
+          {
+            "keyword": "Before",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 5003817399
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 8,
+            "name": "I am authenticated as \"admin\"",
+            "match": {
+              "location": "tests\\step-definitions\\authentication.steps.ts:30"
+            },
+            "result": {
+              "status": "failed",
+              "duration": 12533898199,
+              "error_message": "page.waitForSelector: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('input[name=\"username\"]') to be visible\u001b[22m\n\n    at World.<anonymous> (C:\\Workspaces\\iainitiatives\\tests\\step-definitions\\authentication.steps.ts:37:19)"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 118,
+            "name": "I have products in the system",
+            "match": {
+              "location": "tests\\step-definitions\\products.steps.ts:662"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 119,
+            "name": "I view the dashboard",
+            "match": {
+              "location": "tests\\step-definitions\\products.steps.ts:383"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 120,
+            "name": "the product counter should show the correct number of products",
+            "match": {
+              "location": "tests\\step-definitions\\products.steps.ts:787"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 121,
+            "name": "update when products are added or removed",
+            "match": {
+              "location": "tests\\step-definitions\\products.steps.ts:792"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "keyword": "After",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 100132899
+            }
+          }
+        ],
+        "tags": [],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "product-management;product-counter-shows-correct-count",
+        "keyword": "Scenario",
+        "line": 126,
+        "name": "Product counter shows correct count",
+        "steps": [
+          {
+            "keyword": "Before",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 5259829400
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 8,
+            "name": "I am authenticated as \"admin\"",
+            "match": {
+              "location": "tests\\step-definitions\\authentication.steps.ts:30"
+            },
+            "result": {
+              "status": "failed",
+              "duration": 12547786600,
+              "error_message": "page.waitForSelector: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('input[name=\"username\"]') to be visible\u001b[22m\n\n    at World.<anonymous> (C:\\Workspaces\\iainitiatives\\tests\\step-definitions\\authentication.steps.ts:37:19)"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 118,
+            "name": "I have products in the system",
+            "match": {
+              "location": "tests\\step-definitions\\products.steps.ts:662"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 119,
+            "name": "I view the dashboard",
+            "match": {
+              "location": "tests\\step-definitions\\products.steps.ts:383"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 120,
+            "name": "the product counter should show the correct number of products",
+            "match": {
+              "location": "tests\\step-definitions\\products.steps.ts:787"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 121,
+            "name": "update when products are added or removed",
+            "match": {
+              "location": "tests\\step-definitions\\products.steps.ts:792"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "keyword": "After",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 81405500
+            }
+          }
+        ],
+        "tags": [],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "product-management;product-removal-from-display-after-deletion",
+        "keyword": "Scenario",
+        "line": 129,
+        "name": "Product removal from display after deletion",
+        "steps": [
+          {
+            "keyword": "Before",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 5279041200
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 8,
+            "name": "I am authenticated as \"admin\"",
+            "match": {
+              "location": "tests\\step-definitions\\authentication.steps.ts:30"
+            },
+            "result": {
+              "status": "failed",
+              "duration": 12552428099,
+              "error_message": "page.waitForSelector: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('input[name=\"username\"]') to be visible\u001b[22m\n\n    at World.<anonymous> (C:\\Workspaces\\iainitiatives\\tests\\step-definitions\\authentication.steps.ts:37:19)"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 130,
+            "name": "I have a product in the system",
+            "match": {
+              "location": "tests\\step-definitions\\products.steps.ts:679"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 131,
+            "name": "I successfully delete the product",
+            "match": {
+              "location": "tests\\step-definitions\\products.steps.ts:725"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 132,
+            "name": "it should be immediately removed from the display",
+            "match": {
+              "location": "tests\\step-definitions\\products.steps.ts:738"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 133,
+            "name": "the product count should be updated",
+            "match": {
+              "location": "tests\\step-definitions\\products.steps.ts:745"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "keyword": "After",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 107175000
+            }
+          }
+        ],
+        "tags": [],
+        "type": "scenario"
+      }
+    ],
+    "id": "product-management",
+    "line": 2,
+    "keyword": "Feature",
+    "name": "Product Management",
+    "tags": [],
+    "uri": "tests\\features\\functional-requirements\\product-management\\products.feature"
+  }
+]
