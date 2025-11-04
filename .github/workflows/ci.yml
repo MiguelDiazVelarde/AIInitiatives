@@ -121,31 +121,35 @@ jobs:
         echo "Building application for testing..."
         npm run build
         
-        echo "Starting server for testing..."
-        npm start &
+        echo "Starting server with robust health checking..."
+        node scripts/start-server-and-wait.js &
         SERVER_PID=$!
-        echo "Server started with PID: $SERVER_PID"
+        echo "Server startup script started with PID: $SERVER_PID"
         
         # Function to cleanup on exit
         cleanup() {
           echo "Cleaning up..."
           kill $SERVER_PID 2>/dev/null || true
           pkill -f "node.*dist/server" 2>/dev/null || true
+          pkill -f "start-server-and-wait" 2>/dev/null || true
         }
         trap cleanup EXIT
         
-        # Wait for server to start
-        echo "Waiting for server to be ready..."
-        for i in {1..30}; do
-          if curl -f --max-time 5 http://localhost:3001/api/health 2>/dev/null; then
-            echo "✅ Server is ready!"
+        # Wait for the startup script to confirm server is ready
+        echo "Waiting for server startup confirmation..."
+        for i in {1..90}; do
+          if curl -f --max-time 3 http://localhost:3001/api/health 2>/dev/null; then
+            echo "✅ Server confirmed ready by startup script!"
             break
           fi
-          if [ $i -eq 30 ]; then
-            echo "❌ Server failed to start within timeout"
+          if [ $i -eq 90 ]; then
+            echo "❌ Server startup script failed to confirm readiness"
+            echo "=== Debug Information ==="
+            ps aux | grep node || echo "No node processes found"
+            netstat -tlnp | grep 3001 || echo "Port 3001 not listening"
             exit 1
           fi
-          echo "Waiting... attempt $i/30"
+          echo "Waiting for startup confirmation... attempt $i/90"
           sleep 2
         done
         
@@ -178,6 +182,18 @@ jobs:
         fi
         
         echo "✅ All API connectivity tests passed"
+        
+        # Additional server stabilization time before Cucumber tests
+        echo "🕐 Allowing additional server stabilization time..."
+        sleep 5
+        
+        # Final health check before Cucumber tests
+        if curl -f --max-time 5 http://localhost:3001/api/health >/dev/null 2>&1; then
+          echo "✅ Final health check passed - server stable for Cucumber tests"
+        else
+          echo "❌ Final health check failed - server may be unstable"
+          exit 1
+        fi
         
         # Run Cucumber tests with tolerance for undefined steps
         echo "🧪 Running Cucumber tests (with tolerance for missing steps)..."

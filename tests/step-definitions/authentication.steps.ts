@@ -4,8 +4,31 @@ import { expect } from '@playwright/test';
 // Background
 Given('the application is running at {string}', async function (url: string) {
   this.baseURL = url;
-  await this.page.goto(url);
-  await this.page.waitForLoadState('networkidle');
+  
+  // Retry logic for initial connection
+  let retries = 5;
+  let lastError: Error | null = null;
+  
+  for (let i = 0; i < retries; i++) {
+    try {
+      await this.page.goto(url, { 
+        waitUntil: 'networkidle',
+        timeout: 30000 // 30 second timeout
+      });
+      console.log(`✅ Successfully connected to ${url} on attempt ${i + 1}`);
+      return; // Success
+    } catch (error) {
+      lastError = error instanceof Error ? error : new Error(String(error));
+      console.log(`⚠️ Connection attempt ${i + 1}/${retries} failed: ${lastError.message}`);
+      
+      if (i < retries - 1) {
+        console.log(`🔄 Retrying in 3 seconds...`);
+        await this.page.waitForTimeout(3000);
+      }
+    }
+  }
+  
+  throw new Error(`Failed to connect to ${url} after ${retries} attempts. Last error: ${lastError?.message || 'Unknown error'}`);
 });
 
 Given('I am on the login page', async function () {
