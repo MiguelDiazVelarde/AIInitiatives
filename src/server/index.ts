@@ -38,8 +38,8 @@ app.get('/api/health', (req, res) => {
   res.json({ status: 'OK', message: 'Server is running' });
 });
 
-// Serve React static files in production
-if (process.env.NODE_ENV === 'production') {
+// Serve React static files in production or test
+if (process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'test') {
   const clientDistPath = path.join(__dirname, '../../client/dist');
   app.use(express.static(clientDistPath));
   

@@ -5,7 +5,7 @@ Feature: API Technical Requirements
   So that it can be integrated and maintained effectively
 
   Background:
-    Given the application is running at "http://localhost:3000"
+    Given the application is running at "http://localhost:3001"
 
   # REQ-API-001: Authentication endpoints implementation
   Scenario: Authentication API endpoints availability

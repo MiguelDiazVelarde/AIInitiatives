@@ -9,7 +9,7 @@ Before(async function () {
   });
   this.context = await this.browser.newContext();
   this.page = await this.context.newPage();
-  this.baseURL = 'http://localhost:3000';
+  this.baseURL = process.env.TEST_BASE_URL || 'http://localhost:3000';
 });
 
 After(async function () {

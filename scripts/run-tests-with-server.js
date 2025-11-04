@@ -1,12 +1,15 @@
 const { spawn, exec } = require('child_process');
 const http = require('http');
 
-console.log('🚀 Starting test execution with server...');
+const TEST_PORT = 3001; // Puerto dedicado para tests
+const SERVER_URL = `http://localhost:${TEST_PORT}`;
+
+console.log(`🚀 Starting test execution with server on port ${TEST_PORT}...`);
 
 // Function to check if server is ready
 function checkServerReady(attempt = 1, maxAttempts = 30) {
     return new Promise((resolve, reject) => {
-        const req = http.get('http://localhost:3000/', (res) => {
+        const req = http.get(`${SERVER_URL}/api/health`, (res) => {
             if (res.statusCode === 200) {
                 console.log('✅ Server is ready!');
                 resolve(true);
@@ -63,10 +66,25 @@ async function runTestsWithServer() {
         await buildIfNeeded();
 
         // Start server
-        console.log('🔧 Starting backend server...');
+        console.log(`🔧 Starting backend server on port ${TEST_PORT}...`);
         serverProcess = spawn('npm', ['start'], {
-            stdio: ['ignore', 'pipe', 'pipe'],
-            shell: true
+            stdio: ['ignore', 'inherit', 'inherit'],
+            shell: true,
+            env: { 
+                ...process.env, 
+                PORT: TEST_PORT,
+                NODE_ENV: 'test'
+            },
+            detached: false
+        });
+
+        // Handle server process events
+        serverProcess.on('error', (err) => {
+            console.error('❌ Server process error:', err);
+        });
+
+        serverProcess.on('exit', (code, signal) => {
+            console.log(`🔄 Server process exited with code ${code}, signal ${signal}`);
         });
 
         // Give server time to start
@@ -81,7 +99,8 @@ async function runTestsWithServer() {
         const testResult = await new Promise((resolve) => {
             const testProcess = spawn('npm', ['run', 'test:auth'], {
                 stdio: 'inherit',
-                shell: true
+                shell: true,
+                env: { ...process.env, TEST_BASE_URL: SERVER_URL }
             });
 
             testProcess.on('close', (code) => {
@@ -103,10 +122,24 @@ async function runTestsWithServer() {
         process.exit(1);
     } finally {
         // Cleanup
-        if (serverProcess) {
+        if (serverProcess && !serverProcess.killed) {
             console.log('🧹 Cleaning up server...');
-            serverProcess.kill('SIGTERM');
-            console.log('✅ Server stopped successfully');
+            try {
+                // Try graceful shutdown first
+                serverProcess.kill('SIGTERM');
+                
+                // Wait a bit for graceful shutdown
+                await new Promise(resolve => setTimeout(resolve, 2000));
+                
+                // Force kill if still running
+                if (!serverProcess.killed) {
+                    serverProcess.kill('SIGKILL');
+                }
+                
+                console.log('✅ Server stopped successfully');
+            } catch (killError) {
+                console.log('⚠️ Error stopping server:', killError.message);
+            }
         }
     }
 }

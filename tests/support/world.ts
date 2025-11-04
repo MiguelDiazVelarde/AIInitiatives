@@ -7,7 +7,7 @@ export class CustomWorld {
   public browser!: Browser;
   public context!: BrowserContext;
   public page!: Page;
-  public baseURL: string = 'http://localhost:3000';
+  public baseURL: string = process.env.TEST_BASE_URL || 'http://localhost:3000';
   
   // Properties for test data
   public invalidRegistrationData: any;
