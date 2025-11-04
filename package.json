@@ -28,6 +28,8 @@
     "test:smoke:ci": "echo 'CI Health Check: Server is expected to be running' && curl -f http://localhost:3000/api/health || exit 1",
     "test:smoke:full": "node run-smoke-tests.js",
     "test:with-server": "node scripts/run-tests-with-server.js",
+    "test:ci": "NODE_ENV=test PORT=3001 TEST_BASE_URL=http://localhost:3001 node scripts/run-tests-with-server.js",
+    "test:ci:auth": "NODE_ENV=test TEST_BASE_URL=$TEST_BASE_URL npm run test:auth",
     "ci:check": "npm run ci:build && npm run ci:test && npm run ci:security",
     "ci:build": "echo '🔨 Building...' && npm run build",
     "ci:test": "echo '🧪 Testing...' && npm run test:smoke",

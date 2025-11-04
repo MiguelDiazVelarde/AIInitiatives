@@ -1,10 +1,11 @@
 const { spawn, exec } = require('child_process');
 const http = require('http');
 
-const TEST_PORT = 3001; // Puerto dedicado para tests
-const SERVER_URL = `http://localhost:${TEST_PORT}`;
+const TEST_PORT = process.env.PORT || 3001; // Puerto configurable desde ENV
+const SERVER_URL = process.env.TEST_BASE_URL || `http://localhost:${TEST_PORT}`;
 
 console.log(`🚀 Starting test execution with server on port ${TEST_PORT}...`);
+console.log(`📍 Test URL: ${SERVER_URL}`);
 
 // Function to check if server is ready
 function checkServerReady(attempt = 1, maxAttempts = 30) {
@@ -100,7 +101,11 @@ async function runTestsWithServer() {
             const testProcess = spawn('npm', ['run', 'test:auth'], {
                 stdio: 'inherit',
                 shell: true,
-                env: { ...process.env, TEST_BASE_URL: SERVER_URL }
+                env: { 
+                    ...process.env, 
+                    TEST_BASE_URL: SERVER_URL,
+                    NODE_ENV: process.env.NODE_ENV || 'test'
+                }
             });
 
             testProcess.on('close', (code) => {

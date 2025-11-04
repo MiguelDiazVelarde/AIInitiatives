@@ -75,76 +75,13 @@ jobs:
         fi
         
     - name: 🧪 Run Standard Cucumber Tests
+      env:
+        NODE_ENV: test
+        PORT: 3001
+        TEST_BASE_URL: http://localhost:3001
       run: |
-        echo "Starting backend server for tests..."
-        npm start &
-        SERVER_PID=$!
-        echo $SERVER_PID > test_server.pid
-        
-        # Wait for server to be ready
-        echo "Waiting for server to be ready..."
-        for i in {1..30}; do
-          if curl -f http://localhost:3000/api/health; then
-            echo "✅ Server is ready for testing!"
-            break
-          fi
-          echo "Waiting for server... attempt $i/30"
-          sleep 2
-        done
-        
-        # Run Cucumber tests
-        echo "Running Cucumber test suite..."
-        npm run test:cucumber || TEST_FAILED=true
-        
-        # Stop test server
-        if [ -f test_server.pid ]; then
-          TEST_SERVER_PID=$(cat test_server.pid)
-          echo "Stopping test server with PID: $TEST_SERVER_PID"
-          kill $TEST_SERVER_PID || true
-          rm test_server.pid
-        fi
-        
-        # Check if tests failed
-        if [ "$TEST_FAILED" = "true" ]; then
-          echo "❌ Cucumber tests failed"
-          exit 1
-        else
-          echo "✅ Cucumber tests completed successfully"
-        fi
-        
-    - name: Start backend server in background
-      run: |
-        npm start &
-        SERVER_PID=$!
-        echo $SERVER_PID > app.pid
-        echo "Started server with PID: $SERVER_PID"
-        
-    - name: Wait for server and run health check
-      run: |
-        # Wait for server to start with retry logic
-        echo "Waiting for server to become ready..."
-        for i in {1..30}; do
-          if curl -f http://localhost:3000/api/health; then
-            echo "✅ Server is running and healthy!"
-            break
-          fi
-          echo "Waiting for server... attempt $i/30"
-          sleep 2
-        done
-        
-        # Final verification
-        curl -f http://localhost:3000/api/health || exit 1
-        echo "✅ Health check completed successfully"
-        
-    - name: Stop application
-      if: always()
-      run: |
-        if [ -f app.pid ]; then
-          SERVER_PID=$(cat app.pid)
-          echo "Stopping server with PID: $SERVER_PID"
-          kill $SERVER_PID || true
-          rm app.pid
-        fi
+        echo "Running tests with integrated server management..."
+        node scripts/run-tests-with-server.js
         
     - name: Upload test results
       uses: actions/upload-artifact@v4
@@ -206,8 +143,12 @@ jobs:
         fi
         
     - name: 🧪 Run Extended Cucumber Tests
+      env:
+        NODE_ENV: test
+        PORT: 3002
+        TEST_BASE_URL: http://localhost:3002
       run: |
-        echo "Starting backend server for extended tests..."
+        echo "Starting backend server for extended tests on port 3002..."
         npm start &
         SERVER_PID=$!
         echo $SERVER_PID > extended_test_server.pid
@@ -215,7 +156,7 @@ jobs:
         # Wait for server to be ready
         echo "Waiting for server to be ready..."
         for i in {1..30}; do
-          if curl -f http://localhost:3000/api/health; then
+          if curl -f http://localhost:3002/api/health; then
             echo "✅ Server is ready for extended testing!"
             break
           fi
@@ -241,40 +182,6 @@ jobs:
           exit 1
         else
           echo "✅ Extended Cucumber tests completed successfully"
-        fi
-        
-    - name: Start backend server
-      run: |
-        npm start &
-        SERVER_PID=$!
-        echo $SERVER_PID > app.pid
-        echo "Started server with PID: $SERVER_PID"
-        
-    - name: Run extended health checks
-      run: |
-        # Wait for server to start with retry logic
-        echo "Running extended health checks..."
-        for i in {1..30}; do
-          if curl -f http://localhost:3000/api/health; then
-            echo "✅ Server is running and healthy!"
-            break
-          fi
-          echo "Waiting for server... attempt $i/30"
-          sleep 2
-        done
-        
-        # Final verification
-        curl -f http://localhost:3000/api/health || exit 1
-        echo "✅ Extended health checks completed"
-        
-    - name: Stop application
-      if: always()
-      run: |
-        if [ -f app.pid ]; then
-          SERVER_PID=$(cat app.pid)
-          echo "Stopping server with PID: $SERVER_PID"
-          kill $SERVER_PID || true
-          rm app.pid
         fi
         
     - name: Upload test optimization reports

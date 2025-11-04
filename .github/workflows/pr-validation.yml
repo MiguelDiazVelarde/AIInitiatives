@@ -86,8 +86,12 @@ jobs:
         fi
         
     - name: 🧪 Run Essential Cucumber Tests
+      env:
+        NODE_ENV: test
+        PORT: 3003
+        TEST_BASE_URL: http://localhost:3003
       run: |
-        echo "Starting backend server for essential tests..."
+        echo "Starting backend server for essential tests on port 3003..."
         npm start &
         SERVER_PID=$!
         echo $SERVER_PID > essential_test_server.pid
@@ -95,7 +99,7 @@ jobs:
         # Wait for server to be ready
         echo "Waiting for server to be ready..."
         for i in {1..30}; do
-          if curl -f http://localhost:3000/api/health; then
+          if curl -f http://localhost:3003/api/health; then
             echo "✅ Server is ready for essential testing!"
             break
           fi
