@@ -1,43 +1,43 @@
 [
   {
-    "description": "  As an authenticated user\n  I want to manage products\n  So that I can maintain my product catalog",
+    "description": "  As an application user\n  I want to be able to login and register\n  So that I can access the application functionalities",
     "elements": [
       {
         "description": "",
-        "id": "product-management;add-product-with-all-required-fields",
+        "id": "user-authentication;register-with-duplicate-username",
         "keyword": "Scenario",
         "line": 11,
-        "name": "Add product with all required fields",
+        "name": "Register with duplicate username",
         "steps": [
           {
             "keyword": "Before",
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 4717899400
+              "duration": 5045378000
             }
           },
           {
             "arguments": [],
             "keyword": "Given ",
             "line": 8,
-            "name": "I am authenticated as \"admin\"",
+            "name": "the application is running at \"http://localhost:3000\"",
             "match": {
-              "location": "tests\\step-definitions\\authentication.steps.ts:30"
+              "location": "tests\\step-definitions\\authentication.steps.ts:5"
             },
             "result": {
               "status": "failed",
-              "duration": 12560279000,
-              "error_message": "page.waitForSelector: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('input[name=\"username\"]') to be visible\u001b[22m\n\n    at World.<anonymous> (C:\\Workspaces\\iainitiatives\\tests\\step-definitions\\authentication.steps.ts:37:19)"
+              "duration": 2345795400,
+              "error_message": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3000/\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/\", waiting until \"load\"\u001b[22m\n\n    at World.<anonymous> (C:\\Workspaces\\iainitiatives\\tests\\step-definitions\\authentication.steps.ts:7:19)"
             }
           },
           {
             "arguments": [],
             "keyword": "Given ",
             "line": 12,
-            "name": "I am on the dashboard",
+            "name": "I am on the registration page",
             "match": {
-              "location": "tests\\step-definitions\\navigation.steps.ts:12"
+              "location": "tests\\step-definitions\\authentication.steps.ts:18"
             },
             "result": {
               "status": "skipped",
@@ -56,32 +56,20 @@
                   },
                   {
                     "cells": [
-                      "name",
-                      "Gaming Laptop"
+                      "username",
+                      "admin"
                     ]
                   },
                   {
                     "cells": [
-                      "description",
-                      "High-performance laptop"
+                      "email",
+                      "different@example.com"
                     ]
                   },
                   {
                     "cells": [
-                      "price",
-                      "1299.99"
-                    ]
-                  },
-                  {
-                    "cells": [
-                      "category",
-                      "electronics"
-                    ]
-                  },
-                  {
-                    "cells": [
-                      "stock",
-                      "25"
+                      "password",
+                      "password"
                     ]
                   }
                 ]
@@ -89,9 +77,9 @@
             ],
             "keyword": "When ",
             "line": 13,
-            "name": "I complete the product form with:",
+            "name": "I enter the user data:",
             "match": {
-              "location": "tests\\step-definitions\\products.steps.ts:54"
+              "location": "tests\\step-definitions\\authentication.steps.ts:184"
             },
             "result": {
               "status": "skipped",
@@ -101,28 +89,21 @@
           {
             "arguments": [],
             "keyword": "And ",
-            "line": 20,
-            "name": "I submit the product form",
+            "line": 18,
+            "name": "I click the auth button \"Register\"",
+            "match": {
+              "location": "tests\\step-definitions\\authentication.steps.ts:91"
+            },
             "result": {
-              "status": "undefined",
+              "status": "skipped",
               "duration": 0
             }
           },
           {
             "arguments": [],
             "keyword": "Then ",
-            "line": 21,
-            "name": "the product should be created successfully",
-            "result": {
-              "status": "undefined",
-              "duration": 0
-            }
-          },
-          {
-            "arguments": [],
-            "keyword": "And ",
-            "line": 22,
-            "name": "should appear in the product list",
+            "line": 19,
+            "name": "I should see an error message containing \"Username already exists\"",
             "result": {
               "status": "undefined",
               "duration": 0
@@ -133,7 +114,7 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 75351399
+              "duration": 1336870199
             }
           }
         ],
@@ -142,40 +123,40 @@
       },
       {
         "description": "",
-        "id": "product-management;add-product-with-invalid-price",
+        "id": "user-authentication;registration-validation-with-empty-fields",
         "keyword": "Scenario",
-        "line": 25,
-        "name": "Add product with invalid price",
+        "line": 22,
+        "name": "Registration validation with empty fields",
         "steps": [
           {
             "keyword": "Before",
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 4552763499
+              "duration": 4921395199
             }
           },
           {
             "arguments": [],
             "keyword": "Given ",
             "line": 8,
-            "name": "I am authenticated as \"admin\"",
+            "name": "the application is running at \"http://localhost:3000\"",
             "match": {
-              "location": "tests\\step-definitions\\authentication.steps.ts:30"
+              "location": "tests\\step-definitions\\authentication.steps.ts:5"
             },
             "result": {
               "status": "failed",
-              "duration": 12536470600,
-              "error_message": "page.waitForSelector: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('input[name=\"username\"]') to be visible\u001b[22m\n\n    at World.<anonymous> (C:\\Workspaces\\iainitiatives\\tests\\step-definitions\\authentication.steps.ts:37:19)"
+              "duration": 2322810199,
+              "error_message": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3000/\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/\", waiting until \"load\"\u001b[22m\n\n    at World.<anonymous> (C:\\Workspaces\\iainitiatives\\tests\\step-definitions\\authentication.steps.ts:7:19)"
             }
           },
           {
             "arguments": [],
             "keyword": "Given ",
-            "line": 26,
-            "name": "I am on the dashboard",
+            "line": 23,
+            "name": "I am on the registration page",
             "match": {
-              "location": "tests\\step-definitions\\navigation.steps.ts:12"
+              "location": "tests\\step-definitions\\authentication.steps.ts:18"
             },
             "result": {
               "status": "skipped",
@@ -183,56 +164,119 @@
             }
           },
           {
-            "arguments": [
-              {
-                "rows": [
-                  {
-                    "cells": [
-                      "field",
-                      "value"
-                    ]
-                  },
-                  {
-                    "cells": [
-                      "name",
-                      "Invalid Product"
-                    ]
-                  },
-                  {
-                    "cells": [
-                      "description",
-                      "Test product"
-                    ]
-                  },
-                  {
-                    "cells": [
-                      "price",
-                      "-10.99"
-                    ]
-                  },
-                  {
-                    "cells": [
-                      "category",
-                      "electronics"
-                    ]
-                  },
-                  {
-                    "cells": [
-                      "stock",
-                      "5"
-                    ]
-                  }
-                ]
-              }
-            ],
+            "arguments": [],
             "keyword": "When ",
-            "line": 27,
-            "name": "I complete the product form with:",
+            "line": 24,
+            "name": "I submit the registration form with empty fields",
+            "result": {
+              "status": "undefined",
+              "duration": 0
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 25,
+            "name": "I should see validation error messages",
+            "result": {
+              "status": "undefined",
+              "duration": 0
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 26,
+            "name": "the form should not be submitted",
             "match": {
-              "location": "tests\\step-definitions\\products.steps.ts:54"
+              "location": "tests\\step-definitions\\data-management.steps.ts:23"
             },
             "result": {
               "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "keyword": "After",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 1176276499
+            }
+          }
+        ],
+        "tags": [],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "user-authentication;registration-with-invalid-email-format",
+        "keyword": "Scenario",
+        "line": 29,
+        "name": "Registration with invalid email format",
+        "steps": [
+          {
+            "keyword": "Before",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 5015084500
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 8,
+            "name": "the application is running at \"http://localhost:3000\"",
+            "match": {
+              "location": "tests\\step-definitions\\authentication.steps.ts:5"
+            },
+            "result": {
+              "status": "failed",
+              "duration": 2338497800,
+              "error_message": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3000/\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/\", waiting until \"load\"\u001b[22m\n\n    at World.<anonymous> (C:\\Workspaces\\iainitiatives\\tests\\step-definitions\\authentication.steps.ts:7:19)"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 30,
+            "name": "I am on the registration page",
+            "match": {
+              "location": "tests\\step-definitions\\authentication.steps.ts:18"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 31,
+            "name": "I enter invalid email format \"invalid-email\"",
+            "result": {
+              "status": "undefined",
+              "duration": 0
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 32,
+            "name": "I fill other required fields",
+            "result": {
+              "status": "undefined",
+              "duration": 0
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 33,
+            "name": "I should see an email validation error",
+            "result": {
+              "status": "undefined",
               "duration": 0
             }
           },
@@ -240,32 +284,9 @@
             "arguments": [],
             "keyword": "And ",
             "line": 34,
-            "name": "I submit the product form",
+            "name": "registration should not proceed",
             "result": {
               "status": "undefined",
-              "duration": 0
-            }
-          },
-          {
-            "arguments": [],
-            "keyword": "Then ",
-            "line": 35,
-            "name": "I should see a price validation error",
-            "result": {
-              "status": "undefined",
-              "duration": 0
-            }
-          },
-          {
-            "arguments": [],
-            "keyword": "And ",
-            "line": 36,
-            "name": "the product should not be created",
-            "match": {
-              "location": "tests\\step-definitions\\products.steps.ts:247"
-            },
-            "result": {
-              "status": "skipped",
               "duration": 0
             }
           },
@@ -274,7 +295,7 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 72310599
+              "duration": 1227481499
             }
           }
         ],
@@ -283,40 +304,40 @@
       },
       {
         "description": "",
-        "id": "product-management;add-product-with-invalid-stock",
+        "id": "user-authentication;session-persistence-after-page-refresh",
         "keyword": "Scenario",
-        "line": 39,
-        "name": "Add product with invalid stock",
+        "line": 37,
+        "name": "Session persistence after page refresh",
         "steps": [
           {
             "keyword": "Before",
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 4727133600
+              "duration": 4939572399
             }
           },
           {
             "arguments": [],
             "keyword": "Given ",
             "line": 8,
-            "name": "I am authenticated as \"admin\"",
+            "name": "the application is running at \"http://localhost:3000\"",
             "match": {
-              "location": "tests\\step-definitions\\authentication.steps.ts:30"
+              "location": "tests\\step-definitions\\authentication.steps.ts:5"
             },
             "result": {
               "status": "failed",
-              "duration": 12534637499,
-              "error_message": "page.waitForSelector: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('input[name=\"username\"]') to be visible\u001b[22m\n\n    at World.<anonymous> (C:\\Workspaces\\iainitiatives\\tests\\step-definitions\\authentication.steps.ts:37:19)"
+              "duration": 2323857900,
+              "error_message": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3000/\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/\", waiting until \"load\"\u001b[22m\n\n    at World.<anonymous> (C:\\Workspaces\\iainitiatives\\tests\\step-definitions\\authentication.steps.ts:7:19)"
             }
           },
           {
             "arguments": [],
             "keyword": "Given ",
-            "line": 40,
-            "name": "I am on the dashboard",
+            "line": 38,
+            "name": "I am authenticated as \"admin\"",
             "match": {
-              "location": "tests\\step-definitions\\navigation.steps.ts:12"
+              "location": "tests\\step-definitions\\authentication.steps.ts:30"
             },
             "result": {
               "status": "skipped",
@@ -324,53 +345,112 @@
             }
           },
           {
-            "arguments": [
-              {
-                "rows": [
-                  {
-                    "cells": [
-                      "field",
-                      "value"
-                    ]
-                  },
-                  {
-                    "cells": [
-                      "name",
-                      "Invalid Stock"
-                    ]
-                  },
-                  {
-                    "cells": [
-                      "description",
-                      "Test product"
-                    ]
-                  },
-                  {
-                    "cells": [
-                      "price",
-                      "29.99"
-                    ]
-                  },
-                  {
-                    "cells": [
-                      "category",
-                      "electronics"
-                    ]
-                  },
-                  {
-                    "cells": [
-                      "stock",
-                      "-5"
-                    ]
-                  }
-                ]
-              }
-            ],
+            "arguments": [],
             "keyword": "When ",
-            "line": 41,
-            "name": "I complete the product form with:",
+            "line": 39,
+            "name": "I refresh the browser page",
             "match": {
-              "location": "tests\\step-definitions\\products.steps.ts:54"
+              "location": "tests\\step-definitions\\reliability.steps.ts:229"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 40,
+            "name": "I should remain logged in",
+            "result": {
+              "status": "undefined",
+              "duration": 0
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 41,
+            "name": "still have access to the dashboard",
+            "result": {
+              "status": "undefined",
+              "duration": 0
+            }
+          },
+          {
+            "keyword": "After",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 1240470800
+            }
+          }
+        ],
+        "tags": [],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "user-authentication;session-data-cleanup-on-logout",
+        "keyword": "Scenario",
+        "line": 44,
+        "name": "Session data cleanup on logout",
+        "steps": [
+          {
+            "keyword": "Before",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 4816543200
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 8,
+            "name": "the application is running at \"http://localhost:3000\"",
+            "match": {
+              "location": "tests\\step-definitions\\authentication.steps.ts:5"
+            },
+            "result": {
+              "status": "failed",
+              "duration": 2330767299,
+              "error_message": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3000/\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/\", waiting until \"load\"\u001b[22m\n\n    at World.<anonymous> (C:\\Workspaces\\iainitiatives\\tests\\step-definitions\\authentication.steps.ts:7:19)"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 45,
+            "name": "I am authenticated as \"admin\"",
+            "match": {
+              "location": "tests\\step-definitions\\authentication.steps.ts:30"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 46,
+            "name": "I logout",
+            "match": {
+              "location": "tests\\step-definitions\\authentication.steps.ts:143"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 47,
+            "name": "my session data should be cleared",
+            "match": {
+              "location": "tests\\step-definitions\\authentication.steps.ts:293"
             },
             "result": {
               "status": "skipped",
@@ -381,32 +461,9 @@
             "arguments": [],
             "keyword": "And ",
             "line": 48,
-            "name": "I submit the product form",
+            "name": "I should not be able to access protected resources",
             "result": {
               "status": "undefined",
-              "duration": 0
-            }
-          },
-          {
-            "arguments": [],
-            "keyword": "Then ",
-            "line": 49,
-            "name": "I should see a stock validation error",
-            "result": {
-              "status": "undefined",
-              "duration": 0
-            }
-          },
-          {
-            "arguments": [],
-            "keyword": "And ",
-            "line": 50,
-            "name": "the product should not be created",
-            "match": {
-              "location": "tests\\step-definitions\\products.steps.ts:247"
-            },
-            "result": {
-              "status": "skipped",
               "duration": 0
             }
           },
@@ -415,7 +472,7 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 94667300
+              "duration": 1235777399
             }
           }
         ],
@@ -424,38 +481,64 @@
       },
       {
         "description": "",
-        "id": "product-management;multiple-products-have-unique-ids",
+        "id": "user-authentication;authentication-status-verification",
         "keyword": "Scenario",
-        "line": 53,
-        "name": "Multiple products have unique IDs",
+        "line": 51,
+        "name": "Authentication status verification",
         "steps": [
           {
             "keyword": "Before",
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 5545094000
+              "duration": 4784875399
             }
           },
           {
             "arguments": [],
             "keyword": "Given ",
             "line": 8,
-            "name": "I am authenticated as \"admin\"",
+            "name": "the application is running at \"http://localhost:3000\"",
             "match": {
-              "location": "tests\\step-definitions\\authentication.steps.ts:30"
+              "location": "tests\\step-definitions\\authentication.steps.ts:5"
             },
             "result": {
               "status": "failed",
-              "duration": 12542637599,
-              "error_message": "page.waitForSelector: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('input[name=\"username\"]') to be visible\u001b[22m\n\n    at World.<anonymous> (C:\\Workspaces\\iainitiatives\\tests\\step-definitions\\authentication.steps.ts:37:19)"
+              "duration": 2327961300,
+              "error_message": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3000/\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/\", waiting until \"load\"\u001b[22m\n\n    at World.<anonymous> (C:\\Workspaces\\iainitiatives\\tests\\step-definitions\\authentication.steps.ts:7:19)"
             }
           },
           {
             "arguments": [],
             "keyword": "Given ",
+            "line": 52,
+            "name": "I am authenticated as \"admin\"",
+            "match": {
+              "location": "tests\\step-definitions\\authentication.steps.ts:30"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 53,
+            "name": "I check my authentication status",
+            "match": {
+              "location": "tests\\step-definitions\\authentication.steps.ts:306"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
             "line": 54,
-            "name": "I have created multiple products",
+            "name": "the system should confirm I am authenticated",
             "result": {
               "status": "undefined",
               "duration": 0
@@ -463,29 +546,9 @@
           },
           {
             "arguments": [],
-            "keyword": "When ",
+            "keyword": "And ",
             "line": 55,
-            "name": "I check the product identifiers",
-            "result": {
-              "status": "undefined",
-              "duration": 0
-            }
-          },
-          {
-            "arguments": [],
-            "keyword": "Then ",
-            "line": 56,
-            "name": "each product should have a unique ID",
-            "result": {
-              "status": "undefined",
-              "duration": 0
-            }
-          },
-          {
-            "arguments": [],
-            "keyword": "And ",
-            "line": 57,
-            "name": "no ID collisions should exist",
+            "name": "return my user information",
             "result": {
               "status": "undefined",
               "duration": 0
@@ -496,7 +559,7 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 119733599
+              "duration": 1240540000
             }
           }
         ],
@@ -505,74 +568,71 @@
       },
       {
         "description": "",
-        "id": "product-management;product-creation-metadata",
+        "id": "user-authentication;login-error-messaging",
         "keyword": "Scenario",
-        "line": 60,
-        "name": "Product creation metadata",
+        "line": 58,
+        "name": "Login error messaging",
         "steps": [
           {
             "keyword": "Before",
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 5503031800
+              "duration": 3826804499
             }
           },
           {
             "arguments": [],
             "keyword": "Given ",
             "line": 8,
-            "name": "I am authenticated as \"admin\"",
+            "name": "the application is running at \"http://localhost:3000\"",
             "match": {
-              "location": "tests\\step-definitions\\authentication.steps.ts:30"
+              "location": "tests\\step-definitions\\authentication.steps.ts:5"
             },
             "result": {
               "status": "failed",
-              "duration": 12537072899,
-              "error_message": "page.waitForSelector: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('input[name=\"username\"]') to be visible\u001b[22m\n\n    at World.<anonymous> (C:\\Workspaces\\iainitiatives\\tests\\step-definitions\\authentication.steps.ts:37:19)"
+              "duration": 2338840199,
+              "error_message": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3000/\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/\", waiting until \"load\"\u001b[22m\n\n    at World.<anonymous> (C:\\Workspaces\\iainitiatives\\tests\\step-definitions\\authentication.steps.ts:7:19)"
             }
           },
           {
             "arguments": [],
             "keyword": "Given ",
+            "line": 59,
+            "name": "I am on the login page",
+            "match": {
+              "location": "tests\\step-definitions\\authentication.steps.ts:11"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 60,
+            "name": "I enter invalid credentials",
+            "result": {
+              "status": "undefined",
+              "duration": 0
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
             "line": 61,
-            "name": "I am on the dashboard",
-            "match": {
-              "location": "tests\\step-definitions\\navigation.steps.ts:12"
-            },
+            "name": "I should see a clear error message",
             "result": {
-              "status": "skipped",
+              "status": "undefined",
               "duration": 0
             }
           },
           {
             "arguments": [],
-            "keyword": "When ",
+            "keyword": "And ",
             "line": 62,
-            "name": "I create a new product",
-            "match": {
-              "location": "tests\\step-definitions\\data-management.steps.ts:165"
-            },
-            "result": {
-              "status": "skipped",
-              "duration": 0
-            }
-          },
-          {
-            "arguments": [],
-            "keyword": "Then ",
-            "line": 63,
-            "name": "the product should include creation timestamp",
-            "result": {
-              "status": "undefined",
-              "duration": 0
-            }
-          },
-          {
-            "arguments": [],
-            "keyword": "And ",
-            "line": 64,
-            "name": "should record the creator information",
+            "name": "the message should not reveal specific failure reasons",
             "result": {
               "status": "undefined",
               "duration": 0
@@ -583,7 +643,7 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 120009700
+              "duration": 1109566199
             }
           }
         ],
@@ -592,40 +652,63 @@
       },
       {
         "description": "",
-        "id": "product-management;product-display-includes-all-information",
+        "id": "user-authentication;automatic-redirect-after-successful-login",
         "keyword": "Scenario",
-        "line": 67,
-        "name": "Product display includes all information",
+        "line": 65,
+        "name": "Automatic redirect after successful login",
         "steps": [
           {
             "keyword": "Before",
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 5567080800
+              "duration": 4720626199
             }
           },
           {
             "arguments": [],
             "keyword": "Given ",
             "line": 8,
-            "name": "I am authenticated as \"admin\"",
+            "name": "the application is running at \"http://localhost:3000\"",
             "match": {
-              "location": "tests\\step-definitions\\authentication.steps.ts:30"
+              "location": "tests\\step-definitions\\authentication.steps.ts:5"
             },
             "result": {
               "status": "failed",
-              "duration": 12544697799,
-              "error_message": "page.waitForSelector: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('input[name=\"username\"]') to be visible\u001b[22m\n\n    at World.<anonymous> (C:\\Workspaces\\iainitiatives\\tests\\step-definitions\\authentication.steps.ts:37:19)"
+              "duration": 2337185699,
+              "error_message": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3000/\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/\", waiting until \"load\"\u001b[22m\n\n    at World.<anonymous> (C:\\Workspaces\\iainitiatives\\tests\\step-definitions\\authentication.steps.ts:7:19)"
             }
           },
           {
             "arguments": [],
             "keyword": "Given ",
+            "line": 66,
+            "name": "I am on the login page",
+            "match": {
+              "location": "tests\\step-definitions\\authentication.steps.ts:11"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 67,
+            "name": "I login with valid credentials",
+            "result": {
+              "status": "undefined",
+              "duration": 0
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
             "line": 68,
-            "name": "I have products in the system",
+            "name": "I should be automatically redirected to the dashboard",
             "match": {
-              "location": "tests\\step-definitions\\products.steps.ts:662"
+              "location": "tests\\step-definitions\\navigation.steps.ts:580"
             },
             "result": {
               "status": "skipped",
@@ -634,37 +717,11 @@
           },
           {
             "arguments": [],
-            "keyword": "When ",
+            "keyword": "And ",
             "line": 69,
-            "name": "I view the product list",
+            "name": "see the dashboard content immediately",
             "result": {
-              "status": "ambiguous",
-              "duration": 0
-            }
-          },
-          {
-            "arguments": [],
-            "keyword": "Then ",
-            "line": 70,
-            "name": "each product should display name, description, price, category, and stock",
-            "match": {
-              "location": "tests\\step-definitions\\products.steps.ts:752"
-            },
-            "result": {
-              "status": "skipped",
-              "duration": 0
-            }
-          },
-          {
-            "arguments": [],
-            "keyword": "And ",
-            "line": 71,
-            "name": "all information should be clearly formatted",
-            "match": {
-              "location": "tests\\step-definitions\\products.steps.ts:759"
-            },
-            "result": {
-              "status": "skipped",
+              "status": "undefined",
               "duration": 0
             }
           },
@@ -673,7 +730,7 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 101226999
+              "duration": 1329493499
             }
           }
         ],
@@ -682,79 +739,73 @@
       },
       {
         "description": "",
-        "id": "product-management;product-list-responsive-layout",
+        "id": "user-authentication;protected-resource-access-control",
         "keyword": "Scenario",
-        "line": 74,
-        "name": "Product list responsive layout",
+        "line": 72,
+        "name": "Protected resource access control",
         "steps": [
           {
             "keyword": "Before",
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 5099428199
+              "duration": 5033083599
             }
           },
           {
             "arguments": [],
             "keyword": "Given ",
             "line": 8,
-            "name": "I am authenticated as \"admin\"",
+            "name": "the application is running at \"http://localhost:3000\"",
             "match": {
-              "location": "tests\\step-definitions\\authentication.steps.ts:30"
+              "location": "tests\\step-definitions\\authentication.steps.ts:5"
             },
             "result": {
               "status": "failed",
-              "duration": 12544203900,
-              "error_message": "page.waitForSelector: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('input[name=\"username\"]') to be visible\u001b[22m\n\n    at World.<anonymous> (C:\\Workspaces\\iainitiatives\\tests\\step-definitions\\authentication.steps.ts:37:19)"
+              "duration": 2340717600,
+              "error_message": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3000/\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/\", waiting until \"load\"\u001b[22m\n\n    at World.<anonymous> (C:\\Workspaces\\iainitiatives\\tests\\step-definitions\\authentication.steps.ts:7:19)"
             }
           },
           {
             "arguments": [],
             "keyword": "Given ",
+            "line": 73,
+            "name": "I am not authenticated",
+            "match": {
+              "location": "tests\\step-definitions\\authentication.steps.ts:52"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 74,
+            "name": "I try to access protected API endpoints",
+            "result": {
+              "status": "undefined",
+              "duration": 0
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
             "line": 75,
-            "name": "I have multiple products in the system",
-            "match": {
-              "location": "tests\\step-definitions\\products.steps.ts:693"
-            },
+            "name": "access should be denied",
             "result": {
-              "status": "skipped",
+              "status": "undefined",
               "duration": 0
             }
           },
           {
             "arguments": [],
-            "keyword": "When ",
+            "keyword": "And ",
             "line": 76,
-            "name": "I view the product list on different screen sizes",
+            "name": "I should receive unauthorized error responses",
             "match": {
-              "location": "tests\\step-definitions\\products.steps.ts:355"
-            },
-            "result": {
-              "status": "skipped",
-              "duration": 0
-            }
-          },
-          {
-            "arguments": [],
-            "keyword": "Then ",
-            "line": 77,
-            "name": "products should be displayed in a responsive grid",
-            "match": {
-              "location": "tests\\step-definitions\\products.steps.ts:764"
-            },
-            "result": {
-              "status": "skipped",
-              "duration": 0
-            }
-          },
-          {
-            "arguments": [],
-            "keyword": "And ",
-            "line": 78,
-            "name": "layout should adapt to screen dimensions",
-            "match": {
-              "location": "tests\\step-definitions\\products.steps.ts:769"
+              "location": "tests\\step-definitions\\security-validation.steps.ts:314"
             },
             "result": {
               "status": "skipped",
@@ -766,7 +817,7 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 127011700
+              "duration": 1270029300
             }
           }
         ],
@@ -775,40 +826,63 @@
       },
       {
         "description": "",
-        "id": "product-management;empty-product-list-display",
+        "id": "user-authentication;auto-login-after-registration",
         "keyword": "Scenario",
-        "line": 81,
-        "name": "Empty product list display",
+        "line": 79,
+        "name": "Auto-login after registration",
         "steps": [
           {
             "keyword": "Before",
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 5411195500
+              "duration": 4674409899
             }
           },
           {
             "arguments": [],
             "keyword": "Given ",
             "line": 8,
-            "name": "I am authenticated as \"admin\"",
+            "name": "the application is running at \"http://localhost:3000\"",
             "match": {
-              "location": "tests\\step-definitions\\authentication.steps.ts:30"
+              "location": "tests\\step-definitions\\authentication.steps.ts:5"
             },
             "result": {
               "status": "failed",
-              "duration": 12555535200,
-              "error_message": "page.waitForSelector: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('input[name=\"username\"]') to be visible\u001b[22m\n\n    at World.<anonymous> (C:\\Workspaces\\iainitiatives\\tests\\step-definitions\\authentication.steps.ts:37:19)"
+              "duration": 2336855799,
+              "error_message": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3000/\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/\", waiting until \"load\"\u001b[22m\n\n    at World.<anonymous> (C:\\Workspaces\\iainitiatives\\tests\\step-definitions\\authentication.steps.ts:7:19)"
             }
           },
           {
             "arguments": [],
             "keyword": "Given ",
+            "line": 80,
+            "name": "I am on the registration page",
+            "match": {
+              "location": "tests\\step-definitions\\authentication.steps.ts:18"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 81,
+            "name": "I successfully register a new user",
+            "result": {
+              "status": "undefined",
+              "duration": 0
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
             "line": 82,
-            "name": "I have no products in the system",
+            "name": "I should be automatically logged in",
             "match": {
-              "location": "tests\\step-definitions\\products.steps.ts:715"
+              "location": "tests\\step-definitions\\authentication.steps.ts:362"
             },
             "result": {
               "status": "skipped",
@@ -817,37 +891,11 @@
           },
           {
             "arguments": [],
-            "keyword": "When ",
+            "keyword": "And ",
             "line": 83,
-            "name": "I view the product list",
+            "name": "redirected to the dashboard without additional login steps",
             "result": {
-              "status": "ambiguous",
-              "duration": 0
-            }
-          },
-          {
-            "arguments": [],
-            "keyword": "Then ",
-            "line": 84,
-            "name": "I should see an appropriate empty state message",
-            "match": {
-              "location": "tests\\step-definitions\\products.steps.ts:777"
-            },
-            "result": {
-              "status": "skipped",
-              "duration": 0
-            }
-          },
-          {
-            "arguments": [],
-            "keyword": "And ",
-            "line": 85,
-            "name": "guidance on how to add the first product",
-            "match": {
-              "location": "tests\\step-definitions\\products.steps.ts:782"
-            },
-            "result": {
-              "status": "skipped",
+              "status": "undefined",
               "duration": 0
             }
           },
@@ -856,7 +904,7 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 123752999
+              "duration": 1228560400
             }
           }
         ],
@@ -865,38 +913,64 @@
       },
       {
         "description": "",
-        "id": "product-management;product-list-updates-after-operations",
+        "id": "user-authentication;session-management-during-navigation",
         "keyword": "Scenario",
-        "line": 88,
-        "name": "Product list updates after operations",
+        "line": 86,
+        "name": "Session management during navigation",
         "steps": [
           {
             "keyword": "Before",
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 5357990400
+              "duration": 5057703900
             }
           },
           {
             "arguments": [],
             "keyword": "Given ",
             "line": 8,
-            "name": "I am authenticated as \"admin\"",
+            "name": "the application is running at \"http://localhost:3000\"",
             "match": {
-              "location": "tests\\step-definitions\\authentication.steps.ts:30"
+              "location": "tests\\step-definitions\\authentication.steps.ts:5"
             },
             "result": {
               "status": "failed",
-              "duration": 12550661400,
-              "error_message": "page.waitForSelector: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('input[name=\"username\"]') to be visible\u001b[22m\n\n    at World.<anonymous> (C:\\Workspaces\\iainitiatives\\tests\\step-definitions\\authentication.steps.ts:37:19)"
+              "duration": 2347096399,
+              "error_message": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3000/\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/\", waiting until \"load\"\u001b[22m\n\n    at World.<anonymous> (C:\\Workspaces\\iainitiatives\\tests\\step-definitions\\authentication.steps.ts:7:19)"
             }
           },
           {
             "arguments": [],
             "keyword": "Given ",
+            "line": 87,
+            "name": "I am authenticated as \"admin\"",
+            "match": {
+              "location": "tests\\step-definitions\\authentication.steps.ts:30"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 88,
+            "name": "I navigate between different pages",
+            "match": {
+              "location": "tests\\step-definitions\\authentication.steps.ts:368"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
             "line": 89,
-            "name": "I am viewing the product list",
+            "name": "my authentication should be maintained",
             "result": {
               "status": "undefined",
               "duration": 0
@@ -904,29 +978,9 @@
           },
           {
             "arguments": [],
-            "keyword": "When ",
+            "keyword": "And ",
             "line": 90,
-            "name": "I add or delete a product",
-            "result": {
-              "status": "undefined",
-              "duration": 0
-            }
-          },
-          {
-            "arguments": [],
-            "keyword": "Then ",
-            "line": 91,
-            "name": "the list should update immediately",
-            "result": {
-              "status": "undefined",
-              "duration": 0
-            }
-          },
-          {
-            "arguments": [],
-            "keyword": "And ",
-            "line": 92,
-            "name": "reflect the changes without requiring a page refresh",
+            "name": "I should not be asked to login again",
             "result": {
               "status": "undefined",
               "duration": 0
@@ -937,7 +991,7 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 123622899
+              "duration": 1047672099
             }
           }
         ],
@@ -946,53 +1000,100 @@
       },
       {
         "description": "",
-        "id": "product-management;product-deletion-requires-confirmation",
+        "id": "user-authentication;secure-logout-process",
         "keyword": "Scenario",
-        "line": 95,
-        "name": "Product deletion requires confirmation",
+        "line": 93,
+        "name": "Secure logout process",
         "steps": [
           {
             "keyword": "Before",
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 5315828500
+              "duration": 4633948599
             }
           },
           {
             "arguments": [],
             "keyword": "Given ",
             "line": 8,
-            "name": "I am authenticated as \"admin\"",
+            "name": "the application is running at \"http://localhost:3000\"",
             "match": {
-              "location": "tests\\step-definitions\\authentication.steps.ts:30"
+              "location": "tests\\step-definitions\\authentication.steps.ts:5"
             },
             "result": {
               "status": "failed",
-              "duration": 12535444900,
-              "error_message": "page.waitForSelector: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('input[name=\"username\"]') to be visible\u001b[22m\n\n    at World.<anonymous> (C:\\Workspaces\\iainitiatives\\tests\\step-definitions\\authentication.steps.ts:37:19)"
+              "duration": 2348154799,
+              "error_message": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3000/\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/\", waiting until \"load\"\u001b[22m\n\n    at World.<anonymous> (C:\\Workspaces\\iainitiatives\\tests\\step-definitions\\authentication.steps.ts:7:19)"
             }
           },
           {
             "arguments": [],
             "keyword": "Given ",
+            "line": 94,
+            "name": "I am authenticated as \"admin\"",
+            "match": {
+              "location": "tests\\step-definitions\\authentication.steps.ts:30"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 95,
+            "name": "I initiate logout",
+            "result": {
+              "status": "undefined",
+              "duration": 0
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
             "line": 96,
-            "name": "I have products in the system",
-            "match": {
-              "location": "tests\\step-definitions\\products.steps.ts:662"
-            },
+            "name": "my session should be securely terminated",
             "result": {
-              "status": "skipped",
+              "status": "undefined",
               "duration": 0
             }
           },
           {
-            "arguments": [],
-            "keyword": "When ",
+            "arguments": [
+              {
+                "rows": [
+                  {
+                    "cells": [
+                      "email",
+                      "different@example.com"
+                    ]
+                  },
+                  {
+                    "cells": [
+                      "password",
+                      "newpassword123"
+                    ]
+                  }
+                ]
+              }
+            ],
+            "keyword": "And ",
             "line": 97,
-            "name": "I attempt to delete a product",
+            "name": "all authentication tokens should be invalidated",
+            "result": {
+              "status": "undefined",
+              "duration": 0
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 100,
+            "name": "I click the auth button \"Register\"",
             "match": {
-              "location": "tests\\step-definitions\\products.steps.ts:721"
+              "location": "tests\\step-definitions\\authentication.steps.ts:91"
             },
             "result": {
               "status": "skipped",
@@ -1002,23 +1103,10 @@
           {
             "arguments": [],
             "keyword": "Then ",
-            "line": 98,
-            "name": "I should see a confirmation dialog",
+            "line": 101,
+            "name": "I should see an error message \"User already exists\"",
             "match": {
-              "location": "tests\\step-definitions\\products.steps.ts:437"
-            },
-            "result": {
-              "status": "skipped",
-              "duration": 0
-            }
-          },
-          {
-            "arguments": [],
-            "keyword": "And ",
-            "line": 99,
-            "name": "be able to confirm or cancel the deletion",
-            "match": {
-              "location": "tests\\step-definitions\\products.steps.ts:733"
+              "location": "tests\\step-definitions\\authentication.steps.ts:218"
             },
             "result": {
               "status": "skipped",
@@ -1030,7 +1118,7 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 83373699
+              "duration": 1106347300
             }
           }
         ],
@@ -1039,63 +1127,82 @@
       },
       {
         "description": "",
-        "id": "product-management;handle-deletion-errors-gracefully",
+        "id": "user-authentication;register-with-missing-required-fields",
         "keyword": "Scenario",
-        "line": 102,
-        "name": "Handle deletion errors gracefully",
+        "line": 104,
+        "name": "Register with missing required fields",
         "steps": [
           {
             "keyword": "Before",
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 5260815200
+              "duration": 4671226200
             }
           },
           {
             "arguments": [],
             "keyword": "Given ",
             "line": 8,
-            "name": "I am authenticated as \"admin\"",
+            "name": "the application is running at \"http://localhost:3000\"",
             "match": {
-              "location": "tests\\step-definitions\\authentication.steps.ts:30"
+              "location": "tests\\step-definitions\\authentication.steps.ts:5"
             },
             "result": {
               "status": "failed",
-              "duration": 12537185100,
-              "error_message": "page.waitForSelector: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('input[name=\"username\"]') to be visible\u001b[22m\n\n    at World.<anonymous> (C:\\Workspaces\\iainitiatives\\tests\\step-definitions\\authentication.steps.ts:37:19)"
+              "duration": 2351298899,
+              "error_message": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3000/\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/\", waiting until \"load\"\u001b[22m\n\n    at World.<anonymous> (C:\\Workspaces\\iainitiatives\\tests\\step-definitions\\authentication.steps.ts:7:19)"
             }
           },
           {
             "arguments": [],
             "keyword": "Given ",
-            "line": 103,
-            "name": "I have products in the system",
-            "match": {
-              "location": "tests\\step-definitions\\products.steps.ts:662"
-            },
-            "result": {
-              "status": "skipped",
-              "duration": 0
-            }
-          },
-          {
-            "arguments": [],
-            "keyword": "When ",
-            "line": 104,
-            "name": "deletion fails due to an error",
-            "result": {
-              "status": "undefined",
-              "duration": 0
-            }
-          },
-          {
-            "arguments": [],
-            "keyword": "Then ",
             "line": 105,
-            "name": "I should see an appropriate error message",
+            "name": "I am on the registration page",
             "match": {
-              "location": "tests\\step-definitions\\products.steps.ts:459"
+              "location": "tests\\step-definitions\\authentication.steps.ts:18"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "arguments": [
+              {
+                "rows": [
+                  {
+                    "cells": [
+                      "field",
+                      "value"
+                    ]
+                  },
+                  {
+                    "cells": [
+                      "username",
+                      ""
+                    ]
+                  },
+                  {
+                    "cells": [
+                      "email",
+                      ""
+                    ]
+                  },
+                  {
+                    "cells": [
+                      "password",
+                      ""
+                    ]
+                  }
+                ]
+              }
+            ],
+            "keyword": "When ",
+            "line": 106,
+            "name": "I enter the user data:",
+            "match": {
+              "location": "tests\\step-definitions\\authentication.steps.ts:184"
             },
             "result": {
               "status": "skipped",
@@ -1105,77 +1212,13 @@
           {
             "arguments": [],
             "keyword": "And ",
-            "line": 106,
-            "name": "the product should remain in the list",
-            "match": {
-              "location": "tests\\step-definitions\\products.steps.ts:465"
-            },
-            "result": {
-              "status": "skipped",
-              "duration": 0
-            }
-          },
-          {
-            "keyword": "After",
-            "hidden": true,
-            "result": {
-              "status": "passed",
-              "duration": 120884599
-            }
-          }
-        ],
-        "tags": [],
-        "type": "scenario"
-      },
-      {
-        "description": "",
-        "id": "product-management;comprehensive-form-validation-feedback",
-        "keyword": "Scenario",
-        "line": 109,
-        "name": "Comprehensive form validation feedback",
-        "steps": [
-          {
-            "keyword": "Before",
-            "hidden": true,
-            "result": {
-              "status": "passed",
-              "duration": 5069284199
-            }
-          },
-          {
-            "arguments": [],
-            "keyword": "Given ",
-            "line": 8,
-            "name": "I am authenticated as \"admin\"",
-            "match": {
-              "location": "tests\\step-definitions\\authentication.steps.ts:30"
-            },
-            "result": {
-              "status": "failed",
-              "duration": 12540289799,
-              "error_message": "page.waitForSelector: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('input[name=\"username\"]') to be visible\u001b[22m\n\n    at World.<anonymous> (C:\\Workspaces\\iainitiatives\\tests\\step-definitions\\authentication.steps.ts:37:19)"
-            }
-          },
-          {
-            "arguments": [],
-            "keyword": "Given ",
-            "line": 110,
-            "name": "I am on the dashboard",
-            "match": {
-              "location": "tests\\step-definitions\\navigation.steps.ts:12"
-            },
-            "result": {
-              "status": "skipped",
-              "duration": 0
-            }
-          },
-          {
-            "arguments": [],
-            "keyword": "When ",
             "line": 111,
-            "name": "I submit the product form with missing or invalid data",
+            "name": "I click the auth button \"Register\"",
+            "match": {
+              "location": "tests\\step-definitions\\authentication.steps.ts:91"
+            },
             "result": {
-              "status": "undefined",
+              "status": "skipped",
               "duration": 0
             }
           },
@@ -1183,29 +1226,12 @@
             "arguments": [],
             "keyword": "Then ",
             "line": 112,
-            "name": "I should see specific validation errors for each field",
+            "name": "I should see validation error messages for required fields",
+            "match": {
+              "location": "tests\\step-definitions\\authentication.steps.ts:261"
+            },
             "result": {
-              "status": "undefined",
-              "duration": 0
-            }
-          },
-          {
-            "arguments": [],
-            "keyword": "And ",
-            "line": 113,
-            "name": "clear guidance on how to correct the errors",
-            "result": {
-              "status": "undefined",
-              "duration": 0
-            }
-          },
-          {
-            "arguments": [],
-            "keyword": "And ",
-            "line": 114,
-            "name": "the form should prevent submission until valid",
-            "result": {
-              "status": "undefined",
+              "status": "skipped",
               "duration": 0
             }
           },
@@ -1214,7 +1240,7 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 96443100
+              "duration": 1229765199
             }
           }
         ],
@@ -1223,40 +1249,82 @@
       },
       {
         "description": "",
-        "id": "product-management;product-counter-shows-correct-count",
+        "id": "user-authentication;register-with-invalid-email-format",
         "keyword": "Scenario",
-        "line": 124,
-        "name": "Product counter shows correct count",
+        "line": 115,
+        "name": "Register with invalid email format",
         "steps": [
           {
             "keyword": "Before",
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 5651923699
+              "duration": 4672977500
             }
           },
           {
             "arguments": [],
             "keyword": "Given ",
             "line": 8,
-            "name": "I am authenticated as \"admin\"",
+            "name": "the application is running at \"http://localhost:3000\"",
             "match": {
-              "location": "tests\\step-definitions\\authentication.steps.ts:30"
+              "location": "tests\\step-definitions\\authentication.steps.ts:5"
             },
             "result": {
               "status": "failed",
-              "duration": 12529196400,
-              "error_message": "page.waitForSelector: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('input[name=\"username\"]') to be visible\u001b[22m\n\n    at World.<anonymous> (C:\\Workspaces\\iainitiatives\\tests\\step-definitions\\authentication.steps.ts:37:19)"
+              "duration": 2337409299,
+              "error_message": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3000/\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/\", waiting until \"load\"\u001b[22m\n\n    at World.<anonymous> (C:\\Workspaces\\iainitiatives\\tests\\step-definitions\\authentication.steps.ts:7:19)"
             }
           },
           {
             "arguments": [],
             "keyword": "Given ",
-            "line": 118,
-            "name": "I have products in the system",
+            "line": 116,
+            "name": "I am on the registration page",
             "match": {
-              "location": "tests\\step-definitions\\products.steps.ts:662"
+              "location": "tests\\step-definitions\\authentication.steps.ts:18"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "arguments": [
+              {
+                "rows": [
+                  {
+                    "cells": [
+                      "field",
+                      "value"
+                    ]
+                  },
+                  {
+                    "cells": [
+                      "username",
+                      "testuser"
+                    ]
+                  },
+                  {
+                    "cells": [
+                      "email",
+                      "invalid-email"
+                    ]
+                  },
+                  {
+                    "cells": [
+                      "password",
+                      "password123"
+                    ]
+                  }
+                ]
+              }
+            ],
+            "keyword": "When ",
+            "line": 117,
+            "name": "I enter the user data:",
+            "match": {
+              "location": "tests\\step-definitions\\authentication.steps.ts:184"
             },
             "result": {
               "status": "skipped",
@@ -1265,11 +1333,11 @@
           },
           {
             "arguments": [],
-            "keyword": "When ",
-            "line": 119,
-            "name": "I view the dashboard",
+            "keyword": "And ",
+            "line": 122,
+            "name": "I click the auth button \"Register\"",
             "match": {
-              "location": "tests\\step-definitions\\products.steps.ts:383"
+              "location": "tests\\step-definitions\\authentication.steps.ts:91"
             },
             "result": {
               "status": "skipped",
@@ -1279,23 +1347,10 @@
           {
             "arguments": [],
             "keyword": "Then ",
-            "line": 120,
-            "name": "the product counter should show the correct number of products",
+            "line": 123,
+            "name": "I should see an error message about invalid email format",
             "match": {
-              "location": "tests\\step-definitions\\products.steps.ts:787"
-            },
-            "result": {
-              "status": "skipped",
-              "duration": 0
-            }
-          },
-          {
-            "arguments": [],
-            "keyword": "And ",
-            "line": 121,
-            "name": "update when products are added or removed",
-            "match": {
-              "location": "tests\\step-definitions\\products.steps.ts:792"
+              "location": "tests\\step-definitions\\authentication.steps.ts:267"
             },
             "result": {
               "status": "skipped",
@@ -1307,7 +1362,7 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 80617800
+              "duration": 1178174800
             }
           }
         ],
@@ -1316,133 +1371,40 @@
       },
       {
         "description": "",
-        "id": "product-management;product-counter-shows-correct-count",
-        "keyword": "Scenario",
-        "line": 125,
-        "name": "Product counter shows correct count",
-        "steps": [
-          {
-            "keyword": "Before",
-            "hidden": true,
-            "result": {
-              "status": "passed",
-              "duration": 5003817399
-            }
-          },
-          {
-            "arguments": [],
-            "keyword": "Given ",
-            "line": 8,
-            "name": "I am authenticated as \"admin\"",
-            "match": {
-              "location": "tests\\step-definitions\\authentication.steps.ts:30"
-            },
-            "result": {
-              "status": "failed",
-              "duration": 12533898199,
-              "error_message": "page.waitForSelector: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('input[name=\"username\"]') to be visible\u001b[22m\n\n    at World.<anonymous> (C:\\Workspaces\\iainitiatives\\tests\\step-definitions\\authentication.steps.ts:37:19)"
-            }
-          },
-          {
-            "arguments": [],
-            "keyword": "Given ",
-            "line": 118,
-            "name": "I have products in the system",
-            "match": {
-              "location": "tests\\step-definitions\\products.steps.ts:662"
-            },
-            "result": {
-              "status": "skipped",
-              "duration": 0
-            }
-          },
-          {
-            "arguments": [],
-            "keyword": "When ",
-            "line": 119,
-            "name": "I view the dashboard",
-            "match": {
-              "location": "tests\\step-definitions\\products.steps.ts:383"
-            },
-            "result": {
-              "status": "skipped",
-              "duration": 0
-            }
-          },
-          {
-            "arguments": [],
-            "keyword": "Then ",
-            "line": 120,
-            "name": "the product counter should show the correct number of products",
-            "match": {
-              "location": "tests\\step-definitions\\products.steps.ts:787"
-            },
-            "result": {
-              "status": "skipped",
-              "duration": 0
-            }
-          },
-          {
-            "arguments": [],
-            "keyword": "And ",
-            "line": 121,
-            "name": "update when products are added or removed",
-            "match": {
-              "location": "tests\\step-definitions\\products.steps.ts:792"
-            },
-            "result": {
-              "status": "skipped",
-              "duration": 0
-            }
-          },
-          {
-            "keyword": "After",
-            "hidden": true,
-            "result": {
-              "status": "passed",
-              "duration": 100132899
-            }
-          }
-        ],
-        "tags": [],
-        "type": "scenario"
-      },
-      {
-        "description": "",
-        "id": "product-management;product-counter-shows-correct-count",
+        "id": "user-authentication;session-persistence-after-browser-refresh",
         "keyword": "Scenario",
         "line": 126,
-        "name": "Product counter shows correct count",
+        "name": "Session persistence after browser refresh",
         "steps": [
           {
             "keyword": "Before",
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 5259829400
+              "duration": 4583428799
             }
           },
           {
             "arguments": [],
             "keyword": "Given ",
             "line": 8,
-            "name": "I am authenticated as \"admin\"",
+            "name": "the application is running at \"http://localhost:3000\"",
             "match": {
-              "location": "tests\\step-definitions\\authentication.steps.ts:30"
+              "location": "tests\\step-definitions\\authentication.steps.ts:5"
             },
             "result": {
               "status": "failed",
-              "duration": 12547786600,
-              "error_message": "page.waitForSelector: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('input[name=\"username\"]') to be visible\u001b[22m\n\n    at World.<anonymous> (C:\\Workspaces\\iainitiatives\\tests\\step-definitions\\authentication.steps.ts:37:19)"
+              "duration": 2359473500,
+              "error_message": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3000/\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/\", waiting until \"load\"\u001b[22m\n\n    at World.<anonymous> (C:\\Workspaces\\iainitiatives\\tests\\step-definitions\\authentication.steps.ts:7:19)"
             }
           },
           {
             "arguments": [],
             "keyword": "Given ",
-            "line": 118,
-            "name": "I have products in the system",
+            "line": 127,
+            "name": "I am authenticated as \"admin\"",
             "match": {
-              "location": "tests\\step-definitions\\products.steps.ts:662"
+              "location": "tests\\step-definitions\\authentication.steps.ts:30"
             },
             "result": {
               "status": "skipped",
@@ -1452,10 +1414,10 @@
           {
             "arguments": [],
             "keyword": "When ",
-            "line": 119,
-            "name": "I view the dashboard",
+            "line": 128,
+            "name": "I refresh the browser",
             "match": {
-              "location": "tests\\step-definitions\\products.steps.ts:383"
+              "location": "tests\\step-definitions\\authentication.steps.ts:272"
             },
             "result": {
               "status": "skipped",
@@ -1465,10 +1427,10 @@
           {
             "arguments": [],
             "keyword": "Then ",
-            "line": 120,
-            "name": "the product counter should show the correct number of products",
+            "line": 129,
+            "name": "I should remain authenticated",
             "match": {
-              "location": "tests\\step-definitions\\products.steps.ts:787"
+              "location": "tests\\step-definitions\\authentication.steps.ts:277"
             },
             "result": {
               "status": "skipped",
@@ -1478,10 +1440,10 @@
           {
             "arguments": [],
             "keyword": "And ",
-            "line": 121,
-            "name": "update when products are added or removed",
+            "line": 130,
+            "name": "I should still be on the dashboard",
             "match": {
-              "location": "tests\\step-definitions\\products.steps.ts:792"
+              "location": "tests\\step-definitions\\authentication.steps.ts:289"
             },
             "result": {
               "status": "skipped",
@@ -1493,7 +1455,7 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 81405500
+              "duration": 1216058799
             }
           }
         ],
@@ -1502,40 +1464,40 @@
       },
       {
         "description": "",
-        "id": "product-management;product-removal-from-display-after-deletion",
+        "id": "user-authentication;session-data-cleared-after-logout",
         "keyword": "Scenario",
-        "line": 129,
-        "name": "Product removal from display after deletion",
+        "line": 133,
+        "name": "Session data cleared after logout",
         "steps": [
           {
             "keyword": "Before",
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 5279041200
+              "duration": 4958927400
             }
           },
           {
             "arguments": [],
             "keyword": "Given ",
             "line": 8,
-            "name": "I am authenticated as \"admin\"",
+            "name": "the application is running at \"http://localhost:3000\"",
             "match": {
-              "location": "tests\\step-definitions\\authentication.steps.ts:30"
+              "location": "tests\\step-definitions\\authentication.steps.ts:5"
             },
             "result": {
               "status": "failed",
-              "duration": 12552428099,
-              "error_message": "page.waitForSelector: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('input[name=\"username\"]') to be visible\u001b[22m\n\n    at World.<anonymous> (C:\\Workspaces\\iainitiatives\\tests\\step-definitions\\authentication.steps.ts:37:19)"
+              "duration": 2357319799,
+              "error_message": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3000/\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/\", waiting until \"load\"\u001b[22m\n\n    at World.<anonymous> (C:\\Workspaces\\iainitiatives\\tests\\step-definitions\\authentication.steps.ts:7:19)"
             }
           },
           {
             "arguments": [],
             "keyword": "Given ",
-            "line": 130,
-            "name": "I have a product in the system",
+            "line": 134,
+            "name": "I am authenticated as \"admin\"",
             "match": {
-              "location": "tests\\step-definitions\\products.steps.ts:679"
+              "location": "tests\\step-definitions\\authentication.steps.ts:30"
             },
             "result": {
               "status": "skipped",
@@ -1545,23 +1507,10 @@
           {
             "arguments": [],
             "keyword": "When ",
-            "line": 131,
-            "name": "I successfully delete the product",
+            "line": 135,
+            "name": "I logout",
             "match": {
-              "location": "tests\\step-definitions\\products.steps.ts:725"
-            },
-            "result": {
-              "status": "skipped",
-              "duration": 0
-            }
-          },
-          {
-            "arguments": [],
-            "keyword": "Then ",
-            "line": 132,
-            "name": "it should be immediately removed from the display",
-            "match": {
-              "location": "tests\\step-definitions\\products.steps.ts:738"
+              "location": "tests\\step-definitions\\authentication.steps.ts:143"
             },
             "result": {
               "status": "skipped",
@@ -1571,10 +1520,36 @@
           {
             "arguments": [],
             "keyword": "And ",
-            "line": 133,
-            "name": "the product count should be updated",
+            "line": 136,
+            "name": "I try to access the dashboard directly",
             "match": {
-              "location": "tests\\step-definitions\\products.steps.ts:745"
+              "location": "tests\\step-definitions\\authentication.steps.ts:211"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 137,
+            "name": "I should be redirected to the login page",
+            "match": {
+              "location": "tests\\step-definitions\\authentication.steps.ts:154"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 138,
+            "name": "my session data should be cleared",
+            "match": {
+              "location": "tests\\step-definitions\\authentication.steps.ts:293"
             },
             "result": {
               "status": "skipped",
@@ -1586,7 +1561,710 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 107175000
+              "duration": 1206989699
+            }
+          }
+        ],
+        "tags": [],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "user-authentication;check-authentication-status-via-api",
+        "keyword": "Scenario",
+        "line": 141,
+        "name": "Check authentication status via API",
+        "steps": [
+          {
+            "keyword": "Before",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 4844336999
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 8,
+            "name": "the application is running at \"http://localhost:3000\"",
+            "match": {
+              "location": "tests\\step-definitions\\authentication.steps.ts:5"
+            },
+            "result": {
+              "status": "failed",
+              "duration": 2349713599,
+              "error_message": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3000/\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/\", waiting until \"load\"\u001b[22m\n\n    at World.<anonymous> (C:\\Workspaces\\iainitiatives\\tests\\step-definitions\\authentication.steps.ts:7:19)"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 142,
+            "name": "I am authenticated as \"admin\"",
+            "match": {
+              "location": "tests\\step-definitions\\authentication.steps.ts:30"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 143,
+            "name": "I check my authentication status",
+            "match": {
+              "location": "tests\\step-definitions\\authentication.steps.ts:306"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 144,
+            "name": "the API should confirm I am authenticated",
+            "match": {
+              "location": "tests\\step-definitions\\authentication.steps.ts:315"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 145,
+            "name": "it should return my user information",
+            "match": {
+              "location": "tests\\step-definitions\\authentication.steps.ts:320"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "keyword": "After",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 1199740900
+            }
+          }
+        ],
+        "tags": [],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "user-authentication;login-with-empty-credentials",
+        "keyword": "Scenario",
+        "line": 148,
+        "name": "Login with empty credentials",
+        "steps": [
+          {
+            "keyword": "Before",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 4780536300
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 8,
+            "name": "the application is running at \"http://localhost:3000\"",
+            "match": {
+              "location": "tests\\step-definitions\\authentication.steps.ts:5"
+            },
+            "result": {
+              "status": "failed",
+              "duration": 2357566200,
+              "error_message": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3000/\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/\", waiting until \"load\"\u001b[22m\n\n    at World.<anonymous> (C:\\Workspaces\\iainitiatives\\tests\\step-definitions\\authentication.steps.ts:7:19)"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 149,
+            "name": "I am on the login page",
+            "match": {
+              "location": "tests\\step-definitions\\authentication.steps.ts:11"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 150,
+            "name": "I enter username \"\" and password \"\"",
+            "match": {
+              "location": "tests\\step-definitions\\authentication.steps.ts:65"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 151,
+            "name": "I click the auth button \"Login\"",
+            "match": {
+              "location": "tests\\step-definitions\\authentication.steps.ts:91"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 152,
+            "name": "I should see an error message about required fields",
+            "match": {
+              "location": "tests\\step-definitions\\authentication.steps.ts:326"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "keyword": "After",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 1257554700
+            }
+          }
+        ],
+        "tags": [],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "user-authentication;already-authenticated-user-visits-login-page",
+        "keyword": "Scenario",
+        "line": 155,
+        "name": "Already authenticated user visits login page",
+        "steps": [
+          {
+            "keyword": "Before",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 4657293000
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 8,
+            "name": "the application is running at \"http://localhost:3000\"",
+            "match": {
+              "location": "tests\\step-definitions\\authentication.steps.ts:5"
+            },
+            "result": {
+              "status": "failed",
+              "duration": 2353979599,
+              "error_message": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3000/\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/\", waiting until \"load\"\u001b[22m\n\n    at World.<anonymous> (C:\\Workspaces\\iainitiatives\\tests\\step-definitions\\authentication.steps.ts:7:19)"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 156,
+            "name": "I am authenticated as \"admin\"",
+            "match": {
+              "location": "tests\\step-definitions\\authentication.steps.ts:30"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 157,
+            "name": "I try to visit the login page directly",
+            "match": {
+              "location": "tests\\step-definitions\\authentication.steps.ts:331"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 158,
+            "name": "I should be redirected to the dashboard",
+            "match": {
+              "location": "tests\\step-definitions\\authentication.steps.ts:150"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "keyword": "After",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 1161249499
+            }
+          }
+        ],
+        "tags": [],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "user-authentication;access-protected-api-endpoint-without-authentication",
+        "keyword": "Scenario",
+        "line": 161,
+        "name": "Access protected API endpoint without authentication",
+        "steps": [
+          {
+            "keyword": "Before",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 4798885399
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 8,
+            "name": "the application is running at \"http://localhost:3000\"",
+            "match": {
+              "location": "tests\\step-definitions\\authentication.steps.ts:5"
+            },
+            "result": {
+              "status": "failed",
+              "duration": 2351388899,
+              "error_message": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3000/\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/\", waiting until \"load\"\u001b[22m\n\n    at World.<anonymous> (C:\\Workspaces\\iainitiatives\\tests\\step-definitions\\authentication.steps.ts:7:19)"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 162,
+            "name": "I am not authenticated",
+            "match": {
+              "location": "tests\\step-definitions\\authentication.steps.ts:52"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 163,
+            "name": "I try to access the products API directly",
+            "match": {
+              "location": "tests\\step-definitions\\authentication.steps.ts:336"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 164,
+            "name": "I should receive an unauthorized error",
+            "match": {
+              "location": "tests\\step-definitions\\authentication.steps.ts:345"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 165,
+            "name": "the API should return a 401 status code",
+            "match": {
+              "location": "tests\\step-definitions\\authentication.steps.ts:355"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "keyword": "After",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 1141441099
+            }
+          }
+        ],
+        "tags": [],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "user-authentication;automatic-login-after-registration",
+        "keyword": "Scenario",
+        "line": 168,
+        "name": "Automatic login after registration",
+        "steps": [
+          {
+            "keyword": "Before",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 4652679499
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 8,
+            "name": "the application is running at \"http://localhost:3000\"",
+            "match": {
+              "location": "tests\\step-definitions\\authentication.steps.ts:5"
+            },
+            "result": {
+              "status": "failed",
+              "duration": 2351684600,
+              "error_message": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3000/\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/\", waiting until \"load\"\u001b[22m\n\n    at World.<anonymous> (C:\\Workspaces\\iainitiatives\\tests\\step-definitions\\authentication.steps.ts:7:19)"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 169,
+            "name": "I am on the registration page",
+            "match": {
+              "location": "tests\\step-definitions\\authentication.steps.ts:18"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "arguments": [
+              {
+                "rows": [
+                  {
+                    "cells": [
+                      "field",
+                      "value"
+                    ]
+                  },
+                  {
+                    "cells": [
+                      "username",
+                      "autouser"
+                    ]
+                  },
+                  {
+                    "cells": [
+                      "email",
+                      "autouser@example.com"
+                    ]
+                  },
+                  {
+                    "cells": [
+                      "password",
+                      "autopassword123"
+                    ]
+                  }
+                ]
+              }
+            ],
+            "keyword": "When ",
+            "line": 170,
+            "name": "I enter the user data:",
+            "match": {
+              "location": "tests\\step-definitions\\authentication.steps.ts:184"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 175,
+            "name": "I click the auth button \"Register\"",
+            "match": {
+              "location": "tests\\step-definitions\\authentication.steps.ts:91"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 176,
+            "name": "I should be automatically logged in",
+            "match": {
+              "location": "tests\\step-definitions\\authentication.steps.ts:362"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 177,
+            "name": "I should be redirected to the dashboard",
+            "match": {
+              "location": "tests\\step-definitions\\authentication.steps.ts:150"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 178,
+            "name": "I should see the message \"Dashboard - Welcome autouser\"",
+            "match": {
+              "location": "tests\\step-definitions\\products.steps.ts:170"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "keyword": "After",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 1213147200
+            }
+          }
+        ],
+        "tags": [],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "user-authentication;session-maintained-during-navigation",
+        "keyword": "Scenario",
+        "line": 181,
+        "name": "Session maintained during navigation",
+        "steps": [
+          {
+            "keyword": "Before",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 4819558599
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 8,
+            "name": "the application is running at \"http://localhost:3000\"",
+            "match": {
+              "location": "tests\\step-definitions\\authentication.steps.ts:5"
+            },
+            "result": {
+              "status": "failed",
+              "duration": 2352303399,
+              "error_message": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3000/\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/\", waiting until \"load\"\u001b[22m\n\n    at World.<anonymous> (C:\\Workspaces\\iainitiatives\\tests\\step-definitions\\authentication.steps.ts:7:19)"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 182,
+            "name": "I am authenticated as \"admin\"",
+            "match": {
+              "location": "tests\\step-definitions\\authentication.steps.ts:30"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 183,
+            "name": "I navigate between different pages",
+            "match": {
+              "location": "tests\\step-definitions\\authentication.steps.ts:368"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 184,
+            "name": "my session should remain active",
+            "result": {
+              "status": "ambiguous",
+              "duration": 0
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 185,
+            "name": "I should not need to login again",
+            "match": {
+              "location": "tests\\step-definitions\\authentication.steps.ts:381"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "keyword": "After",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 1216239600
+            }
+          }
+        ],
+        "tags": [],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "user-authentication;secure-logout-process",
+        "keyword": "Scenario",
+        "line": 188,
+        "name": "Secure logout process",
+        "steps": [
+          {
+            "keyword": "Before",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 4811710800
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 8,
+            "name": "the application is running at \"http://localhost:3000\"",
+            "match": {
+              "location": "tests\\step-definitions\\authentication.steps.ts:5"
+            },
+            "result": {
+              "status": "failed",
+              "duration": 2357807499,
+              "error_message": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3000/\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/\", waiting until \"load\"\u001b[22m\n\n    at World.<anonymous> (C:\\Workspaces\\iainitiatives\\tests\\step-definitions\\authentication.steps.ts:7:19)"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 189,
+            "name": "I am authenticated as \"admin\"",
+            "match": {
+              "location": "tests\\step-definitions\\authentication.steps.ts:30"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 190,
+            "name": "I click the \"Logout\" button",
+            "match": {
+              "location": "tests\\step-definitions\\authentication.steps.ts:72"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 191,
+            "name": "my session should be destroyed on the server",
+            "match": {
+              "location": "tests\\step-definitions\\authentication.steps.ts:386"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 192,
+            "name": "I should be logged out completely",
+            "match": {
+              "location": "tests\\step-definitions\\authentication.steps.ts:396"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 193,
+            "name": "any sensitive data should be cleared from the client",
+            "match": {
+              "location": "tests\\step-definitions\\authentication.steps.ts:402"
+            },
+            "result": {
+              "status": "skipped",
+              "duration": 0
+            }
+          },
+          {
+            "keyword": "After",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 1166169099
             }
           }
         ],
@@ -1594,11 +2272,11 @@
         "type": "scenario"
       }
     ],
-    "id": "product-management",
+    "id": "user-authentication",
     "line": 2,
     "keyword": "Feature",
-    "name": "Product Management",
+    "name": "User Authentication",
     "tags": [],
-    "uri": "tests\\features\\functional-requirements\\product-management\\products.feature"
+    "uri": "tests\\features\\functional-requirements\\authentication\\authentication.feature"
   }
 ]

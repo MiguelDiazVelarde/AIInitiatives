@@ -74,6 +74,44 @@ jobs:
           echo "   The application will still be tested with standard health checks"
         fi
         
+    - name: 🧪 Run Standard Cucumber Tests
+      run: |
+        echo "Starting backend server for tests..."
+        npm start &
+        SERVER_PID=$!
+        echo $SERVER_PID > test_server.pid
+        
+        # Wait for server to be ready
+        echo "Waiting for server to be ready..."
+        for i in {1..30}; do
+          if curl -f http://localhost:3000/api/health; then
+            echo "✅ Server is ready for testing!"
+            break
+          fi
+          echo "Waiting for server... attempt $i/30"
+          sleep 2
+        done
+        
+        # Run Cucumber tests
+        echo "Running Cucumber test suite..."
+        npm run test:cucumber || TEST_FAILED=true
+        
+        # Stop test server
+        if [ -f test_server.pid ]; then
+          TEST_SERVER_PID=$(cat test_server.pid)
+          echo "Stopping test server with PID: $TEST_SERVER_PID"
+          kill $TEST_SERVER_PID || true
+          rm test_server.pid
+        fi
+        
+        # Check if tests failed
+        if [ "$TEST_FAILED" = "true" ]; then
+          echo "❌ Cucumber tests failed"
+          exit 1
+        else
+          echo "✅ Cucumber tests completed successfully"
+        fi
+        
     - name: Start backend server in background
       run: |
         npm start &
@@ -167,6 +205,44 @@ jobs:
           echo "⚠️ Could not generate optimization stats"
         fi
         
+    - name: 🧪 Run Extended Cucumber Tests
+      run: |
+        echo "Starting backend server for extended tests..."
+        npm start &
+        SERVER_PID=$!
+        echo $SERVER_PID > extended_test_server.pid
+        
+        # Wait for server to be ready
+        echo "Waiting for server to be ready..."
+        for i in {1..30}; do
+          if curl -f http://localhost:3000/api/health; then
+            echo "✅ Server is ready for extended testing!"
+            break
+          fi
+          echo "Waiting for server... attempt $i/30"
+          sleep 2
+        done
+        
+        # Run extended Cucumber tests
+        echo "Running extended Cucumber test suite for PR validation..."
+        npm run test:full || TEST_FAILED=true
+        
+        # Stop test server
+        if [ -f extended_test_server.pid ]; then
+          EXTENDED_TEST_SERVER_PID=$(cat extended_test_server.pid)
+          echo "Stopping extended test server with PID: $EXTENDED_TEST_SERVER_PID"
+          kill $EXTENDED_TEST_SERVER_PID || true
+          rm extended_test_server.pid
+        fi
+        
+        # Check if tests failed
+        if [ "$TEST_FAILED" = "true" ]; then
+          echo "❌ Extended Cucumber tests failed"
+          exit 1
+        else
+          echo "✅ Extended Cucumber tests completed successfully"
+        fi
+        
     - name: Start backend server
       run: |
         npm start &
@@ -207,6 +283,7 @@ jobs:
       with:
         name: test-optimizer-reports-extended
         path: |
+          reports/
           test-optimizer-reports/
           *.json
         retention-days: 7

@@ -85,6 +85,44 @@ jobs:
           echo "⚠️ Could not generate test recommendations - this is not critical"
         fi
         
+    - name: 🧪 Run Essential Cucumber Tests
+      run: |
+        echo "Starting backend server for essential tests..."
+        npm start &
+        SERVER_PID=$!
+        echo $SERVER_PID > essential_test_server.pid
+        
+        # Wait for server to be ready
+        echo "Waiting for server to be ready..."
+        for i in {1..30}; do
+          if curl -f http://localhost:3000/api/health; then
+            echo "✅ Server is ready for essential testing!"
+            break
+          fi
+          echo "Waiting for server... attempt $i/30"
+          sleep 2
+        done
+        
+        # Run essential Cucumber tests
+        echo "Running essential Cucumber tests for PR validation..."
+        npm run test:auth || TEST_FAILED=true
+        
+        # Stop test server
+        if [ -f essential_test_server.pid ]; then
+          ESSENTIAL_TEST_SERVER_PID=$(cat essential_test_server.pid)
+          echo "Stopping essential test server with PID: $ESSENTIAL_TEST_SERVER_PID"
+          kill $ESSENTIAL_TEST_SERVER_PID || true
+          rm essential_test_server.pid
+        fi
+        
+        # Check if tests failed
+        if [ "$TEST_FAILED" = "true" ]; then
+          echo "❌ Essential Cucumber tests failed"
+          exit 1
+        else
+          echo "✅ Essential Cucumber tests completed successfully"
+        fi
+        
     - name: Quick application startup test
       run: |
         # Start backend in background
