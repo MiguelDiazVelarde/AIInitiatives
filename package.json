@@ -34,7 +34,14 @@
     "ci:quick": "npm run build && npm run test:smoke",
     "ci:full": "npm run ci:check && echo '✅ All CI checks passed!'",
     "pre-commit": "npm run ci:quick && echo '✅ Ready to commit!'",
-    "pre-push": "npm run ci:full && echo '✅ Ready to push!'"
+    "pre-push": "npm run ci:full && echo '✅ Ready to push!'",
+    "optimizer:demo": "node test-optimizer-example.js",
+    "optimizer:smoke": "ts-node src/test-optimizer/index.ts smoke",
+    "optimizer:quick": "ts-node src/test-optimizer/index.ts optimize quick",
+    "optimizer:balanced": "ts-node src/test-optimizer/index.ts optimize balanced",
+    "optimizer:stats": "ts-node src/test-optimizer/index.ts stats",
+    "optimizer:server": "ts-node src/test-optimizer/index.ts server",
+    "optimizer:config": "ts-node src/test-optimizer/index.ts config show"
   },
   "keywords": [
     "typescript",

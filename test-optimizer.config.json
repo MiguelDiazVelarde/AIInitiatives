@@ -1,0 +1,85 @@
+{
+  "strategies": {
+    "quick": {
+      "name": "quick",
+      "description": "Fast feedback with high-priority tests only",
+      "maxDuration": 300000,
+      "maxTests": 20,
+      "riskTolerance": "balanced",
+      "parallelization": true,
+      "includeSmoke": true,
+      "includeCritical": true,
+      "skipFlaky": true
+    },
+    "balanced": {
+      "name": "balanced",
+      "description": "Balanced approach optimizing time vs risk",
+      "maxDuration": 1800000,
+      "maxTests": 50,
+      "riskTolerance": "balanced",
+      "parallelization": true,
+      "includeSmoke": true,
+      "includeCritical": true,
+      "skipFlaky": false
+    },
+    "comprehensive": {
+      "name": "comprehensive",
+      "description": "Comprehensive testing with minimal risk",
+      "maxDuration": 3600000,
+      "maxTests": 100,
+      "riskTolerance": "conservative",
+      "parallelization": true,
+      "includeSmoke": true,
+      "includeCritical": true,
+      "skipFlaky": false
+    },
+    "smoke": {
+      "name": "smoke",
+      "description": "Critical path and smoke tests only",
+      "maxDuration": 600000,
+      "maxTests": 15,
+      "riskTolerance": "conservative",
+      "parallelization": true,
+      "includeSmoke": true,
+      "includeCritical": true,
+      "skipFlaky": true
+    },
+    "critical": {
+      "name": "critical",
+      "description": "Critical and high-priority tests",
+      "maxDuration": 1200000,
+      "maxTests": 30,
+      "riskTolerance": "conservative",
+      "parallelization": true,
+      "includeSmoke": true,
+      "includeCritical": true,
+      "skipFlaky": true
+    }
+  },
+  "ml": {
+    "enabled": true,
+    "retrainInterval": 86400000,
+    "confidenceThreshold": 0.7
+  },
+  "thresholds": {
+    "flakyTestThreshold": 0.2,
+    "minCoverageThreshold": 0.8,
+    "maxExecutionTime": 3600000,
+    "riskToleranceLevel": 0.3
+  },
+  "integrations": {
+    "cucumber": true,
+    "playwright": true,
+    "jest": false,
+    "coverage": true,
+    "git": true,
+    "ci": true
+  },
+  "reporting": {
+    "enabled": true,
+    "format": "both",
+    "outputPath": "./test-optimizer-reports",
+    "includeMetrics": true,
+    "includePredictions": true
+  }
+}
