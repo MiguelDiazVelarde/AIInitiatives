@@ -33,6 +33,7 @@
     "test:ci:fast": "cucumber-js tests/features/functional-requirements/authentication/authentication.feature --require-module ts-node/register --require tests/step-definitions/**/*.ts --tags '@fast or @smoke'",
     "test:ci:quick": "node scripts/quick-ci-test.js",
     "test:health": "echo 'Running health check tests...' && npm run build && echo 'Build successful'",
+    "test:api": "node scripts/api-tests.js",
     "ci:check": "npm run ci:build && npm run ci:test && npm run ci:security",
     "ci:build": "echo '🔨 Building...' && npm run build",
     "ci:test": "echo '🧪 Testing...' && npm run test:smoke",
