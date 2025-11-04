@@ -2,6 +2,8 @@
 plan-*.json
 test-optimizer-data/
 test-optimizer-reports/
+optimization-*.json
+test-recommendations.json
 
 # Cucumber test reports
 reports/
@@ -42,12 +44,27 @@ logs
 .DS_Store
 Thumbs.db
 
-# Temporal
+# Temporal y test files
 *.tmp
 *.temp
+test.txt
+*test*.js
+quick*.md
+*notes*.md
 
 # Coverage
 coverage/
+
+# Generated docs (keep only main docs)
+*IMPLEMENTATION*.md
+*INTEGRATION*.md
+*FIXES*.md
+*ENHANCEMENT*.md
+*STATUS*.md
+
+# Playwright
+test-results/
+playwright-report/
 .nyc_output
 
 # Runtime data
