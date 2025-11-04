@@ -9,6 +9,7 @@ jobs:
   debug-test:
     name: Debug Test Execution
     runs-on: ubuntu-latest
+    timeout-minutes: 8
     
     steps:
     - name: Checkout code
@@ -55,10 +56,10 @@ jobs:
         echo "Server PID: $SERVER_PID"
         
         # Wait for server
-        sleep 10
+        sleep 5
         
         # Check if server is running
-        curl -f http://localhost:3001/api/health || echo "Health check failed"
+        timeout 30 curl -f http://localhost:3001/api/health || echo "Health check failed"
         
         # Kill server
         kill $SERVER_PID || true

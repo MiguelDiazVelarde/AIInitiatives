@@ -8,7 +8,7 @@ console.log(`🚀 Starting test execution with server on port ${TEST_PORT}...`);
 console.log(`📍 Test URL: ${SERVER_URL}`);
 
 // Function to check if server is ready
-function checkServerReady(attempt = 1, maxAttempts = 30) {
+function checkServerReady(attempt = 1, maxAttempts = 15) { // Reducido de 30 a 15
     return new Promise((resolve, reject) => {
         const req = http.get(`${SERVER_URL}/api/health`, (res) => {
             if (res.statusCode === 200) {
@@ -19,19 +19,20 @@ function checkServerReady(attempt = 1, maxAttempts = 30) {
                     console.log(`⏳ Server not ready yet, attempt ${attempt}/${maxAttempts}...`);
                     setTimeout(() => {
                         checkServerReady(attempt + 1, maxAttempts).then(resolve).catch(reject);
-                    }, 2000);
+                    }, 1000); // Reducido de 2000ms a 1000ms
                 } else {
                     reject(new Error('Server failed to start'));
                 }
             }
         });
 
+        req.setTimeout(1000); // Timeout de 1 segundo por request
         req.on('error', () => {
             if (attempt < maxAttempts) {
                 console.log(`⏳ Server not ready yet, attempt ${attempt}/${maxAttempts}...`);
                 setTimeout(() => {
                     checkServerReady(attempt + 1, maxAttempts).then(resolve).catch(reject);
-                }, 2000);
+                }, 1000);
             } else {
                 reject(new Error('Server failed to start'));
             }
@@ -90,7 +91,7 @@ async function runTestsWithServer() {
 
         // Give server time to start
         console.log('⏳ Waiting for server to start...');
-        await new Promise(resolve => setTimeout(resolve, 5000));
+        await new Promise(resolve => setTimeout(resolve, 3000)); // Reducido de 5000ms a 3000ms
 
         // Wait for server to be ready
         await checkServerReady();

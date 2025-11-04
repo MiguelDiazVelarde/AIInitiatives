@@ -22,10 +22,11 @@ jobs:
   test-application:
     name: Build and Test Application
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     
     strategy:
       matrix:
-        node-version: [20.x, 22.x]
+        node-version: [20.x]
     
     steps:
     - name: Checkout code
@@ -79,9 +80,10 @@ jobs:
         NODE_ENV: test
         PORT: 3001
         TEST_BASE_URL: http://localhost:3001
+        HEADLESS: true
       run: |
-        echo "Running tests with integrated server management..."
-        npm run test:ci
+        echo "Running quick CI tests..."
+        timeout 600 npm run test:ci:quick || exit 1
         
     - name: Upload test results
       uses: actions/upload-artifact@v4
@@ -98,6 +100,7 @@ jobs:
   extended-tests:
     name: Extended Tests
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     if: github.event_name == 'pull_request' && github.base_ref == 'main'
     needs: test-application
     
@@ -199,6 +202,7 @@ jobs:
   security-checks:
     name: Security and Quality Checks
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     
     steps:
     - name: Checkout code

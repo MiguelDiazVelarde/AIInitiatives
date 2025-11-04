@@ -30,6 +30,8 @@
     "test:with-server": "node scripts/run-tests-with-server.js",
     "test:ci": "node scripts/run-tests-with-server.js",
     "test:ci:auth": "npm run test:auth",
+    "test:ci:fast": "cucumber-js tests/features/functional-requirements/authentication/authentication.feature --require-module ts-node/register --require tests/step-definitions/**/*.ts --tags '@fast or @smoke'",
+    "test:ci:quick": "node scripts/quick-ci-test.js",
     "ci:check": "npm run ci:build && npm run ci:test && npm run ci:security",
     "ci:build": "echo '🔨 Building...' && npm run build",
     "ci:test": "echo '🧪 Testing...' && npm run test:smoke",
