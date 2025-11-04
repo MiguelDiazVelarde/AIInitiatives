@@ -1,0 +1,71 @@
+name: Simple Health Check
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ main ]
+
+jobs:
+  health-check:
+    name: Basic Health Check
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20.x'
+        cache: 'npm'
+        
+    - name: Install dependencies
+      run: npm ci
+      
+    - name: Install client dependencies
+      run: |
+        cd client
+        npm ci
+        
+    - name: Build application
+      run: npm run build
+      
+    - name: Start server and health check
+      env:
+        NODE_ENV: test
+        PORT: 3001
+      run: |
+        echo "Starting server for health check..."
+        npm start &
+        SERVER_PID=$!
+        echo "Server PID: $SERVER_PID"
+        
+        # Wait for server to start
+        echo "Waiting for server..."
+        sleep 8
+        
+        # Health check
+        echo "Performing health check..."
+        if curl -f --max-time 10 http://localhost:3001/api/health; then
+          echo "✅ Health check passed!"
+          echo "🌐 Server is responding correctly"
+        else
+          echo "❌ Health check failed"
+          exit 1
+        fi
+        
+        # Test basic homepage
+        if curl -f --max-time 10 http://localhost:3001/; then
+          echo "✅ Homepage accessible!"
+        else
+          echo "❌ Homepage not accessible"
+          exit 1
+        fi
+        
+        # Cleanup
+        echo "Stopping server..."
+        kill $SERVER_PID || true
+        
+        echo "✅ All basic checks passed!"
