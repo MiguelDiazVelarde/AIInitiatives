@@ -1,0 +1,66 @@
+name: Debug Test Workflow
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ main ]
+
+jobs:
+  debug-test:
+    name: Debug Test Execution
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20.x'
+        cache: 'npm'
+        
+    - name: Install dependencies
+      run: npm ci
+      
+    - name: Install client dependencies
+      run: |
+        cd client
+        npm ci
+        
+    - name: Build application
+      run: npm run build
+      
+    - name: Check files
+      run: |
+        echo "=== Checking files ==="
+        ls -la scripts/
+        echo "=== Checking package.json scripts ==="
+        cat package.json | grep -A 10 '"scripts"'
+        
+    - name: Simple test execution
+      env:
+        NODE_ENV: test
+        PORT: 3001
+        TEST_BASE_URL: http://localhost:3001
+      run: |
+        echo "=== Environment Variables ==="
+        echo "NODE_ENV: $NODE_ENV"
+        echo "PORT: $PORT"
+        echo "TEST_BASE_URL: $TEST_BASE_URL"
+        
+        echo "=== Starting simple server test ==="
+        npm start &
+        SERVER_PID=$!
+        echo "Server PID: $SERVER_PID"
+        
+        # Wait for server
+        sleep 10
+        
+        # Check if server is running
+        curl -f http://localhost:3001/api/health || echo "Health check failed"
+        
+        # Kill server
+        kill $SERVER_PID || true
+        
+        echo "=== Test completed ==="
