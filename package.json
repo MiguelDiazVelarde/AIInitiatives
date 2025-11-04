@@ -38,6 +38,7 @@
     "optimizer:smoke": "ts-node src/test-optimizer/index.ts smoke",
     "optimizer:quick": "ts-node src/test-optimizer/index.ts optimize quick",
     "optimizer:balanced": "ts-node src/test-optimizer/index.ts optimize balanced",
+    "optimizer:comprehensive": "ts-node src/test-optimizer/index.ts optimize comprehensive",
     "optimizer:stats": "ts-node src/test-optimizer/index.ts stats",
     "optimizer:server": "ts-node src/test-optimizer/index.ts server",
     "optimizer:config": "ts-node src/test-optimizer/index.ts config show",
