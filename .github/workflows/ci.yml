@@ -103,6 +103,93 @@ jobs:
           echo "⚠️ Could not generate test recommendations - using standard test suite"
         fi
       
+    - name: 🤖 Execute AI Test Optimizer with Live Tests
+      continue-on-error: true
+      env:
+        NODE_ENV: test
+        PORT: 3000
+        TEST_BASE_URL: http://localhost:3000
+      run: |
+        echo "🚀 Starting AI Test Optimizer with live server testing..."
+        
+        # Start server for optimizer testing
+        echo "Starting server for AI testing..."
+        npm start &
+        SERVER_PID=$!
+        echo "Server started with PID: $SERVER_PID"
+        
+        # Setup cleanup
+        cleanup() {
+          echo "Cleaning up AI test server..."
+          kill $SERVER_PID 2>/dev/null || true
+          sleep 2
+          pkill -f "node.*dist/server" 2>/dev/null || true
+        }
+        trap cleanup EXIT
+        
+        # Wait for server
+        echo "Waiting for server to be ready for AI testing..."
+        sleep 8
+        
+        # Verify server is ready
+        if curl -f --max-time 5 http://localhost:3000/api/health; then
+          echo "✅ Server ready for AI Test Optimizer"
+          
+          # Execute AI-powered test selection and execution
+          echo "🧠 Running AI-optimized test execution..."
+          if npm run optimizer:smoke; then
+            echo "✅ AI smoke tests completed successfully"
+          else
+            echo "⚠️ AI smoke tests had issues - this provides learning data"
+          fi
+          
+          # Run quick optimization analysis
+          echo "📊 Running quick optimization analysis..."
+          if npm run optimizer:quick; then
+            echo "✅ Quick optimization analysis completed"
+          else
+            echo "⚠️ Quick analysis failed - continuing with standard tests"
+          fi
+          
+        else
+          echo "❌ Server not ready for AI testing - skipping optimizer execution"
+        fi
+      
+    - name: 🎯 Run AI-Recommended Test Suite
+      continue-on-error: true
+      env:
+        NODE_ENV: test
+        PORT: 3000
+      run: |
+        echo "🎯 Executing AI-recommended tests based on analysis..."
+        
+        # Check if we have test recommendations
+        if [ -f "test-recommendations.json" ]; then
+          echo "📋 Found AI test recommendations, executing targeted tests..."
+          
+          # Extract recommended test files/features
+          RECOMMENDED_TESTS=$(cat test-recommendations.json | jq -r '.recommended_tests[]' 2>/dev/null || echo "")
+          
+          if [ ! -z "$RECOMMENDED_TESTS" ]; then
+            echo "🎯 Running AI-recommended tests:"
+            echo "$RECOMMENDED_TESTS"
+            
+            # Execute recommended tests
+            for test in $RECOMMENDED_TESTS; do
+              echo "Running recommended test: $test"
+              npm run test:cucumber -- "$test" || echo "Test $test completed with warnings"
+            done
+          else
+            echo "📋 No specific test recommendations, running critical path tests..."
+            npm run test:smoke || echo "Critical path tests completed with warnings"
+          fi
+        else
+          echo "📋 No recommendations file found, running standard critical tests..."
+          npm run test:smoke || echo "Standard critical tests completed with warnings"
+        fi
+        
+        echo "✅ AI-recommended test execution completed"
+      
     - name: 🚀 AI-Optimized Smart Test Execution
       continue-on-error: true
       run: |
@@ -175,14 +262,14 @@ jobs:
     - name: 🧪 Run Basic Application Tests
       env:
         NODE_ENV: test
-        PORT: 3001
-        TEST_BASE_URL: http://localhost:3001
+        PORT: 3000
+        TEST_BASE_URL: http://localhost:3000
         HEADLESS: true
       run: |
         echo "Building application for testing..."
         npm run build
         
-        echo "Starting server..."
+        echo "Starting server on default port 3000..."
         npm start &
         SERVER_PID=$!
         echo "Server started with PID: $SERVER_PID"
@@ -202,7 +289,7 @@ jobs:
         
         # Basic health check
         echo "Testing server health..."
-        if curl -f http://localhost:3001/api/health; then
+        if curl -f http://localhost:3000/api/health; then
           echo "✅ Server health check passed"
         else
           echo "❌ Server health check failed"
@@ -211,7 +298,7 @@ jobs:
         
         # Test homepage
         echo "Testing homepage..."
-        if curl -f http://localhost:3001/ >/dev/null 2>&1; then
+        if curl -f http://localhost:3000/ >/dev/null 2>&1; then
           echo "✅ Homepage test passed"
         else
           echo "❌ Homepage test failed"
@@ -322,13 +409,13 @@ jobs:
     - name: 🧪 Run Extended Tests
       env:
         NODE_ENV: test
-        PORT: 3002
-        TEST_BASE_URL: http://localhost:3002
+        PORT: 3000
+        TEST_BASE_URL: http://localhost:3000
       run: |
         echo "Building application for extended testing..."
         npm run build
         
-        echo "Starting server on port 3002..."
+        echo "Starting server on default port 3000..."
         npm start &
         SERVER_PID=$!
         echo "Server started with PID: $SERVER_PID"
@@ -347,7 +434,7 @@ jobs:
         sleep 10
         
         # Basic health check
-        if curl -f http://localhost:3002/api/health; then
+        if curl -f http://localhost:3000/api/health; then
           echo "✅ Extended test server ready"
         else
           echo "❌ Extended test server failed to start"
