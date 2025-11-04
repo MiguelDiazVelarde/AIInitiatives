@@ -3,6 +3,13 @@ plan-*.json
 test-optimizer-data/
 test-optimizer-reports/
 
+# Cucumber test reports
+reports/
+cucumber_report.html
+cucumber_report.json
+*.cucumber.json
+*.cucumber.html
+
 # Dependencias
 node_modules/
 npm-debug.log*
