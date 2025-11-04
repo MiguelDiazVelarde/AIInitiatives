@@ -64,6 +64,18 @@ jobs:
         npm run build
         echo "✅ TypeScript compilation successful"
         
+    - name: 🤖 Run Smart Smoke Tests (AI-Optimized)
+      run: |
+        echo "Running AI-optimized smoke tests for fast PR feedback..."
+        npm run optimizer:smoke
+        echo "✅ Smart smoke tests completed"
+        
+    - name: 📊 Get Test Recommendations for Changes
+      run: |
+        echo "Analyzing code changes and generating test recommendations..."
+        npx ts-node src/test-optimizer/index.ts recommendations ${{ github.event.pull_request.head.sha }}
+        echo "✅ Test recommendations generated"
+        
     - name: Quick application startup test
       run: |
         # Start backend in background

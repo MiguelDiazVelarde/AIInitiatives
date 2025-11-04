@@ -45,6 +45,17 @@ jobs:
     - name: Build application
       run: npm run build
       
+    - name: 🚀 Run Comprehensive Test Suite (AI-Optimized)
+      run: |
+        echo "Running comprehensive test suite for release validation..."
+        npm run optimizer:comprehensive
+        echo "✅ Comprehensive tests completed successfully"
+        
+    - name: 📊 Generate Release Test Report
+      run: |
+        echo "Generating comprehensive test optimization report for release..."
+        npm run optimizer:stats
+        
     - name: Run full test suite
       run: |
         # Start backend server

@@ -1,3 +1,8 @@
+# Test Optimizer generated files
+plan-*.json
+test-optimizer-data/
+test-optimizer-reports/
+
 # Dependencias
 node_modules/
 npm-debug.log*

@@ -53,6 +53,16 @@ jobs:
     - name: Build application
       run: npm run build
       
+    - name: 🤖 Initialize Test Optimizer
+      run: |
+        echo "Initializing Test Optimizer..."
+        npx ts-node src/test-optimizer/index.ts config show
+        
+    - name: 🚀 Run Optimized Tests (Quick Strategy)
+      run: |
+        echo "Running optimized tests with quick strategy..."
+        npm run optimizer:quick
+        
     - name: Start backend server in background
       run: |
         npm start &
@@ -125,6 +135,16 @@ jobs:
     - name: Build application
       run: npm run build
       
+    - name: 🤖 Run Optimized Tests (Balanced Strategy)
+      run: |
+        echo "Running optimized tests with balanced strategy for PR validation..."
+        npm run optimizer:balanced
+        
+    - name: 📊 Generate Test Optimization Report
+      run: |
+        echo "Generating test optimization insights..."
+        npm run optimizer:stats
+        
     - name: Start backend server
       run: |
         npm start &
