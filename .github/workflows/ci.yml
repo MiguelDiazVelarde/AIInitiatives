@@ -121,37 +121,63 @@ jobs:
         echo "Building application for testing..."
         npm run build
         
-        echo "Starting server with robust health checking..."
-        node scripts/start-server-and-wait.js &
+        echo "Starting server with CI-optimized script..."
+        node scripts/start-server-ci.js &
         SERVER_PID=$!
-        echo "Server startup script started with PID: $SERVER_PID"
+        echo "Server CI script started with PID: $SERVER_PID"
+        
+        # Give the startup script a moment to initialize
+        sleep 5
         
         # Function to cleanup on exit
         cleanup() {
           echo "Cleaning up..."
           kill $SERVER_PID 2>/dev/null || true
           pkill -f "node.*dist/server" 2>/dev/null || true
-          pkill -f "start-server-and-wait" 2>/dev/null || true
+          pkill -f "start-server-ci" 2>/dev/null || true
         }
         trap cleanup EXIT
         
         # Wait for the startup script to confirm server is ready
         echo "Waiting for server startup confirmation..."
+        SERVER_READY=false
+        
         for i in {1..90}; do
           if curl -f --max-time 3 http://localhost:3001/api/health 2>/dev/null; then
             echo "✅ Server confirmed ready by startup script!"
+            SERVER_READY=true
             break
           fi
+          
+          # Show debug info every 15 attempts (30 seconds)
+          if [ $((i % 15)) -eq 0 ]; then
+            echo "=== Debug Info at attempt $i/90 ==="
+            echo "Server PID: $SERVER_PID"
+            ps aux | grep -E "(node|start-server)" | grep -v grep || echo "No relevant processes found"
+            netstat -tlnp 2>/dev/null | grep 3001 || echo "Port 3001 not listening"
+            echo "=================================="
+          fi
+          
           if [ $i -eq 90 ]; then
             echo "❌ Server startup script failed to confirm readiness"
-            echo "=== Debug Information ==="
-            ps aux | grep node || echo "No node processes found"
-            netstat -tlnp | grep 3001 || echo "Port 3001 not listening"
+            echo "=== Final Debug Information ==="
+            ps aux | grep node | grep -v grep || echo "No node processes found"
+            netstat -tlnp 2>/dev/null | grep 3001 || echo "Port 3001 not listening"
+            # Try to see if there are any error logs
+            if [ -f server.log ]; then
+              echo "=== Server Log ==="
+              tail -20 server.log
+            fi
             exit 1
           fi
           echo "Waiting for startup confirmation... attempt $i/90"
           sleep 2
         done
+        
+        if [ "$SERVER_READY" != "true" ]; then
+          echo "❌ Server readiness verification failed"
+          exit 1
+        fi
         
         # Test homepage
         echo "Testing homepage accessibility..."
@@ -324,7 +350,7 @@ jobs:
         npm run build
         
         echo "Starting backend server for extended tests on port 3002..."
-        npm start &
+        PORT=3002 node scripts/start-server-ci.js &
         SERVER_PID=$!
         echo "Server started with PID: $SERVER_PID"
         
