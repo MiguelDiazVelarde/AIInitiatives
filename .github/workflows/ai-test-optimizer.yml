@@ -1,0 +1,220 @@
+name: 🤖 AI Test Optimizer - Full Analysis
+
+on:
+  workflow_dispatch:
+    inputs:
+      analysis_type:
+        description: 'Type of analysis to run'
+        required: true
+        default: 'full'
+        type: choice
+        options:
+        - full
+        - smart
+        - recommendations
+        - performance
+      target_files:
+        description: 'Specific files to analyze (optional)'
+        required: false
+        type: string
+  schedule:
+    # Run daily at 2 AM UTC to analyze codebase
+    - cron: '0 2 * * *'
+  push:
+    branches: [ main ]
+    paths:
+      - 'src/**'
+      - 'tests/**'
+      - 'client/src/**'
+
+jobs:
+  ai-test-optimization:
+    name: 🧠 AI Test Optimization Analysis
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    
+    permissions:
+      contents: read
+      issues: write
+      pull-requests: write
+    
+    steps:
+    - name: 📥 Checkout code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0  # Full history for better analysis
+
+    - name: 🔧 Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+
+    - name: 📦 Install dependencies
+      run: |
+        npm ci
+        cd client && npm ci
+
+    - name: 🏗️ Build application
+      run: npm run build
+
+    - name: 🤖 Initialize AI Test Optimizer
+      run: |
+        echo "🚀 Initializing AI Test Optimizer..."
+        
+        # Initialize configuration
+        if npx ts-node src/test-optimizer/index.ts config init; then
+          echo "✅ Test Optimizer initialized successfully"
+        else
+          echo "❌ Failed to initialize Test Optimizer"
+          exit 1
+        fi
+
+    - name: 🔍 Comprehensive Code Analysis
+      run: |
+        echo "📊 Running comprehensive code analysis..."
+        
+        # Determine analysis target
+        if [ "${{ github.event.inputs.target_files }}" != "" ]; then
+          TARGET_FILES="${{ github.event.inputs.target_files }}"
+        else
+          # Analyze all source files
+          TARGET_FILES=$(find src tests client/src -name "*.ts" -o -name "*.tsx" -o -name "*.js" -o -name "*.jsx" | head -50)
+        fi
+        
+        echo "🎯 Analyzing files: $TARGET_FILES"
+        
+        # Run comprehensive analysis
+        npx ts-node src/test-optimizer/index.ts analyze $TARGET_FILES
+        echo "✅ Code analysis completed"
+
+    - name: 🧠 Generate Smart Test Strategies
+      run: |
+        echo "🎯 Generating intelligent test strategies..."
+        
+        ANALYSIS_TYPE="${{ github.event.inputs.analysis_type || 'full' }}"
+        
+        case $ANALYSIS_TYPE in
+          "full")
+            echo "Running full optimization analysis..."
+            npx ts-node src/test-optimizer/index.ts optimize --full
+            ;;
+          "smart")
+            echo "Running smart optimization..."
+            npx ts-node src/test-optimizer/index.ts optimize --smart
+            ;;
+          "recommendations")
+            echo "Generating test recommendations..."
+            npx ts-node src/test-optimizer/index.ts recommendations
+            ;;
+          "performance")
+            echo "Running performance analysis..."
+            npx ts-node src/test-optimizer/index.ts analyze --performance
+            ;;
+        esac
+        
+        echo "✅ Test strategy generation completed"
+
+    - name: 🚀 Execute Optimized Test Suite
+      continue-on-error: true
+      run: |
+        echo "🎯 Executing AI-optimized test suite..."
+        
+        # Run the optimized tests
+        if npx ts-node src/test-optimizer/index.ts execute; then
+          echo "✅ Optimized test execution completed successfully"
+        else
+          echo "⚠️ Some optimized tests failed - this provides valuable feedback"
+        fi
+
+    - name: 📈 Performance Metrics Collection
+      run: |
+        echo "📊 Collecting test performance metrics..."
+        
+        # Generate performance report
+        npx ts-node src/test-optimizer/index.ts metrics
+        
+        # Collect system metrics
+        echo "💻 System metrics:"
+        echo "Memory usage: $(free -h | grep '^Mem:' | awk '{print $3 "/" $2}')"
+        echo "CPU info: $(nproc) cores"
+        echo "Disk usage: $(df -h . | tail -1 | awk '{print $3 "/" $2 " (" $5 " used)"}')"
+
+    - name: 📋 Generate Comprehensive Report
+      if: always()
+      run: |
+        echo "📄 Generating comprehensive optimization report..."
+        
+        # Generate detailed report
+        npx ts-node src/test-optimizer/index.ts report --detailed
+        
+        # Create summary
+        echo "## 🤖 AI Test Optimizer Report" > optimization-summary.md
+        echo "" >> optimization-summary.md
+        echo "**Analysis Date:** $(date)" >> optimization-summary.md
+        echo "**Analysis Type:** ${{ github.event.inputs.analysis_type || 'full' }}" >> optimization-summary.md
+        echo "" >> optimization-summary.md
+        
+        # Add metrics if available
+        if [ -f "optimization-metrics.json" ]; then
+          echo "### 📊 Key Metrics" >> optimization-summary.md
+          echo "\`\`\`json" >> optimization-summary.md
+          cat optimization-metrics.json >> optimization-summary.md
+          echo "\`\`\`" >> optimization-summary.md
+        fi
+        
+        # Add recommendations if available
+        if [ -f "test-recommendations.json" ]; then
+          echo "### 🎯 Test Recommendations" >> optimization-summary.md
+          echo "- Recommendations generated: $(cat test-recommendations.json | jq '.recommendations | length' 2>/dev/null || echo 'N/A')" >> optimization-summary.md
+        fi
+
+    - name: 📤 Upload Optimization Artifacts
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: ai-test-optimizer-results-${{ github.run_number }}
+        path: |
+          optimization-report.json
+          test-recommendations.json
+          optimization-metrics.json
+          optimization-summary.md
+          test-optimizer-reports/
+        retention-days: 30
+
+    - name: 💬 Comment Results on PR
+      if: github.event_name == 'pull_request'
+      uses: actions/github-script@v7
+      with:
+        script: |
+          const fs = require('fs');
+          
+          // Try to read the optimization summary
+          let summary = '## 🤖 AI Test Optimizer Results\n\n';
+          
+          try {
+            if (fs.existsSync('optimization-summary.md')) {
+              summary = fs.readFileSync('optimization-summary.md', 'utf8');
+            }
+          } catch (error) {
+            summary += '⚠️ Could not load detailed results\n';
+          }
+          
+          summary += '\n### 📁 Artifacts\n';
+          summary += '- Full optimization report available in workflow artifacts\n';
+          summary += '- Test recommendations and metrics included\n';
+          summary += '\n*This analysis was generated automatically by the AI Test Optimizer*';
+          
+          // Comment on PR
+          await github.rest.issues.createComment({
+            issue_number: context.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: summary
+          });
+
+    - name: ✅ Optimization Complete
+      run: |
+        echo "🎉 AI Test Optimizer analysis completed successfully!"
+        echo "📊 Check the uploaded artifacts for detailed results"
+        echo "🔍 Review the recommendations to improve your test suite"
