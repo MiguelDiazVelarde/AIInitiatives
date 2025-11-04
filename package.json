@@ -36,6 +36,7 @@
     "pre-commit": "npm run ci:quick && echo '✅ Ready to commit!'",
     "pre-push": "npm run ci:full && echo '✅ Ready to push!'",
     "optimizer:demo": "node test-optimizer-example.js",
+    "optimizer:help": "ts-node src/test-optimizer/index.ts help",
     "optimizer:smoke": "ts-node src/test-optimizer/index.ts smoke",
     "optimizer:quick": "ts-node src/test-optimizer/index.ts optimize quick",
     "optimizer:balanced": "ts-node src/test-optimizer/index.ts optimize balanced",

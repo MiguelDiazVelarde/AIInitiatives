@@ -7,7 +7,7 @@ import * as path from 'path';
  * Analyzes test execution history, patterns, and metrics
  */
 export class TestAnalyzer {
-  private dataStore: DataStore;
+  private readonly dataStore: DataStore;
 
   constructor(dataStore: DataStore) {
     this.dataStore = dataStore;
@@ -362,7 +362,8 @@ export class TestAnalyzer {
     const dailyStats = new Map<string, { total: number; failed: number; duration: number }>();
     
     executions.forEach(execution => {
-      const date = execution.timestamp.toISOString().split('T')[0];
+      const timestamp = execution.timestamp instanceof Date ? execution.timestamp : new Date(execution.timestamp);
+      const date = timestamp.toISOString().split('T')[0];
       const stats = dailyStats.get(date) || { total: 0, failed: 0, duration: 0 };
       stats.total++;
       if (execution.status === 'failed') stats.failed++;
@@ -379,7 +380,7 @@ export class TestAnalyzer {
   }
 
   private calculateStabilityScore(executions: TestResult[]): number {
-    if (executions.length === 0) return 1.0;
+    if (executions.length === 0) return 1;
     
     const failureRate = executions.filter(e => e.status === 'failed').length / executions.length;
     return Math.max(0, 1 - (failureRate * 2)); // Penalize failures heavily

@@ -5,7 +5,7 @@ import { OptimizerConfig, ExecutionStrategy } from '../core/types';
  */
 export class ConfigManager {
   private config: OptimizerConfig;
-  private configPath: string;
+  private readonly configPath: string;
 
   constructor(configPath: string = './test-optimizer.config.json') {
     this.configPath = configPath;
@@ -222,13 +222,12 @@ export class ConfigManager {
 export class OptimizerAPI {
   private app: any;
   private server: any;
-  private optimizer: any;
-  private port: number;
+  private readonly optimizer: any;
+  private readonly port: number;
 
   constructor(optimizer: any, port: number = 3001) {
     this.optimizer = optimizer;
     this.port = port;
-    this.initializeServer();
   }
 
   /**
@@ -351,6 +350,7 @@ export class OptimizerAPI {
    * Start the API server
    */
   async start(): Promise<void> {
+    await this.initializeServer();
     this.server = this.app.listen(this.port, () => {
       console.log(`🚀 Test Optimizer API running on port ${this.port}`);
       console.log(`📊 API documentation available at http://localhost:${this.port}/api`);

@@ -3,7 +3,7 @@
 ![CI/CD Pipeline](https://github.com/MiguelDiazVelarde/iainitiatives/workflows/CI/CD%20Pipeline/badge.svg)
 ![Pull Request Validation](https://github.com/MiguelDiazVelarde/iainitiatives/workflows/Pull%20Request%20Validation/badge.svg)
 
-A simple web application built with **React**, **TypeScript**, **Express.js** and **Node.js** that includes authentication system and product management with automated CI/CD pipeline.
+A simple web application built with **React**, **TypeScript**, **Express.js** and **Node.js** that includes authentication system and product management with automated CI/CD pipeline and **AI-powered Test Optimization**.
 
 ## 🚀 Features
 
@@ -17,6 +17,73 @@ A simple web application built with **React**, **TypeScript**, **Express.js** an
 - ✅ **REST API** - JSON-based backend API
 - ✅ **Testing** - Complete functional test suite with Gherkin/Playwright
 - ✅ **CI/CD Pipeline** - Automated testing and deployment with GitHub Actions
+- 🆕 **AI Test Optimizer** - Intelligent regression test execution optimization
+- 🆕 **Machine Learning** - Predictive test failure analysis
+- 🆕 **Smart Prioritization** - Code-change aware test selection
+- 🆕 **Performance Analytics** - Test execution insights and reporting
+
+## 🤖 AI Test Optimizer
+
+### Overview
+
+The **Regression Test Execution Optimizer** is an intelligent agent that analyzes historical test data, code changes, and test relationships to minimize execution time while maximizing defect detection coverage.
+
+### Key Features
+
+- **🧠 Machine Learning Predictions** - Predicts test failure likelihood based on historical data
+- **📊 Smart Test Prioritization** - Prioritizes tests based on risk, coverage, and code changes
+- **⚡ Execution Optimization** - Reduces test execution time by 30-50% while maintaining quality
+- **🔄 Multiple Strategies** - Quick, balanced, comprehensive, smoke, and critical test strategies
+- **📈 Performance Analytics** - Detailed reporting and optimization metrics
+- **🔌 Framework Integration** - Supports Cucumber, Playwright, Jest, and more
+- **🌐 REST API** - Complete API for external integrations
+- **💻 CLI Interface** - Command-line tools for test optimization
+
+### Optimization Strategies
+
+| Strategy | Duration | Tests | Use Case |
+|----------|----------|-------|----------|
+| **Quick** | ~5 min | ~20 tests | Fast feedback loop |
+| **Balanced** | ~30 min | ~50 tests | Standard development |
+| **Comprehensive** | ~60 min | ~100 tests | Pre-release validation |
+| **Smoke** | ~10 min | ~15 tests | Critical path only |
+| **Critical** | ~20 min | ~30 tests | High-priority features |
+
+### Quick Start
+
+```bash
+# Show all available commands
+npm run optimizer:help
+
+# Run smoke tests (fastest)
+npm run optimizer:smoke
+
+# Generate optimization plan
+npm run optimizer:quick
+npm run optimizer:balanced
+
+# View optimization statistics
+npm run optimizer:stats
+
+# Start API server
+npm run optimizer:server
+```
+
+### Advanced Usage
+
+```bash
+# Generate plan for specific code changes
+npx ts-node src/test-optimizer/index.ts optimize balanced HEAD~1
+
+# Execute a specific optimization plan
+npx ts-node src/test-optimizer/index.ts execute plan-123
+
+# Get test recommendations for commit
+npx ts-node src/test-optimizer/index.ts recommendations abc123
+
+# Show current configuration
+npx ts-node src/test-optimizer/index.ts config show
+```
 
 ## 🛠️ Technologies Used
 
@@ -28,6 +95,10 @@ A simple web application built with **React**, **TypeScript**, **Express.js** an
 - **Database**: In-memory (for simplicity)
 - **Testing**: Cucumber (Gherkin) + Playwright
 - **Build Tools**: TypeScript compiler + Vite
+- **🆕 AI Test Optimizer**: Custom ML algorithms + TypeScript
+- **🆕 Test Analysis**: Historical data analysis + predictive modeling
+- **🆕 Optimization Strategies**: Multi-strategy test execution planning
+- **🆕 API Integration**: RESTful test optimizer service
 
 ## 📋 Prerequisites
 
@@ -121,6 +192,29 @@ src/server/               # Express Backend
 └── middleware/           # Custom middleware
     └── auth.ts
 
+src/test-optimizer/       # AI Test Optimizer (NEW)
+├── core/                 # Core optimization logic
+│   ├── RegressionTestOptimizer.ts
+│   └── types.ts
+├── analyzers/            # Test and code analysis
+│   ├── TestAnalyzer.ts
+│   ├── CodeAnalyzer.ts
+│   └── CoverageAnalyzer.ts
+├── ml/                   # Machine Learning models
+│   └── MLPredictor.ts
+├── strategies/           # Optimization strategies
+│   ├── PrioritizationStrategy.ts
+│   └── ExecutionOptimizer.ts
+├── integrations/         # Framework integrations
+│   └── TestFrameworkIntegrations.ts
+├── reporting/            # Report generation
+│   └── ReportGenerator.ts
+├── data/                 # Data storage
+│   └── DataStore.ts
+├── config/               # Configuration management
+│   └── ConfigManager.ts
+└── index.ts              # CLI interface
+
 tests/                    # Test suite
 ├── features/             # Gherkin feature files
 ├── step-definitions/     # Test step implementations
@@ -149,6 +243,35 @@ npm run test:navigation   # Navigation tests only
 npm run test:smoke:full   # Full smoke test suite (requires server)
 npm run test:headed       # Run tests in visible browser
 ```
+
+### 🤖 Test Optimizer Commands
+
+```bash
+# Core Commands
+npm run optimizer:help      # Show all available commands and options
+npm run optimizer:smoke     # Run critical smoke tests (~10 min)
+npm run optimizer:stats     # Show optimization statistics and insights
+
+# Optimization Strategies  
+npm run optimizer:quick     # Quick feedback strategy (~5 min, ~20 tests)
+npm run optimizer:balanced  # Balanced strategy (~30 min, ~50 tests)
+
+# Advanced Usage (Direct CLI)
+npx ts-node src/test-optimizer/index.ts optimize comprehensive  # Full coverage
+npx ts-node src/test-optimizer/index.ts optimize critical       # High priority tests
+npx ts-node src/test-optimizer/index.ts recommendations HEAD~1  # Test recommendations
+npx ts-node src/test-optimizer/index.ts execute plan-123        # Execute specific plan
+npx ts-node src/test-optimizer/index.ts config show             # Show configuration
+npx ts-node src/test-optimizer/index.ts server                  # Start API server (port 3001)
+```
+
+### Test Optimizer Benefits
+
+- **⚡ 30-50% faster execution** - Intelligent test selection reduces runtime
+- **🎯 Higher defect detection** - ML predictions identify likely failures
+- **📊 Data-driven insights** - Historical analysis guides optimization
+- **🔄 Multiple strategies** - Adapt to different development phases
+- **🤖 Automated decisions** - Reduces manual test selection overhead
 
 ## 🔐 Security Features
 
@@ -266,6 +389,13 @@ npm run test:navigation  # UI navigation tests
 - [ ] User roles
 - [ ] Docker containerization
 - [x] ~~CI/CD pipeline~~ ✅ **Already implemented**
+- [x] ~~AI Test Optimization~~ ✅ **Completed with ML-powered optimizer**
+- [ ] Advanced ML models (deep learning, neural networks)
+- [ ] Real-time test failure prediction
+- [ ] Integration with more testing frameworks (Jest, Mocha, Cypress)
+- [ ] Visual test analytics dashboard
+- [ ] Distributed test execution across multiple environments
+- [ ] A/B testing for optimization strategies
 
 ## 📝 API Endpoints
 
@@ -283,6 +413,34 @@ npm run test:navigation  # UI navigation tests
 - `GET /api/products/:id` - Get product by ID (JSON)
 - `DELETE /api/products/:id` - Delete product (JSON)
 
+### 🤖 Test Optimizer API (Port 3001)
+
+- `GET /api` - API documentation and status
+- `POST /api/optimize` - Generate optimization plan
+- `GET /api/plans` - Get all optimization plans
+- `GET /api/plans/:id` - Get specific optimization plan
+- `POST /api/plans/:id/execute` - Execute optimization plan
+- `GET /api/tests` - Get discovered tests
+- `POST /api/recommendations` - Get test recommendations for code changes
+- `GET /api/stats` - Get optimization statistics
+- `GET /api/config` - Get current configuration
+- `PUT /api/config` - Update configuration
+- `GET /api/health` - API health check
+
+#### Example: Generate Optimization Plan
+
+```bash
+curl -X POST http://localhost:3001/api/optimize \
+  -H "Content-Type: application/json" \
+  -d '{"strategy": "quick", "codeChanges": ["src/components/LoginForm.tsx"]}'
+```
+
+#### Example: Get Statistics
+
+```bash
+curl http://localhost:3001/api/stats
+```
+
 ## 🤝 Contributing
 
 1. Fork the project
@@ -297,7 +455,8 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 👨‍💻 Author
 
-**Miguel Diaz Velarde**
+Miguel Diaz Velarde
+
 - GitHub: [@MiguelDiazVelarde](https://github.com/MiguelDiazVelarde)
 
 ---

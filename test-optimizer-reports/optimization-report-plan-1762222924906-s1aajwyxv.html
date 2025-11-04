@@ -1,0 +1,51 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Optimization Report</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .header { background: #f0f0f0; padding: 20px; border-radius: 5px; }
+        .section { margin: 20px 0; padding: 15px; border-left: 4px solid #007acc; }
+        .metric { display: inline-block; margin: 10px; padding: 10px; background: #f9f9f9; border-radius: 3px; }
+        .risk-high { color: #d32f2f; }
+        .risk-medium { color: #f57c00; }
+        .risk-low { color: #388e3c; }
+        table { width: 100%; border-collapse: collapse; margin: 10px 0; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        th { background-color: #f2f2f2; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Test Optimization Report</h1>
+        <p>Generated: 2025-11-04T02:22:04.906Z</p>
+        <p>Plan ID: plan-1762222924906-s1aajwyxv</p>
+    </div>
+    
+    <div class="section">
+        <h2>Summary</h2>
+        <div class="metric"><strong>strategy:</strong> balanced</div><div class="metric"><strong>selectedTests:</strong> 50</div><div class="metric"><strong>totalAvailableTests:</strong> 50</div><div class="metric"><strong>estimatedDuration:</strong> 5.0s</div><div class="metric"><strong>parallelGroups:</strong> 1</div><div class="metric"><strong>optimizationScore:</strong> 0.8838709677419354</div>
+    </div>
+    
+    <div class="section">
+        <h2>Optimization Metrics</h2>
+        <h3>timeReduction</h3><div class="metric"><strong>original:</strong> 5.2m</div><div class="metric"><strong>optimized:</strong> 4.2m</div><div class="metric"><strong>savings:</strong> 19.4%</div><h3>testReduction</h3><div class="metric"><strong>original:</strong> 62</div><div class="metric"><strong>selected:</strong> 50</div><div class="metric"><strong>reduction:</strong> 19.4%</div><h3>riskCoverage</h3><div class="metric"><strong>critical:</strong> 100.0%</div><div class="metric"><strong>high:</strong> 100.0%</div><div class="metric"><strong>medium:</strong> 60.0%</div><div class="metric"><strong>low:</strong> 100.0%</div>
+    </div>
+    
+    <div class="section">
+        <h2>Risk Assessment</h2>
+        <div class="metric"><strong>overallRisk:</strong> low</div><h3>riskFactors</h3><div class="metric"><strong>coverage:</strong> 19.4%</div><div class="metric"><strong>functional:</strong> 0.0%</div><div class="metric"><strong>performance:</strong> 70.0%</div><div class="metric"><strong>security:</strong> 0.0%</div><h3>skipRisks</h3><h3>0</h3><div class="metric"><strong>testId:</strong> navigation.feature-form-submission-states</div><div class="metric"><strong>riskLevel:</strong> medium</div><div class="metric"><strong>reason:</strong> Test skipped in optimization</div><div class="metric"><strong>mitigationStrategy:</strong> undefined</div><h3>1</h3><div class="metric"><strong>testId:</strong> navigation.feature-loading-indicators-throughout-the-application</div><div class="metric"><strong>riskLevel:</strong> medium</div><div class="metric"><strong>reason:</strong> Test skipped in optimization</div><div class="metric"><strong>mitigationStrategy:</strong> undefined</div><h3>2</h3><div class="metric"><strong>testId:</strong> navigation.feature-form-reset-after-successful-operations</div><div class="metric"><strong>riskLevel:</strong> medium</div><div class="metric"><strong>reason:</strong> Test skipped in optimization</div><div class="metric"><strong>mitigationStrategy:</strong> undefined</div><h3>3</h3><div class="metric"><strong>testId:</strong> navigation.feature-cross-device-compatibility</div><div class="metric"><strong>riskLevel:</strong> medium</div><div class="metric"><strong>reason:</strong> Test skipped in optimization</div><div class="metric"><strong>mitigationStrategy:</strong> undefined</div><h3>4</h3><div class="metric"><strong>testId:</strong> navigation.feature-layout-optimization-for-different-screens</div><div class="metric"><strong>riskLevel:</strong> medium</div><div class="metric"><strong>reason:</strong> Test skipped in optimization</div><div class="metric"><strong>mitigationStrategy:</strong> undefined</div><h3>mitigation</h3>
+    </div>
+    
+    
+    <div class="section">
+        <h2>Recommendations</h2>
+        <ul>
+            <li>Consider more aggressive test selection to improve time savings</li>
+        </ul>
+    </div>
+    
+</body>
+</html>
+    

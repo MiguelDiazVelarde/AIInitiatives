@@ -25,14 +25,14 @@ import { ReportGenerator } from '../reporting/ReportGenerator';
  */
 export class RegressionTestOptimizer {
   private config: OptimizerConfig;
-  private testAnalyzer: TestAnalyzer;
-  private codeAnalyzer: CodeAnalyzer;
-  private coverageAnalyzer: CoverageAnalyzer;
-  private mlPredictor: MLPredictor;
-  private prioritizationStrategy: PrioritizationStrategy;
-  private executionOptimizer: ExecutionOptimizer;
-  private dataStore: DataStore;
-  private reportGenerator: ReportGenerator;
+  private testAnalyzer!: TestAnalyzer;
+  private codeAnalyzer!: CodeAnalyzer;
+  private coverageAnalyzer!: CoverageAnalyzer;
+  private mlPredictor!: MLPredictor;
+  private prioritizationStrategy!: PrioritizationStrategy;
+  private executionOptimizer!: ExecutionOptimizer;
+  private dataStore!: DataStore;
+  private reportGenerator!: ReportGenerator;
 
   constructor(config: OptimizerConfig) {
     this.config = config;
@@ -83,7 +83,7 @@ export class RegressionTestOptimizer {
     );
 
     // 5. Generate execution plan
-    const executionStrategy = this.config.strategies[strategy] || this.config.strategies.balanced;
+    const executionStrategy = (this.config.strategies as any)[strategy] || this.config.strategies.balanced;
     const executionPlan = await this.executionOptimizer.generatePlan(
       testSuite,
       priorities,
@@ -210,7 +210,7 @@ export class RegressionTestOptimizer {
     console.log(`Executing test group: ${group.id} with ${group.tests.length} tests`);
     
     // For now, return mock results
-    return group.tests.map(test => ({
+    return group.tests.map((test: any) => ({
       testId: test.id,
       status: 'passed' as const,
       duration: test.estimatedDuration || 1000,

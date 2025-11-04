@@ -1,0 +1,146 @@
+{
+  "timestamp": "2025-11-04T02:22:04.906Z",
+  "planId": "plan-1762222924906-s1aajwyxv",
+  "strategy": "balanced",
+  "summary": {
+    "strategy": "balanced",
+    "selectedTests": 50,
+    "totalAvailableTests": 50,
+    "estimatedDuration": "5.0s",
+    "parallelGroups": 1,
+    "optimizationScore": 0.8838709677419354
+  },
+  "optimization": {
+    "timeReduction": {
+      "original": "5.2m",
+      "optimized": "4.2m",
+      "savings": "19.4%"
+    },
+    "testReduction": {
+      "original": 62,
+      "selected": 50,
+      "reduction": "19.4%"
+    },
+    "riskCoverage": {
+      "critical": "100.0%",
+      "high": "100.0%",
+      "medium": "60.0%",
+      "low": "100.0%"
+    }
+  },
+  "riskAssessment": {
+    "overallRisk": "low",
+    "riskFactors": {
+      "coverage": "19.4%",
+      "functional": "0.0%",
+      "performance": "70.0%",
+      "security": "0.0%"
+    },
+    "skipRisks": [
+      {
+        "testId": "navigation.feature-form-submission-states",
+        "riskLevel": "medium",
+        "reason": "Test skipped in optimization"
+      },
+      {
+        "testId": "navigation.feature-loading-indicators-throughout-the-application",
+        "riskLevel": "medium",
+        "reason": "Test skipped in optimization"
+      },
+      {
+        "testId": "navigation.feature-form-reset-after-successful-operations",
+        "riskLevel": "medium",
+        "reason": "Test skipped in optimization"
+      },
+      {
+        "testId": "navigation.feature-cross-device-compatibility",
+        "riskLevel": "medium",
+        "reason": "Test skipped in optimization"
+      },
+      {
+        "testId": "navigation.feature-layout-optimization-for-different-screens",
+        "riskLevel": "medium",
+        "reason": "Test skipped in optimization"
+      }
+    ],
+    "mitigation": []
+  },
+  "testSelection": {
+    "selectionCriteria": "Balanced approach optimizing time vs risk",
+    "topPriorityTests": [
+      {
+        "testId": "security.feature-password-encryption-verification",
+        "score": "0.532",
+        "reasoning": "High business criticality (100%), High execution time (92%)"
+      },
+      {
+        "testId": "security.feature-session-security-measures",
+        "score": "0.532",
+        "reasoning": "High business criticality (100%), High execution time (92%)"
+      },
+      {
+        "testId": "security.feature-comprehensive-input-sanitization",
+        "score": "0.532",
+        "reasoning": "High business criticality (100%), High execution time (92%)"
+      },
+      {
+        "testId": "security.feature-xss-protection",
+        "score": "0.532",
+        "reasoning": "High business criticality (100%), High execution time (92%)"
+      },
+      {
+        "testId": "security.feature-csrf-protection-measures",
+        "score": "0.532",
+        "reasoning": "High business criticality (100%), High execution time (92%)"
+      },
+      {
+        "testId": "security.feature-comprehensive-authentication-enforcement",
+        "score": "0.532",
+        "reasoning": "High business criticality (100%), High execution time (92%)"
+      },
+      {
+        "testId": "authentication.feature-register-with-duplicate-username",
+        "score": "0.504",
+        "reasoning": "High business criticality (95%), High execution time (92%)"
+      },
+      {
+        "testId": "authentication.feature-registration-validation-with-empty-fields",
+        "score": "0.504",
+        "reasoning": "High business criticality (95%), High execution time (92%)"
+      },
+      {
+        "testId": "authentication.feature-registration-with-invalid-email-format",
+        "score": "0.504",
+        "reasoning": "High business criticality (95%), High execution time (92%)"
+      },
+      {
+        "testId": "authentication.feature-session-persistence-after-page-refresh",
+        "score": "0.504",
+        "reasoning": "High business criticality (95%), High execution time (92%)"
+      }
+    ],
+    "distributionByType": {
+      "cucumber": 50
+    },
+    "distributionByCriticality": {
+      "high": 26,
+      "medium": 18,
+      "critical": 6
+    }
+  },
+  "parallelExecution": {
+    "strategy": "Parallel",
+    "groups": [
+      {
+        "id": "fast-parallel",
+        "testCount": 50,
+        "parallelizable": true,
+        "estimatedDuration": "5.0s"
+      }
+    ],
+    "parallelizationBenefit": "98.0% time savings"
+  },
+  "recommendations": [
+    "Consider more aggressive test selection to improve time savings"
+  ]
+}

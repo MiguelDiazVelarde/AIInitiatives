@@ -8,7 +8,7 @@ import { CodeAnalyzer } from './analyzers/CodeAnalyzer';
  * Command Line Interface for the Test Optimizer
  */
 class TestOptimizerCLI {
-  private optimizer: RegressionTestOptimizer;
+  private optimizer!: RegressionTestOptimizer;
   private configManager: ConfigManager;
   private codeAnalyzer: CodeAnalyzer;
 
