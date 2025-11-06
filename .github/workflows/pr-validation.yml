@@ -13,6 +13,9 @@ jobs:
     steps:
     - name: 📥 Checkout code
       uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+        ref: ${{ github.event.pull_request.head.sha }}
 
     - name: 🔧 Setup Node.js
       uses: actions/setup-node@v4
@@ -89,12 +92,8 @@ jobs:
         echo "📁 Files changed in this PR:"
         echo "$CHANGED_FILES"
         
-        # Use PR head commit for analysis
-        PR_HEAD_SHA="${{ github.event.pull_request.head.sha }}"
-        echo "📝 Analyzing changes from commit: $PR_HEAD_SHA"
-        
-        # Generate optimization plan based on PR changes
-        if npx ts-node src/test-optimizer/index.ts optimize balanced "$PR_HEAD_SHA"; then
+        # Generate optimization plan without specific commit (uses current state)
+        if npx ts-node src/test-optimizer/index.ts optimize balanced; then
           echo "✅ PR optimization plan generated"
         else
           echo "⚠️ PR analysis failed - continuing with standard validation"
@@ -105,13 +104,12 @@ jobs:
       run: |
         echo "🧠 Generating smart test recommendations for PR..."
         
-        PR_HEAD_SHA="${{ github.event.pull_request.head.sha }}"
-        
-        # Generate targeted recommendations for PR commit
-        if npx ts-node src/test-optimizer/index.ts recommendations "$PR_HEAD_SHA"; then
+        # Try basic recommendations without commit-specific analysis
+        if npx ts-node src/test-optimizer/index.ts recommendations HEAD; then
           echo "✅ PR-specific test recommendations generated"
         else
-          echo "⚠️ Could not generate PR test recommendations"
+          echo "⚠️ Could not generate PR test recommendations - using fallback"
+          echo "📋 Fallback: Will execute smoke tests for validation"
         fi
 
     - name: 🎭 Install Playwright browsers
