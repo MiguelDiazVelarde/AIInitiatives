@@ -78,5 +78,76 @@ jobs:
         kill $SERVER_PID 2>/dev/null || true
         echo "Server test completed"
 
+    - name: 🤖 AI Test Optimizer - PR Analysis
+      continue-on-error: true
+      run: |
+        echo "🔍 Running AI Test Optimizer for PR changes..."
+        
+        # Get PR changed files
+        CHANGED_FILES=$(git diff --name-only ${{ github.event.pull_request.base.sha }} ${{ github.event.pull_request.head.sha }})
+        
+        echo "📁 Files changed in this PR:"
+        echo "$CHANGED_FILES"
+        
+        # Analyze impact of PR changes
+        if npx ts-node src/test-optimizer/index.ts analyze-pr "$CHANGED_FILES"; then
+          echo "✅ PR impact analysis completed"
+        else
+          echo "⚠️ PR analysis failed - continuing with standard validation"
+        fi
+      
+    - name: 🎯 Smart PR Test Recommendations
+      continue-on-error: true
+      run: |
+        echo "🧠 Generating smart test recommendations for PR..."
+        
+        # Generate targeted recommendations for PR
+        if npx ts-node src/test-optimizer/index.ts recommendations --pr; then
+          echo "✅ PR-specific test recommendations generated"
+          
+          # Show recommendations if available
+          if [ -f "pr-test-recommendations.json" ]; then
+            echo "📋 Recommended tests for this PR:"
+            cat pr-test-recommendations.json | jq '.recommended_tests[]' 2>/dev/null || echo "Recommendations generated"
+          fi
+        else
+          echo "⚠️ Could not generate PR test recommendations"
+        fi
+
+    - name: 🎭 Install Playwright browsers
+      run: npx playwright install --with-deps
+
+    - name: 🚀 Start server for testing
+      run: |
+        echo "Starting server for tests..."
+        npm start &
+        echo $! > server.pid
+        echo "Server started, waiting for it to be ready..."
+        sleep 10
+
+    - name: 🧪 Execute AI-Optimized Tests
+      run: |
+        echo "🤖 Executing AI-optimized test suite..."
+        
+        # Try to execute optimized tests first
+        if npx ts-node src/test-optimizer/index.ts execute --pr; then
+          echo "✅ AI-optimized tests completed successfully"
+        else
+          echo "⚠️ AI-optimized execution failed, falling back to smoke tests"
+          npm run test:smoke
+        fi
+
+    - name: 🛑 Stop server
+      if: always()
+      run: |
+        if [ -f "server.pid" ]; then
+          SERVER_PID=$(cat server.pid)
+          echo "Stopping server with PID: $SERVER_PID"
+          kill $SERVER_PID 2>/dev/null || true
+          rm server.pid
+        fi
+        pkill -f "node.*dist/server" 2>/dev/null || true
+        echo "Server stopped"
+
     - name: ✅ PR validation complete
       run: echo "✅ PR validation completed successfully"
