@@ -248,8 +248,47 @@ jobs:
       env:
         NODE_ENV: test
         PORT: 3000
+        TEST_BASE_URL: http://localhost:3000
+        HEADLESS: true
       run: |
         echo "🎯 Executing AI-recommended tests based on analysis..."
+        
+        # Start server for tests
+        echo "🚀 Starting server for AI test suite..."
+        npm start &
+        SERVER_PID=$!
+        echo "Server started with PID: $SERVER_PID"
+        
+        # Setup cleanup
+        cleanup() {
+          echo "🛑 Cleaning up AI test server..."
+          kill $SERVER_PID 2>/dev/null || true
+          sleep 2
+          pkill -f "node.*dist/server" 2>/dev/null || true
+        }
+        trap cleanup EXIT
+        
+        # Wait for server to be ready
+        echo "⏳ Waiting for server to be ready..."
+        sleep 10
+        
+        # Verify server is responding
+        for i in {1..15}; do
+          if curl -s --max-time 5 http://localhost:3000 >/dev/null 2>&1; then
+            echo "✅ Server is ready for AI tests"
+            break
+          elif curl -s --max-time 5 http://localhost:3000/api/health >/dev/null 2>&1; then
+            echo "✅ Server health endpoint responding"
+            break
+          else
+            echo "⏳ Waiting for server... (attempt $i/15)"
+            if [ $i -eq 15 ]; then
+              echo "❌ Server failed to respond after 15 attempts"
+              echo "⚠️ Continuing with tests - server may not be ready"
+            fi
+            sleep 2
+          fi
+        done
         
         # Check if we have test recommendations
         if [ -f "test-recommendations.json" ]; then
@@ -280,8 +319,49 @@ jobs:
       
     - name: 🚀 AI-Optimized Smart Test Execution
       continue-on-error: true
+      env:
+        NODE_ENV: test
+        PORT: 3000
+        TEST_BASE_URL: http://localhost:3000
+        HEADLESS: true
       run: |
         echo "🎯 Running AI-optimized test execution..."
+        
+        # Start server for smart tests
+        echo "🚀 Starting server for smart test execution..."
+        npm start &
+        SERVER_PID=$!
+        echo "Server started with PID: $SERVER_PID"
+        
+        # Setup cleanup
+        cleanup() {
+          echo "🛑 Cleaning up smart test server..."
+          kill $SERVER_PID 2>/dev/null || true
+          sleep 2
+          pkill -f "node.*dist/server" 2>/dev/null || true
+        }
+        trap cleanup EXIT
+        
+        # Wait for server to be ready
+        echo "⏳ Waiting for server to be ready..."
+        sleep 10
+        
+        # Verify server is responding
+        for i in {1..10}; do
+          if curl -s --max-time 5 http://localhost:3000 >/dev/null 2>&1; then
+            echo "✅ Server is ready for smart tests"
+            break
+          elif curl -s --max-time 5 http://localhost:3000/api/health >/dev/null 2>&1; then
+            echo "✅ Server health endpoint responding"
+            break
+          else
+            echo "⏳ Waiting for server... (attempt $i/10)"
+            if [ $i -eq 10 ]; then
+              echo "❌ Server failed to respond, continuing anyway"
+            fi
+            sleep 2
+          fi
+        done
         
         # Check if we have smart test recommendations
         if [ -f "test-recommendations.json" ]; then
