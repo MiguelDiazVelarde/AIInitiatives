@@ -27,11 +27,7 @@ jobs:
         
         echo "Installing client dependencies..."
         cd client
-        if [ -f "package-lock.json" ]; then
-          npm ci
-        else
-          npm install
-        fi
+        npm ci
         cd ..
 
     - name: 🏗️ Build application
