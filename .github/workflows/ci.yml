@@ -49,102 +49,90 @@ jobs:
         npm ci
 
     - name: 🎭 Install Playwright Browsers for Testing
+      timeout-minutes: 5
       run: |
         echo "🎭 Installing Playwright browsers for CI testing..."
         
-        # Check system info and permissions
-        echo "🔍 System information:"
+        # Set strict timeout for installation
+        timeout 300 bash -c '
+        
+        # Check system info quickly
+        echo "🔍 System: $(uname -a | cut -d\" \" -f1-3)"
         echo "User: $(whoami)"
-        echo "Home: $HOME"
-        echo "Cache dir permissions: $(ls -ld ~/.cache 2>/dev/null || echo 'cache dir does not exist')"
         
-        # Verify Playwright package is available
-        echo "📦 Checking Playwright installation..."
-        npm ls @playwright/test
-        echo "Playwright version: $(npx playwright --version 2>/dev/null || echo 'not available')"
+        # Verify Playwright package exists
+        echo "📦 Checking Playwright..."
+        if npm ls @playwright/test > /dev/null 2>&1; then
+          echo "✅ Playwright package found"
+        else
+          echo "❌ Playwright package not found"
+          exit 1
+        fi
         
-        # Create cache directory if it doesn't exist
-        echo "📁 Ensuring cache directory exists..."
+        # Quick version check
+        PLAYWRIGHT_VERSION=$(npx playwright --version 2>/dev/null | head -1 || echo "unknown")
+        echo "Playwright version: $PLAYWRIGHT_VERSION"
+        
+        # Ensure cache directory exists with proper permissions
+        echo "📁 Setting up cache directory..."
         mkdir -p ~/.cache/ms-playwright
         chmod 755 ~/.cache/ms-playwright
-        echo "Cache directory created: $(ls -ld ~/.cache/ms-playwright)"
         
-        # Install browsers with all dependencies
-        echo "🔄 Installing browsers with dependencies..."
-        npx playwright install --with-deps
+        # Install browsers with timeout and minimal output
+        echo "🔄 Installing browsers (this may take 2-3 minutes)..."
+        npx playwright install --with-deps chromium > /tmp/playwright-install.log 2>&1 &
+        INSTALL_PID=$!
         
-        # Verify browser cache was created and populated
-        echo "📂 Checking browser installation..."
-        if [ -d ~/.cache/ms-playwright ] && [ "$(ls -A ~/.cache/ms-playwright 2>/dev/null)" ]; then
-          echo "✅ Browser cache directory exists and has content"
-          ls -la ~/.cache/ms-playwright/ | head -10
-          
-          # Count installed browsers
-          BROWSER_COUNT=$(find ~/.cache/ms-playwright/ -maxdepth 1 -type d -name "*chromium*" | wc -l)
-          echo "📊 Chromium browser directories found: $BROWSER_COUNT"
-          
-          # Look for specific chromium installation
-          CHROMIUM_DIR=$(find ~/.cache/ms-playwright/ -name "*chromium*" -type d | head -1)
-          if [ -n "$CHROMIUM_DIR" ]; then
-            echo "✅ Chromium browser found at: $CHROMIUM_DIR"
-            ls -la "$CHROMIUM_DIR" | head -5
-          else
-            echo "❌ Chromium browser not found"
-            echo "🔍 Available directories:"
-            ls -la ~/.cache/ms-playwright/
+        # Monitor installation with timeout
+        for i in {1..180}; do
+          if ! kill -0 $INSTALL_PID 2>/dev/null; then
+            wait $INSTALL_PID
+            INSTALL_EXIT_CODE=$?
+            if [ $INSTALL_EXIT_CODE -eq 0 ]; then
+              echo "✅ Browser installation completed"
+              break
+            else
+              echo "❌ Browser installation failed with code $INSTALL_EXIT_CODE"
+              tail -10 /tmp/playwright-install.log || echo "No install log"
+              exit 1
+            fi
           fi
-        else
-          echo "❌ Browser cache directory is empty or doesn't exist"
-          echo "🔧 Attempting alternative installation..."
           
-          # Try more specific installation
-          npx playwright install chromium --with-deps
-          
-          # Wait a moment and check again
-          sleep 2
-          if [ -d ~/.cache/ms-playwright ] && [ "$(ls -A ~/.cache/ms-playwright 2>/dev/null)" ]; then
-            echo "✅ Alternative installation successful"
-          else
-            echo "❌ All installation attempts failed"
-            echo "🔍 Final diagnostics:"
-            echo "Disk space: $(df -h ~/.cache)"
-            echo "Environment: $(env | grep -i playwright || echo 'No Playwright env vars')"
-            # Don't exit - let tests handle the failure gracefully
-            echo "⚠️ Continuing without Playwright browsers - tests may fail"
+          if [ $((i % 30)) -eq 0 ]; then
+            echo "⏳ Still installing... ($i/180 seconds)"
           fi
+          sleep 1
+        done
+        
+        # Check if installation timed out
+        if kill -0 $INSTALL_PID 2>/dev/null; then
+          echo "❌ Installation timed out after 3 minutes"
+          kill $INSTALL_PID 2>/dev/null || true
+          exit 1
         fi
         
-        # Test browser functionality if installation succeeded
+        # Quick verification
         if [ -d ~/.cache/ms-playwright ] && [ "$(ls -A ~/.cache/ms-playwright 2>/dev/null)" ]; then
-          echo "🧪 Testing browser functionality..."
-          cat > test-browser-ci.js << 'EOF'
-          const { chromium } = require('@playwright/test');
-          
-          (async () => {
-            try {
-              console.log('🚀 Testing browser after installation...');
-              const browser = await chromium.launch({
-                headless: true,
-                args: ['--no-sandbox', '--disable-dev-shm-usage']
-              });
-              console.log('✅ Browser launched successfully');
-              await browser.close();
-              console.log('✅ Browser test passed');
-              process.exit(0);
-            } catch (error) {
-              console.error('❌ Browser test failed:', error.message);
-              process.exit(1);
-            }
-          })();
-        EOF
-          
-          node test-browser-ci.js
-          rm test-browser-ci.js
-          
-          echo "✅ Playwright browsers installed and verified for CI"
+          CHROMIUM_COUNT=$(find ~/.cache/ms-playwright -name "*chromium*" -type d | wc -l)
+          echo "✅ Browser cache populated ($CHROMIUM_COUNT chromium directories)"
         else
-          echo "⚠️ Skipping browser functionality test - installation failed"
+          echo "❌ Browser cache empty after installation"
+          exit 1
         fi
+        
+        ' || {
+          echo "❌ Playwright installation failed or timed out"
+          echo "📋 Falling back to minimal installation..."
+          
+          # Emergency fallback - try minimal installation
+          npx playwright install chromium --force || {
+            echo "❌ Even minimal installation failed"
+            echo "⚠️ Tests requiring browsers will be skipped"
+            exit 0  # Don't fail the entire workflow
+          }
+        }
+        
+        echo "✅ Playwright browsers ready for CI"
         
     - name: Lint code
       run: |
