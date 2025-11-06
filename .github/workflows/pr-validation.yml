@@ -39,147 +39,104 @@ jobs:
         cd client
         npm ci
 
-    - name: 🎭 Pre-install Playwright browsers
+    - name: 🎭 Install and Verify Playwright Browsers
       run: |
-        echo "🎭 Installing Playwright browsers immediately after dependencies..."
-        # This ensures browsers are installed with the exact same Playwright version as dependencies
+        echo "🎭 Installing Playwright browsers (consolidated approach)..."
+        
+        # Check system info and permissions
+        echo "🔍 System information:"
+        echo "User: $(whoami)"
+        echo "Home: $HOME"
+        echo "Cache dir permissions: $(ls -ld ~/.cache 2>/dev/null || echo 'cache dir does not exist')"
+        
+        # Verify Playwright package is available
+        echo "📦 Checking Playwright installation..."
+        npm ls @playwright/test
+        echo "Playwright version: $(npx playwright --version 2>/dev/null || echo 'not available')"
+        
+        # Create cache directory if it doesn't exist (sometimes needed in CI)
+        echo "📁 Ensuring cache directory exists..."
+        mkdir -p ~/.cache/ms-playwright
+        chmod 755 ~/.cache/ms-playwright
+        echo "Cache directory created: $(ls -ld ~/.cache/ms-playwright)"
+        
+        # Install browsers with all dependencies
+        echo "🔄 Installing browsers with dependencies..."
         npx playwright install --with-deps
-        echo "✅ Browsers pre-installed"
+        
+        # Verify browser cache was created and populated
+        echo "📂 Checking browser installation..."
+        if [ -d ~/.cache/ms-playwright ] && [ "$(ls -A ~/.cache/ms-playwright 2>/dev/null)" ]; then
+          echo "✅ Browser cache directory exists and has content"
+          ls -la ~/.cache/ms-playwright/ | head -10
+          
+          # Count installed browsers
+          BROWSER_COUNT=$(find ~/.cache/ms-playwright/ -maxdepth 1 -type d -name "*chromium*" | wc -l)
+          echo "📊 Chromium browser directories found: $BROWSER_COUNT"
+          
+          # Look for specific chromium installation
+          CHROMIUM_DIR=$(find ~/.cache/ms-playwright/ -name "*chromium*" -type d | head -1)
+          if [ -n "$CHROMIUM_DIR" ]; then
+            echo "✅ Chromium browser found at: $CHROMIUM_DIR"
+            ls -la "$CHROMIUM_DIR" | head -5
+          else
+            echo "❌ Chromium browser not found"
+            echo "🔍 Available directories:"
+            ls -la ~/.cache/ms-playwright/
+          fi
+        else
+          echo "❌ Browser cache directory is empty or doesn't exist"
+          echo "🔧 Attempting alternative installation..."
+          
+          # Try more specific installation
+          npx playwright install chromium --with-deps
+          
+          # Wait a moment and check again
+          sleep 2
+          if [ -d ~/.cache/ms-playwright ] && [ "$(ls -A ~/.cache/ms-playwright 2>/dev/null)" ]; then
+            echo "✅ Alternative installation successful"
+          else
+            echo "❌ All installation attempts failed"
+            echo "🔍 Final diagnostics:"
+            echo "Disk space: $(df -h ~/.cache)"
+            echo "Environment: $(env | grep -i playwright || echo 'No Playwright env vars')"
+            exit 1
+          fi
+        fi
+        
+        # Test browser functionality immediately after installation
+        echo "🧪 Testing browser functionality..."
+        cat > test-browser-install.js << 'EOF'
+        const { chromium } = require('@playwright/test');
+        
+        (async () => {
+          try {
+            console.log('🚀 Testing browser after installation...');
+            const browser = await chromium.launch({
+              headless: true,
+              args: ['--no-sandbox', '--disable-dev-shm-usage']
+            });
+            console.log('✅ Browser launched successfully');
+            await browser.close();
+            console.log('✅ Browser test passed');
+            process.exit(0);
+          } catch (error) {
+            console.error('❌ Browser test failed:', error.message);
+            process.exit(1);
+          }
+        })();
+        EOF
+        
+        node test-browser-install.js
+        rm test-browser-install.js
+        
+        echo "✅ Playwright browsers installed and verified"
 
     - name: 🏗️ Build server
       run: npm run build:server
 
     - name: 🏗️ Build client
       run: npm run build:client
-
-    - name: 🎭 Install Playwright browsers
-      run: |
-        echo "Installing Playwright browsers..."
-        
-        # First ensure we have the latest Playwright
-        echo "📦 Ensuring Playwright is up to date..."
-        npm ls @playwright/test || echo "Playwright not found in dependencies"
-        
-        # Force reinstall browsers to ensure clean state
-        echo "🧹 Cleaning browser cache..."
-        rm -rf ~/.cache/ms-playwright/ || echo "No cache to clean"
-        
-        # Install browsers with verbose output
-        echo "🎭 Installing all Playwright browsers..."
-        npx playwright install --with-deps
-        
-        # Verify installation
-        echo "🔍 Verifying Playwright installation..."
-        npx playwright --version
-        
-        # Check what browsers were actually installed
-        echo "📂 Checking installed browsers:"
-        ls -la ~/.cache/ms-playwright/ || echo "No browser cache found"
-        find ~/.cache/ms-playwright/ -type d -name "*chromium*" | head -5
-        
-        # Test browser availability
-        echo "🧪 Testing browser executables..."
-        find ~/.cache/ms-playwright/ -name "*chrome*" -type f -executable | head -3 || echo "No chrome executables found"
-        find ~/.cache/ms-playwright/ -name "*headless*" -type f -executable | head -3 || echo "No headless executables found"
-        
-        # Ensure all dependencies are properly installed
-        echo "🔗 Ensuring Playwright dependencies are linked..."
-        npm ls @playwright/test
-        
-        # Force a browser recheck
-        echo "🔄 Running Playwright browser check..."
-        npx playwright install --dry-run || echo "Dry run completed"
-
-    - name: 🧪 Test Playwright Setup
-      run: |
-        echo "🔍 Testing Playwright browser functionality..."
-        
-        # Create a test that matches exactly what Cucumber is trying to do
-        cat > test-playwright-cucumber.js << 'EOF'
-        const { chromium } = require('@playwright/test');
-        
-        (async () => {
-          try {
-            console.log('🚀 Testing Playwright browser launch (matching Cucumber setup)...');
-            
-            // Use exact same options as Cucumber hooks
-            const launchOptions = {
-              headless: process.env.HEADLESS !== 'false',
-              args: [
-                '--no-sandbox', 
-                '--disable-dev-shm-usage',
-                '--disable-gpu',
-                '--disable-web-security',
-                '--disable-background-timer-throttling',
-                '--disable-backgrounding-occluded-windows',
-                '--disable-renderer-backgrounding'
-              ]
-            };
-            
-            console.log('🎭 Launching browser with options:', JSON.stringify(launchOptions, null, 2));
-            
-            const browser = await chromium.launch(launchOptions);
-            console.log('✅ Browser launched successfully');
-            
-            const context = await browser.newContext({
-              viewport: { width: 1280, height: 720 },
-              ignoreHTTPSErrors: true
-            });
-            console.log('✅ Context created successfully');
-            
-            const page = await context.newPage();
-            console.log('✅ Page created successfully');
-            
-            // Test page navigation
-            await page.goto('about:blank');
-            console.log('✅ Page navigation successful');
-            
-            await context.close();
-            await browser.close();
-            console.log('✅ Playwright test completed successfully - Cucumber should work!');
-            process.exit(0);
-          } catch (error) {
-            console.error('❌ Playwright test failed:', error.message);
-            console.error('🔍 Full error:', error);
-            
-            // Try to provide specific debugging for browser executable issues
-            if (error.message.includes("Executable doesn't exist")) {
-              console.error('🚨 Browser executable path issue detected!');
-              console.error('💡 This usually means browser installation failed or version mismatch');
-              
-              // Check what browsers are actually available
-              const fs = require('fs');
-              const path = require('path');
-              const os = require('os');
-              
-              const cacheDir = path.join(os.homedir(), '.cache', 'ms-playwright');
-              console.error('🔍 Checking browser cache at:', cacheDir);
-              
-              try {
-                if (fs.existsSync(cacheDir)) {
-                  const contents = fs.readdirSync(cacheDir);
-                  console.error('📂 Cache contents:', contents);
-                } else {
-                  console.error('❌ Browser cache directory does not exist');
-                }
-              } catch (e) {
-                console.error('❌ Failed to read cache directory:', e.message);
-              }
-            }
-            
-            process.exit(1);
-          }
-        })();
-        EOF
-        
-        # Run the test
-        echo "🧪 Running Playwright functionality test..."
-        node test-playwright-cucumber.js
-        
-        # Clean up
-        rm test-playwright-cucumber.js
-        
-        echo "✅ Playwright setup verification completed"
 
     - name: ✅ Verify builds
       run: |
