@@ -5,7 +5,7 @@ Feature: User Authentication
   So that I can access the application functionalities
 
   Background:
-    Given the application is running at "http://localhost:3001"
+    Given the application is running at "http://localhost:3000"
 
   # REQ-AUTH-002: Username and email uniqueness validation
   Scenario: Register with duplicate username
