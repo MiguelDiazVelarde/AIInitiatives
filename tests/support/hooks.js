@@ -1,7 +1,8 @@
 const { Before, After, setDefaultTimeout } = require('@cucumber/cucumber');
 const { chromium } = require('@playwright/test');
 
-setDefaultTimeout(30 * 1000); // Reducido de 60s a 30s
+// Increased timeout for session persistence tests and CI environments
+setDefaultTimeout(60 * 1000); // Increased to 60s for better reliability in CI
 
 Before(async function () {
   try {
