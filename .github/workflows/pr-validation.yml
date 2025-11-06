@@ -48,13 +48,68 @@ jobs:
     - name: 🎭 Install Playwright browsers
       run: |
         echo "Installing Playwright browsers..."
-        npx playwright install chromium firefox webkit
+        
+        # Install all browsers including headless shell variants
+        npx playwright install
         npx playwright install-deps
+        
+        # Also install specific browsers that Cucumber might need
+        npx playwright install chromium
+        npx playwright install chromium-headless-shell
+        npx playwright install firefox
+        npx playwright install webkit
         
         # Verify installation
         echo "Verifying Playwright installation..."
         npx playwright --version || echo "Playwright CLI not available"
+        
+        # Check browser cache
+        echo "Checking Playwright browser cache..."
         ls -la ~/.cache/ms-playwright/ || echo "Playwright cache not found"
+        
+        # List installed browsers
+        echo "Installed browsers:"
+        find ~/.cache/ms-playwright/ -name "*headless*" -type d 2>/dev/null || echo "No headless browsers found"
+        find ~/.cache/ms-playwright/ -name "*chromium*" -type d 2>/dev/null || echo "No chromium browsers found"
+
+    - name: 🧪 Test Playwright Setup
+      run: |
+        echo "🔍 Testing Playwright browser functionality..."
+        
+        # Create a simple test to verify Playwright is working
+        cat > test-playwright.js << 'EOF'
+        const { chromium } = require('@playwright/test');
+        
+        (async () => {
+          try {
+            console.log('🚀 Testing Playwright browser launch...');
+            const browser = await chromium.launch({
+              headless: true,
+              args: ['--no-sandbox', '--disable-dev-shm-usage']
+            });
+            
+            console.log('✅ Browser launched successfully');
+            
+            const context = await browser.newContext();
+            const page = await context.newPage();
+            
+            console.log('✅ Page created successfully');
+            
+            await browser.close();
+            console.log('✅ Playwright test completed successfully');
+            process.exit(0);
+          } catch (error) {
+            console.error('❌ Playwright test failed:', error.message);
+            process.exit(1);
+          }
+        })();
+        EOF
+        
+        # Run the test
+        node test-playwright.js
+        
+        # Clean up
+        rm test-playwright.js
 
     - name: ✅ Verify builds
       run: |
