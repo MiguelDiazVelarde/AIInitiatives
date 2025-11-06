@@ -42,6 +42,11 @@ jobs:
         echo "Installing Playwright browsers..."
         npx playwright install chromium firefox webkit
         npx playwright install-deps
+        
+        # Verify installation
+        echo "Verifying Playwright installation..."
+        npx playwright --version || echo "Playwright CLI not available"
+        ls -la ~/.cache/ms-playwright/ || echo "Playwright cache not found"
 
     - name: ✅ Verify builds
       run: |
@@ -87,54 +92,62 @@ jobs:
         kill $SERVER_PID 2>/dev/null || true
         echo "Server test completed"
 
-    - name: 🤖 AI Test Optimizer - PR Analysis
-      continue-on-error: true
-      run: |
-        echo "🔍 Running AI Test Optimizer for PR changes..."
-        
-        # Get PR changed files
-        CHANGED_FILES=$(git diff --name-only ${{ github.event.pull_request.base.sha }} ${{ github.event.pull_request.head.sha }})
-        
-        echo "📁 Files changed in this PR:"
-        echo "$CHANGED_FILES"
-        
-        # Generate optimization plan without specific commit (uses current state)
-        if npx ts-node src/test-optimizer/index.ts optimize balanced; then
-          echo "✅ PR optimization plan generated"
-        else
-          echo "⚠️ PR analysis failed - continuing with standard validation"
-        fi
-      
-    - name: 🎯 Smart PR Test Recommendations
-      continue-on-error: true
-      run: |
-        echo "🧠 Generating smart test recommendations for PR..."
-        
-        # Try basic recommendations without commit-specific analysis
-        if npx ts-node src/test-optimizer/index.ts recommendations HEAD; then
-          echo "✅ PR-specific test recommendations generated"
-        else
-          echo "⚠️ Could not generate PR test recommendations - using fallback"
-          echo "📋 Fallback: Will execute smoke tests for validation"
-        fi
-
     - name: 🚀 Start server for testing
       run: |
         echo "Starting server for tests..."
         npm start &
         echo $! > server.pid
         echo "Server started, waiting for it to be ready..."
-        sleep 10
+        sleep 15
+        
+        # Verify server is responding
+        echo "Checking if server is ready..."
+        for i in {1..10}; do
+          if curl -f --max-time 5 http://localhost:3000 >/dev/null 2>&1; then
+            echo "✅ Server is ready and responding"
+            break
+          else
+            echo "⏳ Waiting for server... (attempt $i/10)"
+            sleep 3
+          fi
+        done
 
     - name: 🧪 Execute AI-Optimized Tests
       run: |
         echo "🤖 Executing AI-optimized test suite..."
         
+        # First, run AI analysis
+        echo "🔍 Running AI Test Optimizer for PR changes..."
+        CHANGED_FILES=$(git diff --name-only ${{ github.event.pull_request.base.sha }} ${{ github.event.pull_request.head.sha }})
+        echo "📁 Files changed in this PR: $CHANGED_FILES"
+        
+        # Generate optimization plan
+        echo "🧠 Generating optimization plan..."
+        if npx ts-node src/test-optimizer/index.ts optimize balanced; then
+          echo "✅ PR optimization plan generated"
+        else
+          echo "⚠️ PR analysis failed - will use fallback"
+        fi
+        
+        # Generate recommendations
+        echo "💡 Generating test recommendations..."
+        npx ts-node src/test-optimizer/index.ts recommendations HEAD || echo "⚠️ Recommendations failed"
+        
+        # Verify Playwright is working
+        echo "🔍 Verifying Playwright setup..."
+        if npx playwright --version; then
+          echo "✅ Playwright CLI is available"
+        else
+          echo "❌ Playwright CLI not working"
+        fi
+        
         # Try to execute optimized tests first
+        echo "🚀 Executing optimized test suite..."
         if npx ts-node src/test-optimizer/index.ts execute; then
           echo "✅ AI-optimized tests completed successfully"
         else
           echo "⚠️ AI-optimized execution failed, falling back to smoke tests"
+          echo "🔥 Running fallback smoke tests..."
           npm run test:smoke
         fi
 
