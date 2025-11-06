@@ -31,7 +31,9 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
-      
+      with:
+        fetch-depth: 0
+        
     - name: Setup Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v4
       with:
@@ -79,7 +81,7 @@ jobs:
         echo "$CHANGED_FILES"
         
         # Run the Test Optimizer
-        if npx ts-node src/test-optimizer/index.ts analyze "$CHANGED_FILES"; then
+        if npx ts-node src/test-optimizer/index.ts optimize balanced; then
           echo "✅ AI Test Optimizer analysis completed successfully"
         else
           echo "⚠️ AI Test Optimizer analysis failed - continuing with standard tests"
@@ -91,7 +93,7 @@ jobs:
         echo "🧠 Generating intelligent test recommendations..."
         
         # Generate test recommendations based on changes
-        if npx ts-node src/test-optimizer/index.ts recommendations; then
+        if npx ts-node src/test-optimizer/index.ts optimize balanced; then
           echo "✅ Smart test recommendations generated"
           
           # Display recommendations if available
@@ -200,7 +202,7 @@ jobs:
           echo "📊 Executing recommended tests based on AI analysis..."
           
           # Run targeted tests based on recommendations
-          if npx ts-node src/test-optimizer/index.ts execute-smart; then
+          if npx ts-node src/test-optimizer/index.ts execute; then
             echo "✅ AI-optimized tests completed successfully"
           else
             echo "⚠️ Smart test execution failed - falling back to standard tests"
@@ -242,7 +244,7 @@ jobs:
       continue-on-error: true
       run: |
         echo "Attempting to initialize Test Optimizer..."
-        if npx ts-node src/test-optimizer/index.ts config show; then
+        if npx ts-node src/test-optimizer/index.ts stats; then
           echo "✅ Test Optimizer initialized successfully"
         else
           echo "⚠️ Test Optimizer initialization failed - continuing with standard tests"
@@ -314,7 +316,7 @@ jobs:
         echo "📈 Generating test optimization report..."
         
         # Generate comprehensive optimization report
-        if npx ts-node src/test-optimizer/index.ts report; then
+        if npx ts-node src/test-optimizer/index.ts stats; then
           echo "✅ Optimization report generated successfully"
           
           # Display key metrics if available
