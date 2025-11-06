@@ -170,9 +170,40 @@ When('I enter registration details for username {string}', async function (usern
 });
 
 When('I logout', async function () {
-  await this.page.click('button:has-text("Cerrar Sesión")');
-  await this.page.waitForLoadState('networkidle');
+  console.log('🚪 Attempting to logout...');
+  
+  // Try multiple selectors for the logout button
+  const logoutSelectors = [
+    'button:has-text("Logout")',
+    '.logout-btn',
+    'button.logout-btn',
+    'button[class*="logout"]'
+  ];
+  
+  let clicked = false;
+  for (const selector of logoutSelectors) {
+    try {
+      const element = await this.page.locator(selector).first();
+      if (await element.isVisible({ timeout: 5000 })) {
+        console.log(`✅ Found logout button with selector: ${selector}`);
+        await element.click();
+        clicked = true;
+        break;
+      }
+    } catch (error: unknown) {
+      console.log(`⚠️ Selector ${selector} not found:`, error instanceof Error ? error.message : 'Unknown error');
+    }
+  }
+  
+  if (!clicked) {
+    console.log('❌ No logout button found, trying generic approach...');
+    // Fallback: try to find any button containing "logout" text (case insensitive)
+    await this.page.click('button:has-text("Logout")');
+  }
+  
+  await this.page.waitForLoadState('networkidle', { timeout: 10000 });
   await this.page.waitForTimeout(1000);
+  console.log('✅ Logout action completed');
 });
 
 // Verifications
@@ -500,17 +531,27 @@ Then('I should be automatically logged in', async function () {
 });
 
 When('I navigate between different pages', async function () {
+  console.log('🧭 Navigating between different pages...');
+  
   // Navigate through different sections while maintaining session
-  await this.navigateToLogin();
-  await this.navigateToDashboard();
+  console.log('🔄 Navigating to different pages to test session persistence...');
+  
+  // Go to auth page first
+  await this.page.goto(`${this.baseURL}/auth`);
+  await this.page.waitForLoadState('networkidle', { timeout: 10000 });
+  
+  // Then go back to dashboard
+  await this.page.goto(`${this.baseURL}/dashboard`);
+  await this.page.waitForLoadState('networkidle', { timeout: 10000 });
+  
+  // Refresh the page to test session persistence
   await this.page.reload();
-  await this.page.waitForLoadState('networkidle');
+  await this.page.waitForLoadState('networkidle', { timeout: 10000 });
+  
+  console.log('✅ Page navigation completed');
 });
 
-Then('my session should remain active', async function () {
-  const dashboardVisible = await this.page.locator('h1:has-text("Dashboard")').isVisible();
-  expect(dashboardVisible).toBe(true);
-});
+// Note: 'my session should remain active' step is defined in reliability.steps.ts
 
 Then('I should not need to login again', async function () {
   // Already verified in previous step
@@ -543,4 +584,411 @@ Then('any sensitive data should be cleared from the client', async function () {
   
   // Should not contain any obvious user data
   expect(storageData).toBeTruthy();
+});
+
+// ===== MISSING STEP DEFINITIONS =====
+
+Then('I should see an error message containing {string}', async function (expectedMessage: string) {
+  console.log(`🔍 Looking for error message containing: "${expectedMessage}"`);
+  
+  // Try multiple selectors for error messages
+  const errorSelectors = [
+    '.error',
+    '.error-message',
+    '[data-testid="error"]',
+    '.alert-danger',
+    '.validation-error'
+  ];
+  
+  let found = false;
+  for (const selector of errorSelectors) {
+    try {
+      const errorElement = await this.page.locator(selector).first();
+      if (await errorElement.isVisible({ timeout: 3000 })) {
+        const errorText = await errorElement.textContent();
+        if (errorText?.includes(expectedMessage)) {
+          console.log(`✅ Found error message: "${errorText}"`);
+          found = true;
+          break;
+        }
+      }
+    } catch {
+      // Continue to next selector
+    }
+  }
+  
+  if (!found) {
+    // Fallback: search for any element containing the error message
+    const errorElement = await this.page.locator(`text="${expectedMessage}"`).first();
+    if (await errorElement.isVisible({ timeout: 5000 })) {
+      found = true;
+      console.log(`✅ Found error message via text search`);
+    }
+  }
+  
+  expect(found).toBe(true);
+});
+
+When('I submit the registration form with empty fields', async function () {
+  console.log('📝 Submitting registration form with empty fields...');
+  
+  // Clear all form fields to ensure they're empty
+  const fields = ['input[name="username"]', 'input[name="email"]', 'input[name="password"]'];
+  for (const field of fields) {
+    try {
+      await this.page.fill(field, '');
+    } catch {
+      // Field might not exist, continue
+    }
+  }
+  
+  // Submit the form
+  await this.page.click('button[type="submit"]');
+  await this.page.waitForTimeout(1000);
+});
+
+Then('I should see validation error messages', async function () {
+  console.log('🔍 Looking for validation error messages...');
+  
+  // Look for validation error indicators
+  const validationSelectors = [
+    '.validation-error',
+    '.field-error',
+    'input:invalid',
+    '.error',
+    '[data-testid="validation-error"]'
+  ];
+  
+  let found = false;
+  for (const selector of validationSelectors) {
+    try {
+      const element = await this.page.locator(selector).first();
+      if (await element.isVisible({ timeout: 3000 })) {
+        console.log(`✅ Found validation error with selector: ${selector}`);
+        found = true;
+        break;
+      }
+    } catch {
+      // Continue to next selector
+    }
+  }
+  
+  expect(found).toBe(true);
+});
+
+When('I enter invalid email format {string}', async function (invalidEmail: string) {
+  console.log(`📧 Entering invalid email: ${invalidEmail}`);
+  await this.page.fill('input[name="email"]', invalidEmail);
+});
+
+When('I fill other required fields', async function () {
+  console.log('📝 Filling other required fields...');
+  await this.page.fill('input[name="username"]', 'testuser');
+  await this.page.fill('input[name="password"]', 'testpassword');
+});
+
+Then('I should see an email validation error', async function () {
+  console.log('🔍 Looking for email validation error...');
+  
+  // Check for HTML5 validation or custom email validation
+  const emailInput = this.page.locator('input[name="email"]');
+  const isInvalid = await emailInput.evaluate((el: HTMLInputElement) => !el.validity.valid);
+  
+  if (isInvalid) {
+    console.log('✅ Email field shows HTML5 validation error');
+    expect(isInvalid).toBe(true);
+  } else {
+    // Look for custom validation messages
+    const errorElement = await this.page.locator('.error, .validation-error').first();
+    const isVisible = await errorElement.isVisible({ timeout: 3000 });
+    expect(isVisible).toBe(true);
+  }
+});
+
+Then('registration should not proceed', async function () {
+  console.log('🚫 Verifying registration did not proceed...');
+  
+  // Check that we're still on the registration page (not redirected)
+  const currentUrl = this.page.url();
+  expect(currentUrl).toMatch(/auth/);
+  
+  // Check that we're still on registration form
+  const registerButton = await this.page.locator('button:has-text("Register")').isVisible();
+  expect(registerButton).toBe(true);
+});
+
+Then('I should remain logged in', async function () {
+  console.log('🔐 Verifying user remains logged in...');
+  
+  // This is the same as "I should remain authenticated" but using different wording
+  const currentUrl = this.page.url();
+  console.log('📍 Current URL after refresh:', currentUrl);
+  
+  // If not on dashboard, try to navigate there to test authentication
+  if (!currentUrl.includes('/dashboard')) {
+    console.log('🏠 Not on dashboard, attempting to navigate...');
+    try {
+      await this.page.goto(`${this.baseURL}/dashboard`, { 
+        waitUntil: 'domcontentloaded', 
+        timeout: 15000 
+      });
+    } catch (error: unknown) {
+      console.log('⚠️ Navigation timeout, checking current state...', error instanceof Error ? error.message : 'Unknown error');
+    }
+  }
+  
+  // Check if we're authenticated by looking for dashboard elements
+  const dashboardVisible = await this.page.locator('h1:has-text("Dashboard")').isVisible({ timeout: 10000 });
+  expect(dashboardVisible).toBe(true);
+});
+
+Then('still have access to the dashboard', async function () {
+  console.log('🏠 Verifying dashboard access...');
+  
+  // Navigate to dashboard and verify access
+  await this.page.goto(`${this.baseURL}/dashboard`);
+  await this.page.waitForLoadState('networkidle', { timeout: 10000 });
+  
+  // Check for dashboard content
+  const dashboardContent = await this.page.locator('h1:has-text("Dashboard"), .dashboard, [data-testid="dashboard"]').first().isVisible({ timeout: 8000 });
+  expect(dashboardContent).toBe(true);
+});
+
+Then('I should not be able to access protected resources', async function () {
+  console.log('🚫 Verifying no access to protected resources...');
+  
+  // Try to access dashboard - should be redirected to login
+  await this.page.goto(`${this.baseURL}/dashboard`);
+  await this.page.waitForLoadState('networkidle', { timeout: 10000 });
+  
+  const currentUrl = this.page.url();
+  expect(currentUrl).toMatch(/auth|login/);
+});
+
+Then('the system should confirm I am authenticated', async function () {
+  console.log('✅ Verifying system confirms authentication...');
+  
+  // Check for authenticated state indicators
+  const authIndicators = [
+    'h1:has-text("Dashboard")',
+    '.user-info',
+    'button:has-text("Logout")',
+    '.logout-btn'
+  ];
+  
+  let found = false;
+  for (const selector of authIndicators) {
+    if (await this.page.locator(selector).isVisible({ timeout: 5000 })) {
+      console.log(`✅ Found auth indicator: ${selector}`);
+      found = true;
+      break;
+    }
+  }
+  
+  expect(found).toBe(true);
+});
+
+Then('return my user information', async function () {
+  console.log('👤 Verifying user information is displayed...');
+  
+  // Look for user information display
+  const userInfoSelectors = [
+    '.user-info',
+    '[data-testid="user-info"]',
+    'text=/Welcome.*!/',
+    'span:has-text("Welcome")'
+  ];
+  
+  let found = false;
+  for (const selector of userInfoSelectors) {
+    try {
+      if (await this.page.locator(selector).isVisible({ timeout: 5000 })) {
+        console.log(`✅ Found user info: ${selector}`);
+        found = true;
+        break;
+      }
+    } catch {
+      // Continue to next selector
+    }
+  }
+  
+  expect(found).toBe(true);
+});
+
+When('I enter invalid credentials', async function () {
+  console.log('🚫 Entering invalid credentials...');
+  await this.page.fill('input[name="username"]', 'invaliduser');
+  await this.page.fill('input[name="password"]', 'wrongpassword');
+  await this.page.click('button[type="submit"]');
+  await this.page.waitForTimeout(2000);
+});
+
+Then('I should see a clear error message', async function () {
+  console.log('🔍 Looking for clear error message...');
+  
+  const errorElement = await this.page.locator('.error, .error-message, [data-testid="error"]').first();
+  const isVisible = await errorElement.isVisible({ timeout: 5000 });
+  expect(isVisible).toBe(true);
+  
+  const errorText = await errorElement.textContent();
+  expect(errorText).toBeTruthy();
+  console.log(`✅ Found error message: "${errorText}"`);
+});
+
+Then('the message should not reveal specific failure reasons', async function () {
+  console.log('🔒 Verifying error message is generic...');
+  
+  const errorElement = await this.page.locator('.error, .error-message').first();
+  const errorText = await errorElement.textContent();
+  
+  // Error message should be generic, not revealing whether username or password was wrong
+  const genericPhrases = ['invalid credentials', 'login failed', 'authentication failed', 'incorrect username or password'];
+  const isGeneric = genericPhrases.some(phrase => errorText?.toLowerCase().includes(phrase));
+  
+  expect(isGeneric).toBe(true);
+});
+
+When('I login with valid credentials', async function () {
+  console.log('✅ Logging in with valid credentials...');
+  await this.page.fill('input[name="username"]', 'admin');
+  await this.page.fill('input[name="password"]', 'password');
+  await this.page.click('button[type="submit"]');
+  await this.page.waitForLoadState('networkidle', { timeout: 10000 });
+});
+
+Then('see the dashboard content immediately', async function () {
+  console.log('⚡ Verifying dashboard content loads immediately...');
+  
+  // Check that dashboard content is visible quickly
+  const dashboardContent = await this.page.locator('h1:has-text("Dashboard"), .dashboard-main').first().isVisible({ timeout: 8000 });
+  expect(dashboardContent).toBe(true);
+});
+
+When('I try to access protected API endpoints', async function () {
+  console.log('🔒 Trying to access protected API endpoints...');
+  
+  // Store response for verification in next step
+  this.apiResponse = await this.page.evaluate(async (baseURL: string) => {
+    try {
+      const response = await fetch(`${baseURL}/api/products`, {
+        credentials: 'include'
+      });
+      return {
+        status: response.status,
+        ok: response.ok
+      };
+    } catch (error) {
+      return {
+        status: 0,
+        ok: false,
+        error: error instanceof Error ? error.message : 'Unknown error'
+      };
+    }
+  }, this.baseURL);
+});
+
+Then('access should be denied', async function () {
+  console.log('🚫 Verifying access is denied...');
+  
+  expect(this.apiResponse).toBeTruthy();
+  expect(this.apiResponse.status).toBe(401); // Unauthorized
+  expect(this.apiResponse.ok).toBe(false);
+});
+
+When('I successfully register a new user', async function () {
+  console.log('📝 Registering a new user...');
+  
+  const timestamp = Date.now();
+  await this.page.fill('input[name="username"]', `newuser${timestamp}`);
+  await this.page.fill('input[name="email"]', `newuser${timestamp}@example.com`);
+  await this.page.fill('input[name="password"]', 'newpassword123');
+  await this.page.click('button[type="submit"]');
+  await this.page.waitForLoadState('networkidle', { timeout: 10000 });
+});
+
+Then('redirected to the dashboard without additional login steps', async function () {
+  console.log('🚀 Verifying auto-login after registration...');
+  
+  // Should be on dashboard without needing to login again
+  await expect(this.page).toHaveURL(/.*dashboard/, { timeout: 10000 });
+  
+  const dashboardVisible = await this.page.locator('h1:has-text("Dashboard")').isVisible({ timeout: 5000 });
+  expect(dashboardVisible).toBe(true);
+});
+
+When('my authentication should be maintained', async function () {
+  console.log('🔐 Verifying authentication is maintained during navigation...');
+  
+  // Check that we're still authenticated by looking for auth indicators
+  const authIndicators = [
+    'button:has-text("Logout")',
+    '.logout-btn',
+    '.user-info'
+  ];
+  
+  let found = false;
+  for (const selector of authIndicators) {
+    if (await this.page.locator(selector).isVisible({ timeout: 5000 })) {
+      found = true;
+      break;
+    }
+  }
+  
+  expect(found).toBe(true);
+});
+
+Then('I should not be asked to login again', async function () {
+  console.log('✅ Verifying no login prompt...');
+  
+  // Check that we're not on the login page
+  const currentUrl = this.page.url();
+  expect(currentUrl).not.toMatch(/auth|login/);
+  
+  // Check that login form is not visible
+  const loginForm = await this.page.locator('input[name="username"]').isVisible();
+  expect(loginForm).toBe(false);
+});
+
+When('I initiate logout', async function () {
+  console.log('🚪 Initiating logout process...');
+  
+  // Same as the "I logout" step but with different wording
+  const logoutButton = this.page.locator('button:has-text("Logout"), .logout-btn').first();
+  await logoutButton.click();
+  await this.page.waitForLoadState('networkidle', { timeout: 10000 });
+});
+
+Then('my session should be securely terminated', async function () {
+  console.log('🔒 Verifying session termination...');
+  
+  // Check that we're redirected to login page
+  const currentUrl = this.page.url();
+  expect(currentUrl).toMatch(/auth|login/);
+  
+  // At minimum, we should be on auth page
+  expect(currentUrl).toMatch(/auth/);
+});
+
+Then('all authentication tokens should be invalidated', async function () {
+  console.log('🔑 Verifying tokens are invalidated...');
+  
+  // Try to access protected resource - should fail
+  const response = await this.page.evaluate(async (baseURL: string) => {
+    try {
+      const res = await fetch(`${baseURL}/api/products`, {
+        credentials: 'include'
+      });
+      return {
+        status: res.status,
+        ok: res.ok
+      };
+    } catch {
+      return {
+        status: 0,
+        ok: false
+      };
+    }
+  }, this.baseURL);
+  
+  expect(response.ok).toBe(false);
 });
