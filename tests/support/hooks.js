@@ -28,7 +28,34 @@ Before(async function () {
     }
     
     console.log('🎭 Launching Chromium browser...');
-    this.browser = await chromium.launch(launchOptions);
+    
+    // Add retry logic for browser launch
+    let browser = null;
+    let lastError = null;
+    
+    for (let attempt = 1; attempt <= 3; attempt++) {
+      try {
+        console.log(`🔄 Browser launch attempt ${attempt}/3...`);
+        browser = await chromium.launch(launchOptions);
+        console.log('✅ Browser launched successfully');
+        break;
+      } catch (error) {
+        lastError = error;
+        console.error(`❌ Browser launch attempt ${attempt} failed:`, error.message);
+        
+        if (attempt < 3) {
+          console.log('⏳ Waiting 2 seconds before retry...');
+          await new Promise(resolve => setTimeout(resolve, 2000));
+        }
+      }
+    }
+    
+    if (!browser) {
+      console.error('❌ All browser launch attempts failed');
+      throw lastError;
+    }
+    
+    this.browser = browser;
     
     console.log('📱 Creating browser context...');
     this.context = await this.browser.newContext({
@@ -51,6 +78,43 @@ Before(async function () {
     if (error.message.includes("Executable doesn't exist")) {
       console.error('🚨 Browser executable not found. This usually means Playwright browsers are not installed.');
       console.error('💡 Try running: npx playwright install');
+      
+      // In CI, try to diagnose what browsers are available
+      if (process.env.CI || process.env.GITHUB_ACTIONS) {
+        console.error('🔍 Diagnosing browser installation in CI...');
+        const fs = require('fs');
+        const path = require('path');
+        const os = require('os');
+        
+        try {
+          const cacheDir = path.join(os.homedir(), '.cache', 'ms-playwright');
+          console.error('🔍 Browser cache directory:', cacheDir);
+          
+          if (fs.existsSync(cacheDir)) {
+            const contents = fs.readdirSync(cacheDir);
+            console.error('📂 Available browsers:', contents);
+            
+            // Look for chromium specifically
+            const chromiumDirs = contents.filter(dir => dir.includes('chromium'));
+            if (chromiumDirs.length > 0) {
+              console.error('🔍 Chromium directories found:', chromiumDirs);
+              chromiumDirs.forEach(dir => {
+                const fullPath = path.join(cacheDir, dir);
+                try {
+                  const subContents = fs.readdirSync(fullPath);
+                  console.error(`📁 Contents of ${dir}:`, subContents.slice(0, 5));
+                } catch (e) {
+                  console.error(`❌ Failed to read ${dir}:`, e.message);
+                }
+              });
+            }
+          } else {
+            console.error('❌ Browser cache directory does not exist');
+          }
+        } catch (e) {
+          console.error('❌ Failed to diagnose browser installation:', e.message);
+        }
+      }
     }
     
     throw error;
