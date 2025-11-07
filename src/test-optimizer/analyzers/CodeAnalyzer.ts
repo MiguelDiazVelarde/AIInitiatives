@@ -158,9 +158,30 @@ export class CodeAnalyzer {
       const { promisify } = await import('node:util');
       const execAsync = promisify(exec);
 
-      let command = commitHash 
-        ? `git diff ${baseBranch}..${commitHash}`
-        : `git diff ${baseBranch}..HEAD`;
+      // First, try to get available references
+      let command: string;
+      try {
+        // Check if we can access the base branch
+        await execAsync(`git rev-parse ${baseBranch}`);
+        command = commitHash 
+          ? `git diff ${baseBranch}..${commitHash}`
+          : `git diff ${baseBranch}..HEAD`;
+      } catch (refError) {
+        console.warn(`Base branch ${baseBranch} not available, using alternative approach`);
+        // Fallback: try with origin/main
+        try {
+          await execAsync(`git rev-parse origin/${baseBranch}`);
+          command = commitHash 
+            ? `git diff origin/${baseBranch}..${commitHash}`
+            : `git diff origin/${baseBranch}..HEAD`;
+        } catch (originError) {
+          console.warn(`origin/${baseBranch} also not available, using HEAD~1 as fallback`);
+          // Last resort: compare with previous commit
+          command = commitHash 
+            ? `git show --name-only ${commitHash}`
+            : `git diff HEAD~1..HEAD`;
+        }
+      }
 
       const { stdout } = await execAsync(command);
       const changes = this.parseGitDiff(stdout);

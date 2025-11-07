@@ -5,7 +5,7 @@ Feature: Security Requirements
   So that user data and system integrity are protected
 
   Background:
-    Given the application is running at "http://localhost:3001"
+    Given the application is running at "http://localhost:3000"
 
   # REQ-SEC-001: Password encryption with bcrypt
   Scenario: Password encryption verification
