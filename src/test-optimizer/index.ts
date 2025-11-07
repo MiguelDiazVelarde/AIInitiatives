@@ -81,6 +81,11 @@ class TestOptimizerCLI {
     const strategy = args[0] || 'balanced';
     const commitHash = args[1];
     
+    // Debug logging
+    console.log('🔍 DEBUG: handleOptimize called with args:', args);
+    console.log('🔍 DEBUG: Using strategy:', strategy);
+    console.log('🔍 DEBUG: Commit hash:', commitHash || 'none provided');
+    
     console.log(`🔄 Generating optimization plan with strategy: ${strategy}`);
     
     // Get code changes if commit hash provided

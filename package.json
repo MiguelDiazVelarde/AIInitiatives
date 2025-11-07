@@ -48,8 +48,20 @@
     "optimizer:execute": "ts-node src/test-optimizer/index.ts execute",
     "optimizer:report": "ts-node src/test-optimizer/index.ts report",
     "optimizer:pr": "ts-node src/test-optimizer/index.ts analyze-pr",
+    "optimizer:debug": "node --inspect-brk -r ts-node/register src/test-optimizer/index.ts",
+    "optimizer:debug:quick": "cross-env DEBUG=test-optimizer:* ts-node src/test-optimizer/index.ts optimize quick",
+    "optimizer:debug:stats": "cross-env DEBUG=test-optimizer:* ts-node src/test-optimizer/index.ts stats",
+    "optimizer:debug:server": "node --inspect -r ts-node/register src/test-optimizer/index.ts server 3001",
     "optimizer:metrics": "ts-node src/test-optimizer/index.ts metrics",
-    "optimizer:init": "ts-node src/test-optimizer/index.ts config init"
+    "optimizer:init": "ts-node src/test-optimizer/index.ts config init",
+    "server:debug": "node --inspect-brk -r ts-node/register src/server/index.ts",
+    "server:debug:auth": "cross-env DEBUG=server:auth:* nodemon --inspect src/server/index.ts",
+    "server:debug:products": "cross-env DEBUG=server:products:* nodemon --inspect src/server/index.ts",
+    "server:debug:api": "cross-env DEBUG=server:api:* nodemon --inspect src/server/index.ts",
+    "client:debug": "cross-env DEBUG=client:* npm run dev:client",
+    "client:debug:build": "cross-env DEBUG=client:* npm run build:client",
+    "client:debug:preview": "cross-env DEBUG=client:* cd client && vite preview",
+    "fullstack:debug": "cross-env DEBUG=server:*,client:* npm run dev"
   },
   "keywords": [
     "typescript",

@@ -199,6 +199,59 @@ npx ts-node src/test-optimizer/index.ts optimize balanced HEAD~1
 npx ts-node src/test-optimizer/index.ts server 3001
 ```
 
+## 🐛 **COMPREHENSIVE DEBUG SYSTEM**
+
+### ✅ **Professional Debug Infrastructure**
+
+Complete debugging system for all application components with VS Code integration and terminal support:
+
+**📚 Debug Guides Available:**
+- 🔧 **[TEST-OPTIMIZER-DEBUG-GUIDE.md](TEST-OPTIMIZER-DEBUG-GUIDE.md)** - AI Test Optimizer debugging
+- 🖥️ **[SERVER-DEBUG-GUIDE.md](SERVER-DEBUG-GUIDE.md)** - Express.js backend debugging  
+- ⚡ **[CLIENT-DEBUG-GUIDE.md](CLIENT-DEBUG-GUIDE.md)** - React frontend debugging
+
+### 🎯 **Quick Debug Commands**
+
+```bash
+# Test Optimizer Debug
+npm run optimizer:debug              # General debug with breakpoints
+npm run optimizer:debug:stats        # Debug statistics calculation
+npm run optimizer:debug:server       # Debug API server
+
+# Server Debug  
+npm run server:debug                 # Express server debug
+npm run server:debug:auth            # Authentication debug
+npm run server:debug:api             # API endpoint debug
+
+# Client Debug
+npm run client:debug                 # React dev server debug
+npm run client:debug:build           # Build process debug
+npm run client:debug:preview         # Preview production debug
+
+# Full Stack Debug
+npm run fullstack:debug              # Server + Client together
+```
+
+### 🔧 **VS Code Debug Configurations**
+
+Pre-configured debug setups available in **Run and Debug (Ctrl+Shift+D)**:
+
+**AI Test Optimizer:**
+- 🆘 Debug Test Optimizer - Help
+- ⚡ Debug Test Optimizer - Quick Strategy
+- 📊 Debug Test Optimizer - Stats  
+- 🌐 Debug Test Optimizer - API Server
+
+**Express Server:**
+- 🖥️ Debug Express Server - Main
+- 🔐 Debug Express Server - Authentication
+- 📡 Debug Express Server - API Routes
+
+**React Client:**
+- ⚡ Debug React Client - Development Server
+- 🏗️ Debug React Client - Build Process
+- 🔄 Debug Full Stack - Server + Client
+
 ### 📈 Real-Time Performance Monitoring
 
 The AI Test Optimizer provides live metrics and can be monitored through:
