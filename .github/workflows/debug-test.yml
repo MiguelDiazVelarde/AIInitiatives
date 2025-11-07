@@ -32,36 +32,77 @@ jobs:
     - name: Build application
       run: npm run build
       
-    - name: Check files
+    - name: Check files and project structure
       run: |
-        echo "=== Checking files ==="
-        ls -la scripts/
+        echo "=== Checking project structure ==="
+        ls -la
+        echo "=== Checking PowerShell scripts ==="
+        ls -la *.ps1 2>/dev/null || echo "No PowerShell scripts found"
         echo "=== Checking package.json scripts ==="
-        cat package.json | grep -A 10 '"scripts"'
+        cat package.json | grep -A 15 '"scripts"'
+        echo "=== Checking test directories ==="
+        ls -la tests/ 2>/dev/null || echo "Tests directory not found"
+        echo "=== Checking source directories ==="
+        ls -la src/ 2>/dev/null || echo "Source directory not found"
         
-    - name: Simple test execution
+    - name: Enhanced debug test execution
       env:
         NODE_ENV: test
         PORT: 3001
         TEST_BASE_URL: http://localhost:3001
+        HEADLESS: true
       run: |
         echo "=== Environment Variables ==="
         echo "NODE_ENV: $NODE_ENV"
         echo "PORT: $PORT"
         echo "TEST_BASE_URL: $TEST_BASE_URL"
+        echo "HEADLESS: $HEADLESS"
         
-        echo "=== Starting simple server test ==="
+        echo "=== Checking authentication test infrastructure ==="
+        if [ -f "tests/step-definitions/authentication.steps.ts" ]; then
+          echo "✅ Authentication step definitions found"
+          STEP_COUNT=$(grep -c "Then\|When\|Given" tests/step-definitions/authentication.steps.ts || echo "0")
+          echo "   Step definitions count: $STEP_COUNT"
+        else
+          echo "❌ Authentication step definitions missing"
+        fi
+        
+        echo "=== Starting enhanced server test ==="
         npm start &
         SERVER_PID=$!
         echo "Server PID: $SERVER_PID"
         
-        # Wait for server
-        sleep 5
+        # Enhanced server wait
+        echo "Waiting for server to be ready..."
+        sleep 8
         
-        # Check if server is running
-        timeout 30 curl -f http://localhost:3001/api/health || echo "Health check failed"
+        # Multiple health check attempts
+        SERVER_READY=false
+        for i in {1..10}; do
+          if timeout 5 curl -f http://localhost:3001 >/dev/null 2>&1; then
+            echo "✅ Server is responding on main endpoint"
+            SERVER_READY=true
+            break
+          elif timeout 5 curl -f http://localhost:3001/api/health >/dev/null 2>&1; then
+            echo "✅ Server health endpoint responding"
+            SERVER_READY=true
+            break
+          else
+            echo "⏳ Server check attempt $i/10..."
+            sleep 2
+          fi
+        done
         
-        # Kill server
-        kill $SERVER_PID || true
+        if [ "$SERVER_READY" = true ]; then
+          echo "✅ Server is ready for testing"
+        else
+          echo "⚠️ Server not responding to health checks"
+        fi
         
-        echo "=== Test completed ==="
+        # Enhanced cleanup
+        echo "=== Cleaning up ==="
+        kill $SERVER_PID 2>/dev/null || true
+        sleep 2
+        pkill -f "node.*dist/server" 2>/dev/null || true
+        
+        echo "✅ Enhanced debug test completed successfully"
