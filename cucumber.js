@@ -13,6 +13,8 @@ module.exports = {
     formatOptions: {
       snippetInterface: 'async-await'
     },
-    publishQuiet: true
+    publishQuiet: true,
+    timeout: 60000, // 60 seconds timeout
+    retry: 1 // Retry once on failure
   }
 };

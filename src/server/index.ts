@@ -1,7 +1,7 @@
 import express from 'express';
 import session from 'express-session';
 import cors from 'cors';
-import path from 'path';
+import path from 'node:path';
 import authRoutes from './routes/auth';
 import productRoutes from './routes/products';
 
@@ -41,14 +41,58 @@ app.get('/api/health', (req, res) => {
 // Serve React static files in production or test
 if (process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'test') {
   const clientDistPath = path.join(__dirname, '../../client/dist');
-  app.use(express.static(clientDistPath));
+  console.log(`📁 Looking for client files at: ${clientDistPath}`);
   
-  // All non-API routes should serve React's index.html
-  app.get('*', (req, res) => {
-    if (!req.path.startsWith('/api')) {
-      res.sendFile(path.join(clientDistPath, 'index.html'));
+  // Check if client dist directory exists
+  try {
+    const fs = require('node:fs');
+    if (fs.existsSync(clientDistPath)) {
+      console.log('✅ Client dist directory found');
+      app.use(express.static(clientDistPath));
+      
+      // All non-API routes should serve React's index.html
+      app.get('*', (req, res) => {
+        if (!req.path.startsWith('/api')) {
+          const indexPath = path.join(clientDistPath, 'index.html');
+          if (fs.existsSync(indexPath)) {
+            res.sendFile(indexPath);
+          } else {
+            console.error('❌ index.html not found at:', indexPath);
+            res.status(404).send('Client app not found');
+          }
+        }
+      });
+    } else {
+      console.warn('⚠️ Client dist directory not found. Serving API only.');
+      // Serve a simple HTML page for testing
+      app.get('*', (req, res) => {
+        if (!req.path.startsWith('/api')) {
+          res.send(`
+            <html>
+              <head><title>Products App</title></head>
+              <body>
+                <h1>Products App Server</h1>
+                <p>API is running but client not built.</p>
+                <p>Available endpoints:</p>
+                <ul>
+                  <li><a href="/api/health">/api/health</a></li>
+                  <li>/api/auth/* (POST)</li>
+                  <li>/api/products/* (GET/POST)</li>
+                </ul>
+              </body>
+            </html>
+          `);
+        }
+      });
     }
-  });
+  } catch (error) {
+    console.error('❌ Error checking client files:', error);
+    app.get('*', (req, res) => {
+      if (!req.path.startsWith('/api')) {
+        res.status(500).send('Server configuration error');
+      }
+    });
+  }
 }
 
 // Error handling middleware
