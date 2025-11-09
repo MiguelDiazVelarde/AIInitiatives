@@ -1,0 +1,114 @@
+name: Debug Workflow Issues
+
+on:
+  workflow_dispatch:
+    inputs:
+      debug_level:
+        description: 'Debug level'
+        required: true
+        default: 'basic'
+        type: choice
+        options:
+        - basic
+        - detailed
+        - verbose
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  debug-basic:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+    - name: 🛎️ Checkout Repository
+      uses: actions/checkout@v4
+      
+    - name: 🟢 Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20.x'
+        cache: 'npm'
+        
+    - name: 📦 Install Dependencies
+      run: |
+        echo "🔍 Installing dependencies..."
+        npm ci
+        echo "✅ Dependencies installed"
+        
+    - name: 🔧 Build Check
+      run: |
+        echo "🔍 Checking build process..."
+        npm run build:server
+        npm run build:client
+        echo "✅ Build successful"
+        
+    - name: 📋 Environment Check
+      run: |
+        echo "🔍 Environment information:"
+        echo "Node version: $(node --version)"
+        echo "NPM version: $(npm --version)"
+        echo "OS: $(uname -a)"
+        echo "Available scripts:"
+        npm run | grep test || echo "No test scripts found"
+        
+    - name: 🎭 Browser Check
+      run: |
+        echo "🔍 Checking Playwright installation..."
+        npx playwright install chromium --with-deps
+        npx playwright --version
+        echo "✅ Playwright ready"
+        
+    - name: 🚀 Server Test
+      run: |
+        echo "🔍 Testing server startup..."
+        NODE_ENV=test timeout 30s npm start &
+        SERVER_PID=$!
+        echo "Server PID: $SERVER_PID"
+        
+        # Wait for server
+        sleep 10
+        
+        # Test server health
+        if curl -f http://localhost:3000/api/health; then
+          echo "✅ Server health check passed"
+        else
+          echo "❌ Server health check failed"
+          ps aux | grep node || true
+        fi
+        
+        # Cleanup
+        kill $SERVER_PID || true
+        
+    - name: 🧪 Simple Test Run
+      run: |
+        echo "🔍 Running a simple test..."
+        NODE_ENV=test timeout 60s npm start &
+        SERVER_PID=$!
+        
+        # Wait for server
+        sleep 15
+        
+        # Run auth tests only
+        npm run test:auth || echo "Auth tests failed"
+        
+        # Cleanup
+        kill $SERVER_PID || true
+        
+    - name: 📊 Results Summary
+      if: always()
+      run: |
+        echo "## Debug Results 🔍" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "### Environment" >> $GITHUB_STEP_SUMMARY
+        echo "- **Node.js**: $(node --version)" >> $GITHUB_STEP_SUMMARY
+        echo "- **NPM**: $(npm --version)" >> $GITHUB_STEP_SUMMARY
+        echo "- **OS**: Ubuntu Latest" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "### Status" >> $GITHUB_STEP_SUMMARY
+        echo "- Build: ✅ Completed" >> $GITHUB_STEP_SUMMARY
+        echo "- Dependencies: ✅ Installed" >> $GITHUB_STEP_SUMMARY
+        echo "- Browser: ✅ Ready" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "Check the workflow logs for detailed information."

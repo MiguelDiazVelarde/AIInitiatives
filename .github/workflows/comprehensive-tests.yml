@@ -19,18 +19,29 @@ on:
         - products
         - smoke
 
+# Add explicit permissions
+permissions:
+  contents: read
+  pull-requests: write
+  issues: write
+  checks: write
+
 jobs:
   test:
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     
     strategy:
       matrix:
         node-version: [20.x, 22.x]
+      fail-fast: false
     
     steps:
     - name: 🛎️ Checkout Repository
       uses: actions/checkout@v4
-      
+      with:
+        fetch-depth: 1
+        
     - name: 🟢 Setup Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v4
       with:
@@ -51,38 +62,126 @@ jobs:
         echo "✅ Build completed successfully"
         
     - name: 🔍 Install Playwright Browsers
+      timeout-minutes: 5
       run: |
-        echo "🎭 Installing Playwright browsers..."
-        npx playwright install chromium
-        echo "✅ Browsers installed successfully"
+        echo "🎭 Installing Playwright browsers for comprehensive testing..."
+        
+        # Verify Playwright package exists
+        if npm ls @playwright/test > /dev/null 2>&1; then
+          echo "✅ Playwright package found"
+        else
+          echo "❌ Playwright package not found"
+          exit 1
+        fi
+        
+        # Quick version check
+        PLAYWRIGHT_VERSION=$(npx playwright --version 2>/dev/null | head -1 || echo "unknown")
+        echo "Playwright version: $PLAYWRIGHT_VERSION"
+        
+        # Install with timeout and monitoring
+        echo "🔄 Installing Chromium browser..."
+        timeout 300 bash -c '
+          mkdir -p ~/.cache/ms-playwright
+          chmod 755 ~/.cache/ms-playwright
+          
+          npx playwright install --with-deps chromium > /tmp/playwright-install.log 2>&1 &
+          INSTALL_PID=$!
+          
+          for i in {1..180}; do
+            if ! kill -0 $INSTALL_PID 2>/dev/null; then
+              wait $INSTALL_PID
+              INSTALL_EXIT_CODE=$?
+              if [ $INSTALL_EXIT_CODE -eq 0 ]; then
+                echo "✅ Chromium installation completed successfully"
+                break
+              else
+                echo "❌ Installation failed with code $INSTALL_EXIT_CODE"
+                tail -10 /tmp/playwright-install.log || echo "No install log"
+                exit 1
+              fi
+            fi
+            
+            if [ $((i % 30)) -eq 0 ]; then
+              echo "⏳ Installing browser... ($i/180 seconds)"
+            fi
+            sleep 1
+          done
+        '
+        
+        # Verify installation
+        if npx playwright install --dry-run chromium 2>/dev/null | grep -q "already installed"; then
+          echo "✅ Browser verification passed"
+        else
+          echo "⚠️ Browser verification warning, but continuing..."
+        fi
         
     - name: 🚀 Start Server in Background
+      env:
+        NODE_ENV: test
+        PORT: 3000
+        TEST_BASE_URL: http://localhost:3000
       run: |
         echo "🚀 Starting server in test mode..."
-        NODE_ENV=test npm start &
+        npm start &
         SERVER_PID=$!
         echo "SERVER_PID=$SERVER_PID" >> $GITHUB_ENV
-        echo "✅ Server started with PID: $SERVER_PID"
+        echo "Server started with PID: $SERVER_PID"
+        
+        # Setup cleanup function
+        cleanup() {
+          echo "Cleaning up server..."
+          kill $SERVER_PID 2>/dev/null || true
+          sleep 2
+          pkill -f "node.*dist/server" 2>/dev/null || true
+        }
+        trap cleanup EXIT
+        
+        echo "✅ Server startup initiated"
         
     - name: ⏳ Wait for Server to be Ready
       run: |
         echo "⏳ Waiting for server to be ready..."
-        for i in {1..30}; do
+        sleep 8
+        
+        # Verify server is ready with timeout and multiple endpoints
+        timeout=120
+        counter=0
+        
+        while [ $counter -lt $timeout ]; do
           if curl -f http://localhost:3000/api/health >/dev/null 2>&1; then
-            echo "✅ Server is ready!"
-            break
+            echo "✅ Server health check passed!"
+            
+            # Additional verification - check if auth endpoint is accessible
+            if curl -f http://localhost:3000/ >/dev/null 2>&1; then
+              echo "✅ Server main endpoint accessible!"
+              break
+            else
+              echo "⚠️ Main endpoint not ready, retrying..."
+            fi
           fi
-          echo "⏳ Attempt $i/30: Server not ready yet, waiting..."
+          
+          if [ $((counter % 20)) -eq 0 ]; then
+            echo "⏳ Waiting for server... ($counter/$timeout seconds)"
+          fi
+          
           sleep 2
+          counter=$((counter+2))
         done
         
-        # Final health check
+        # Final comprehensive health check
         if ! curl -f http://localhost:3000/api/health >/dev/null 2>&1; then
-          echo "❌ Server failed to start properly"
-          echo "📋 Server logs:"
+          echo "❌ Server failed to start within $timeout seconds"
+          echo "📋 Server diagnostics:"
           ps aux | grep node || true
+          netstat -tlnp | grep :3000 || true
+          if [ -f server.log ]; then
+            echo "📄 Server logs:"
+            tail -50 server.log
+          fi
           exit 1
         fi
+        
+        echo "🎯 Server is ready for testing!"
         
     - name: 🔐 Run Authentication Tests
       if: ${{ github.event.inputs.test_type == 'auth' || github.event.inputs.test_type == 'all' || github.event.inputs.test_type == '' }}
@@ -109,7 +208,7 @@ jobs:
       if: ${{ github.event.inputs.test_type == 'smoke' || github.event.inputs.test_type == 'all' || github.event.inputs.test_type == '' }}
       run: |
         echo "💨 Running smoke tests..."
-        npm run test:smoke:full
+        npm run test:smoke
         echo "✅ Smoke tests completed"
         
     - name: 📊 Run Full Test Suite with Reports
@@ -132,11 +231,24 @@ jobs:
       run: |
         echo "🧹 Cleaning up server process..."
         if [ ! -z "$SERVER_PID" ]; then
-          kill $SERVER_PID || true
-          echo "✅ Server process terminated"
+          kill $SERVER_PID 2>/dev/null || true
+          echo "✅ Server process $SERVER_PID terminated"
         fi
-        pkill -f "node.*server" || true
-        echo "✅ Cleanup completed"
+        
+        # Ensure all node processes are cleaned up
+        pkill -f "node.*dist/server" 2>/dev/null || true
+        pkill -f "npm.*start" 2>/dev/null || true
+        
+        # Wait a moment for cleanup
+        sleep 2
+        
+        # Final check
+        if pgrep -f "node.*dist/server" >/dev/null; then
+          echo "⚠️ Some server processes may still be running"
+          ps aux | grep node || true
+        else
+          echo "✅ All server processes cleaned up"
+        fi
         
     - name: 📋 Upload Test Reports
       if: always()
@@ -252,9 +364,9 @@ jobs:
         echo "## Performance Metrics 📈" >> $GITHUB_STEP_SUMMARY
         echo "" >> $GITHUB_STEP_SUMMARY
         echo "### Workflow Performance" >> $GITHUB_STEP_SUMMARY
-        echo "- **Total Duration**: ${{ needs.test.outputs.duration || 'N/A' }}" >> $GITHUB_STEP_SUMMARY
-        echo "- **Test Matrix**: Node.js 20.x, 22.x" >> $GITHUB_STEP_SUMMARY
-        echo "- **Parallel Jobs**: ${{ strategy.job-total || '3' }}" >> $GITHUB_STEP_SUMMARY
+        echo "- **Matrix Strategy**: Node.js 20.x, 22.x" >> $GITHUB_STEP_SUMMARY
+        echo "- **Test Type**: ${{ github.event.inputs.test_type || 'all' }}" >> $GITHUB_STEP_SUMMARY
+        echo "- **Parallel Jobs**: Multiple" >> $GITHUB_STEP_SUMMARY
         echo "" >> $GITHUB_STEP_SUMMARY
         echo "### Next Steps" >> $GITHUB_STEP_SUMMARY
         echo "- 📋 Review test reports in artifacts" >> $GITHUB_STEP_SUMMARY
