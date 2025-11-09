@@ -160,12 +160,95 @@ When('I try to perform a protected action', async function () {
 });
 
 When('I click the register link', async function () {
-  await this.page.click('button:has-text("Register"), a:has-text("Register")');
+  // First, let's see what's actually on the page
+  console.log('🔍 Current URL:', this.page.url());
+  console.log('🔍 Page title:', await this.page.title());
+  
+  // Take a screenshot for debugging
+  await this.page.screenshot({ path: 'debug-page.png', fullPage: true });
+  
+  // Log all buttons and links on the page
+  const buttons = await this.page.locator('button').all();
+  console.log('🔍 Found buttons:', buttons.length);
+  for (let i = 0; i < buttons.length; i++) {
+    const text = await buttons[i].textContent();
+    const visible = await buttons[i].isVisible();
+    console.log(`🔍 Button ${i}: "${text}" (visible: ${visible})`);
+  }
+  
+  const links = await this.page.locator('a').all();
+  console.log('🔍 Found links:', links.length);
+  for (let i = 0; i < links.length; i++) {
+    const text = await links[i].textContent();
+    const visible = await links[i].isVisible();
+    console.log(`🔍 Link ${i}: "${text}" (visible: ${visible})`);
+  }
+  
+  // Check the page HTML content
+  const bodyHTML = await this.page.locator('body').innerHTML();
+  console.log('🔍 Body content (first 500 chars):', bodyHTML.substring(0, 500));
+  
+  // Multiple fallback selectors for register link
+  const registerSelectors = [
+    'button.link-button:has-text("Register")',
+    'button:has-text("Register")',
+    'a:has-text("Register")',
+    '.link-button:has-text("Register")',
+    '[data-testid="register-link"]',
+    'button:text("Register")', // Alternative syntax
+    'text=Register' // Simple text search
+  ];
+  
+  let clicked = false;
+  for (const selector of registerSelectors) {
+    try {
+      await this.page.waitForSelector(selector, { timeout: 2000 });
+      await this.page.click(selector);
+      clicked = true;
+      console.log(`✅ Successfully clicked register link with selector: ${selector}`);
+      break;
+    } catch (error) {
+      // Log the selector that failed and continue to next
+      console.log(`Register link selector "${selector}" not found:`, error instanceof Error ? error.message : String(error));
+      continue;
+    }
+  }
+  
+  if (!clicked) {
+    throw new Error('Could not find register link with any of the expected selectors');
+  }
+  
   await this.page.waitForTimeout(500);
 });
 
 When('I click the login link', async function () {
-  await this.page.click('button:has-text("Login"), a:has-text("Login")');
+  // Multiple fallback selectors for login link  
+  const loginSelectors = [
+    'button.link-button:has-text("Login")',
+    'button:has-text("Login")',
+    'a:has-text("Login")',
+    '.link-button:has-text("Login")',
+    '[data-testid="login-link"]'
+  ];
+  
+  let clicked = false;
+  for (const selector of loginSelectors) {
+    try {
+      await this.page.waitForSelector(selector, { timeout: 10000 });
+      await this.page.click(selector);
+      clicked = true;
+      break;
+    } catch (error) {
+      // Log the selector that failed and continue to next
+      console.log(`Login link selector "${selector}" not found:`, error instanceof Error ? error.message : String(error));
+      continue;
+    }
+  }
+  
+  if (!clicked) {
+    throw new Error('Could not find login link with any of the expected selectors');
+  }
+  
   await this.page.waitForTimeout(500);
 });
 
@@ -291,11 +374,6 @@ Then('the validation feedback should update accordingly', async function () {
   expect(validFields).toBeGreaterThanOrEqual(2);
 });
 
-When('I submit the login form', async function () {
-  await this.page.click('button[type="submit"]');
-  await this.page.waitForTimeout(1000);
-});
-
 Then('the submit button should be disabled during processing', async function () {
   // This is hard to test due to fast processing, but we can check the form works
   const buttonExists = await this.page.locator('button[type="submit"]').count();
@@ -340,7 +418,7 @@ Then('I should see loading feedback', async function () {
   expect(dashboardVisible).toBe(true);
 });
 
-When('I am creating a new product', async function () {
+When('I am navigating to create a new product', async function () {
   await this.navigateToDashboard();
   await this.page.click('button:has-text("Add Product")');
 });
@@ -611,9 +689,4 @@ When('I switch to registration page', async function () {
 
 When('the login completes', async function () {
   await this.page.waitForLoadState('networkidle');
-});
-
-When('I am authenticated and on the dashboard', async function () {
-  await this.login('admin', 'password');
-  await this.navigateToDashboard();
 });

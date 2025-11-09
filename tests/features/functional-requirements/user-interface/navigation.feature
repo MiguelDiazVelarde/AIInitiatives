@@ -72,7 +72,7 @@ Feature: User Interface Navigation and Responsiveness
     Then I should see appropriate loading indicators
     When I am loading products on the dashboard
     Then I should see loading feedback
-    When I am creating a new product
+    When I am navigating to create a new product
     Then I should see submission progress indicators
 
   # REQ-UI-009: Form data clearing after submission
