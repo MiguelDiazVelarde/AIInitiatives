@@ -1,0 +1,262 @@
+name: Comprehensive Test Suite
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+  workflow_dispatch:
+    inputs:
+      test_type:
+        description: 'Type of tests to run'
+        required: true
+        default: 'all'
+        type: choice
+        options:
+        - all
+        - auth
+        - navigation
+        - products
+        - smoke
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    
+    strategy:
+      matrix:
+        node-version: [20.x, 22.x]
+    
+    steps:
+    - name: 🛎️ Checkout Repository
+      uses: actions/checkout@v4
+      
+    - name: 🟢 Setup Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+        
+    - name: 📦 Install Dependencies
+      run: |
+        npm ci
+        echo "✅ Dependencies installed successfully"
+        
+    - name: 🔧 Build Application
+      run: |
+        echo "🏗️ Building TypeScript server..."
+        npm run build:server
+        echo "⚡ Building React client..."
+        npm run build:client
+        echo "✅ Build completed successfully"
+        
+    - name: 🔍 Install Playwright Browsers
+      run: |
+        echo "🎭 Installing Playwright browsers..."
+        npx playwright install chromium
+        echo "✅ Browsers installed successfully"
+        
+    - name: 🚀 Start Server in Background
+      run: |
+        echo "🚀 Starting server in test mode..."
+        NODE_ENV=test npm start &
+        SERVER_PID=$!
+        echo "SERVER_PID=$SERVER_PID" >> $GITHUB_ENV
+        echo "✅ Server started with PID: $SERVER_PID"
+        
+    - name: ⏳ Wait for Server to be Ready
+      run: |
+        echo "⏳ Waiting for server to be ready..."
+        for i in {1..30}; do
+          if curl -f http://localhost:3000/api/health >/dev/null 2>&1; then
+            echo "✅ Server is ready!"
+            break
+          fi
+          echo "⏳ Attempt $i/30: Server not ready yet, waiting..."
+          sleep 2
+        done
+        
+        # Final health check
+        if ! curl -f http://localhost:3000/api/health >/dev/null 2>&1; then
+          echo "❌ Server failed to start properly"
+          echo "📋 Server logs:"
+          ps aux | grep node || true
+          exit 1
+        fi
+        
+    - name: 🔐 Run Authentication Tests
+      if: ${{ github.event.inputs.test_type == 'auth' || github.event.inputs.test_type == 'all' || github.event.inputs.test_type == '' }}
+      run: |
+        echo "🔐 Running authentication tests..."
+        npm run test:auth
+        echo "✅ Authentication tests completed"
+        
+    - name: 🧭 Run Navigation Tests
+      if: ${{ github.event.inputs.test_type == 'navigation' || github.event.inputs.test_type == 'all' || github.event.inputs.test_type == '' }}
+      run: |
+        echo "🧭 Running navigation tests..."
+        npm run test:navigation
+        echo "✅ Navigation tests completed"
+        
+    - name: 📦 Run Product Management Tests
+      if: ${{ github.event.inputs.test_type == 'products' || github.event.inputs.test_type == 'all' || github.event.inputs.test_type == '' }}
+      run: |
+        echo "📦 Running product management tests..."
+        npm run test:products
+        echo "✅ Product management tests completed"
+        
+    - name: 💨 Run Smoke Tests
+      if: ${{ github.event.inputs.test_type == 'smoke' || github.event.inputs.test_type == 'all' || github.event.inputs.test_type == '' }}
+      run: |
+        echo "💨 Running smoke tests..."
+        npm run test:smoke:full
+        echo "✅ Smoke tests completed"
+        
+    - name: 📊 Run Full Test Suite with Reports
+      if: ${{ github.event.inputs.test_type == 'all' || github.event.inputs.test_type == '' }}
+      run: |
+        echo "📊 Running full test suite with HTML reports..."
+        npm run test:full
+        echo "✅ Full test suite completed"
+        
+    - name: 🤖 Run AI Test Optimizer Analysis
+      if: ${{ github.event.inputs.test_type == 'all' || github.event.inputs.test_type == '' }}
+      run: |
+        echo "🤖 Running AI Test Optimizer analysis..."
+        npm run optimizer:stats
+        npm run optimizer:quick
+        echo "✅ AI Test Optimizer analysis completed"
+        
+    - name: 🧹 Cleanup Server Process
+      if: always()
+      run: |
+        echo "🧹 Cleaning up server process..."
+        if [ ! -z "$SERVER_PID" ]; then
+          kill $SERVER_PID || true
+          echo "✅ Server process terminated"
+        fi
+        pkill -f "node.*server" || true
+        echo "✅ Cleanup completed"
+        
+    - name: 📋 Upload Test Reports
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: test-reports-node-${{ matrix.node-version }}
+        path: |
+          reports/
+          test-optimizer-reports/
+          debug-page.png
+        retention-days: 7
+        
+    - name: 📊 Upload Test Results Summary
+      if: always()
+      run: |
+        echo "## Test Results Summary 📊" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "### Environment" >> $GITHUB_STEP_SUMMARY
+        echo "- **Node.js Version**: ${{ matrix.node-version }}" >> $GITHUB_STEP_SUMMARY
+        echo "- **Test Type**: ${{ github.event.inputs.test_type || 'all' }}" >> $GITHUB_STEP_SUMMARY
+        echo "- **Timestamp**: $(date)" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        
+        if [ -f "reports/cucumber_report.json" ]; then
+          echo "### Test Results" >> $GITHUB_STEP_SUMMARY
+          echo "✅ Test reports generated successfully" >> $GITHUB_STEP_SUMMARY
+          echo "📋 Check artifacts for detailed HTML reports" >> $GITHUB_STEP_SUMMARY
+        else
+          echo "### Test Results" >> $GITHUB_STEP_SUMMARY
+          echo "⚠️ No test reports found" >> $GITHUB_STEP_SUMMARY
+        fi
+
+  security-scan:
+    runs-on: ubuntu-latest
+    steps:
+    - name: 🛎️ Checkout Repository
+      uses: actions/checkout@v4
+      
+    - name: 🟢 Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20.x'
+        cache: 'npm'
+        
+    - name: 📦 Install Dependencies
+      run: npm ci
+      
+    - name: 🔒 Run Security Audit
+      run: |
+        echo "🔒 Running npm security audit..."
+        npm audit --audit-level high
+        echo "✅ Security audit completed"
+        
+    - name: 🔍 Check for Sensitive Information
+      run: |
+        echo "🔍 Scanning for sensitive information..."
+        # Check for potential secrets in code
+        if grep -r "password.*=" src/ --include="*.ts" --include="*.js" | grep -v "password.*placeholder" | grep -v "password.*field" | grep -v "password.*input"; then
+          echo "⚠️ Potential hardcoded passwords found"
+          exit 1
+        fi
+        
+        if grep -r "secret.*=" src/ --include="*.ts" --include="*.js" | grep -v "secret.*placeholder" | grep -v "secret.*field"; then
+          echo "⚠️ Potential hardcoded secrets found"
+          exit 1
+        fi
+        
+        echo "✅ No sensitive information detected"
+
+  ai-test-optimizer:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
+    steps:
+    - name: 🛎️ Checkout Repository
+      uses: actions/checkout@v4
+      
+    - name: 🟢 Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20.x'
+        cache: 'npm'
+        
+    - name: 📦 Install Dependencies
+      run: npm ci
+      
+    - name: 🔧 Build Application
+      run: npm run build
+      
+    - name: 🤖 AI Test Optimizer Analysis
+      run: |
+        echo "🤖 Running AI Test Optimizer comprehensive analysis..."
+        npm run optimizer:stats
+        npm run optimizer:analyze src/
+        npm run optimizer:report
+        echo "✅ AI analysis completed"
+        
+    - name: 📊 Upload AI Optimization Reports
+      uses: actions/upload-artifact@v4
+      with:
+        name: ai-optimization-reports
+        path: |
+          test-optimizer-reports/
+          test-optimizer-data/
+        retention-days: 30
+
+  performance-metrics:
+    runs-on: ubuntu-latest
+    needs: test
+    if: always()
+    steps:
+    - name: 📈 Calculate Performance Metrics
+      run: |
+        echo "## Performance Metrics 📈" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "### Workflow Performance" >> $GITHUB_STEP_SUMMARY
+        echo "- **Total Duration**: ${{ needs.test.outputs.duration || 'N/A' }}" >> $GITHUB_STEP_SUMMARY
+        echo "- **Test Matrix**: Node.js 20.x, 22.x" >> $GITHUB_STEP_SUMMARY
+        echo "- **Parallel Jobs**: ${{ strategy.job-total || '3' }}" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "### Next Steps" >> $GITHUB_STEP_SUMMARY
+        echo "- 📋 Review test reports in artifacts" >> $GITHUB_STEP_SUMMARY
+        echo "- 🤖 Check AI optimization recommendations" >> $GITHUB_STEP_SUMMARY
+        echo "- 🔐 Verify authentication test coverage" >> $GITHUB_STEP_SUMMARY
