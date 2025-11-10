@@ -18,8 +18,9 @@ This directory contains sequence diagrams for the Pull Request validation workfl
 
 - For technical documentation
 - More detailed than Mermaid
-- **View online**: <https://www.plantuml.com/plantuml/uml/>
+- **View online**: [Click to render diagram](http://www.plantuml.com/plantuml/proxy?src=https://raw.githubusercontent.com/MiguelDiazVelarde/AIInitiatives/main/docs/diagrams/pr-validation.puml)
 - **View locally**: Install PlantUML extension in VS Code
+- **Alternative**: Copy content and paste at <https://www.plantuml.com/plantuml/uml/>
 
 ### 3. **pr-validation.drawio**
 
