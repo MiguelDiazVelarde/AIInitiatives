@@ -3,29 +3,84 @@ import { expect } from '@playwright/test';
 
 // Navigation actions
 When('I navigate to the main page', async function () {
-  await this.page.goto(this.baseURL);
-  await this.page.waitForLoadState('networkidle');
+  await this.page.goto(this.baseURL, { 
+    waitUntil: 'domcontentloaded',
+    timeout: 15000 
+  });
   // Wait for React app to load and potentially redirect
-  await this.page.waitForTimeout(2000);
+  await this.page.waitForTimeout(1500);
+  // Verify the page loaded by checking for common elements
+  await this.page.waitForSelector('body', { timeout: 5000 });
 });
 
 When('I am on the dashboard', async function () {
   console.log('🔄 Navigating to dashboard...');
+  
   try {
-    await this.page.goto(`${this.baseURL}/dashboard`, { timeout: 30000 });
-    console.log('✅ Dashboard navigation successful');
-    await this.page.waitForLoadState('networkidle', { timeout: 30000 });
-    console.log('✅ Page load completed');
-    await this.page.waitForTimeout(2000);
+    // First check if we need to authenticate
+    const currentUrl = this.page.url();
+    console.log(`📍 Current URL: ${currentUrl}`);
+    
+    // Check if already on dashboard
+    if (currentUrl.includes('/dashboard')) {
+      console.log('✅ Already on dashboard');
+      // Wait for dashboard to be fully loaded
+      await this.page.waitForSelector('h1:has-text("Dashboard"), .dashboard-header', { 
+        timeout: 10000 
+      }).catch(() => console.log('⚠️ Dashboard header not found, but on dashboard URL'));
+      return;
+    }
+    
+    // Try navigating to dashboard with shorter timeout and domcontentloaded
+    console.log('🔄 Attempting direct navigation to dashboard...');
+    await this.page.goto(`${this.baseURL}/dashboard`, { 
+      waitUntil: 'domcontentloaded',
+      timeout: 15000 
+    });
+    
+    // Wait briefly to see if we stay on dashboard or get redirected
+    await this.page.waitForTimeout(1000);
+    
+    const newUrl = this.page.url();
+    console.log(`📍 After navigation URL: ${newUrl}`);
+    
+    // If redirected to auth, we need to login first
+    if (newUrl.includes('/auth') || !newUrl.includes('/dashboard')) {
+      console.log('� Not authenticated, logging in first...');
+      
+      // Check if already on auth page, otherwise navigate to it
+      if (!newUrl.includes('/auth')) {
+        await this.page.goto(`${this.baseURL}/auth`, { 
+          waitUntil: 'domcontentloaded',
+          timeout: 15000 
+        });
+      }
+      
+      // Wait for login form to be available
+      await this.page.waitForSelector('input[name="username"]', { timeout: 10000 });
+      
+      // Login with test credentials
+      await this.page.fill('input[name="username"]', 'admin');
+      await this.page.fill('input[name="password"]', 'password');
+      await this.page.click('button[type="submit"]');
+      
+      // Wait for navigation to dashboard after login
+      await this.page.waitForURL(/.*dashboard/, { timeout: 15000 });
+      console.log('✅ Logged in and navigated to dashboard');
+    }
+    
+    // Wait for dashboard content to be visible
+    await this.page.waitForSelector('h1:has-text("Dashboard"), .dashboard-header', { 
+      timeout: 10000 
+    });
+    console.log('✅ Dashboard loaded successfully');
+    
   } catch (error) {
     console.error('❌ Dashboard navigation failed:', error);
-    // Try alternative approach - go to auth first, then dashboard
-    console.log('🔄 Trying alternative approach...');
-    await this.page.goto(`${this.baseURL}/auth`, { timeout: 30000 });
-    await this.page.waitForLoadState('networkidle', { timeout: 30000 });
-    await this.page.goto(`${this.baseURL}/dashboard`, { timeout: 30000 });
-    await this.page.waitForLoadState('networkidle', { timeout: 30000 });
-    await this.page.waitForTimeout(2000);
+    console.log('📸 Taking screenshot for debugging...');
+    const screenshot = await this.page.screenshot({ fullPage: true });
+    console.log(`📸 Screenshot size: ${screenshot.length} bytes`);
+    throw error;
   }
 });
 
@@ -40,9 +95,13 @@ When('I change the browser window size', async function () {
 });
 
 When('I reload the page', async function () {
-  await this.page.reload();
-  await this.page.waitForLoadState('networkidle');
-  await this.page.waitForTimeout(2000);
+  await this.page.reload({ 
+    waitUntil: 'domcontentloaded',
+    timeout: 15000 
+  });
+  await this.page.waitForTimeout(1000);
+  // Verify page is loaded
+  await this.page.waitForSelector('body', { timeout: 5000 });
 });
 
 When('the session expires', async function () {
@@ -61,9 +120,11 @@ When('the session expires', async function () {
 
 When('I try to perform a protected action', async function () {
   // Try to access dashboard or perform an action that requires authentication
-  await this.page.goto(`${this.baseURL}/dashboard`);
-  await this.page.waitForLoadState('networkidle');
-  await this.page.waitForTimeout(2000);
+  await this.page.goto(`${this.baseURL}/dashboard`, { 
+    waitUntil: 'domcontentloaded',
+    timeout: 15000 
+  });
+  await this.page.waitForTimeout(1000);
 });
 
 // Verifications
