@@ -1,0 +1,104 @@
+@startuml PR Validation Workflow - Line 368
+
+title Flujo del Workflow PR Validation\nFoco en Línea 368: AI Test Optimizer Execute
+
+actor Developer as Dev
+participant "GitHub Actions" as GH
+participant "Git" as Git
+participant "AI Test Optimizer" as AI
+participant "Express Server" as Server
+participant "Test Suite" as Tests
+
+Dev -> GH: Crea/Actualiza Pull Request
+activate GH
+
+== Setup Phase ==
+GH -> Git: Checkout PR code
+GH -> GH: Install dependencies\n& Playwright browsers
+GH -> GH: Build server + client
+
+== Server Start ==
+GH -> Server: Start server (port 3000)
+activate Server
+loop Health Check (15 attempts)
+    GH -> Server: GET /api/health
+    Server --> GH: Response
+end
+Server --> GH: ✅ Server ready
+
+== Análisis de Cambios ==
+GH -> Git: git diff base..head\n--name-only
+Git --> GH: CHANGED_FILES
+
+alt Auth files changed
+    
+    note over GH: 🔐 Prioridad: Auth Tests
+    
+    GH -> AI: optimize balanced
+    AI --> GH: Optimization plan
+    
+    GH -> Tests: npm run test:auth
+    activate Tests
+    Tests --> GH: Auth test results
+    deactivate Tests
+    
+    alt Auth tests PASS
+        note over GH,AI: **LÍNEA 368: Execute AI Optimizer**
+        GH -> AI: ts-node execute
+        activate AI
+        
+        AI -> AI: Load optimization plan
+        AI -> AI: Select additional tests
+        AI -> Tests: Execute selected tests
+        activate Tests
+        Tests --> AI: Test results
+        deactivate Tests
+        
+        AI --> GH: ✅ Completed
+        deactivate AI
+        
+    else Auth tests FAIL
+        note over GH: ⚠️ Stop with summary
+        GH --> Dev: ❌ Fix required
+    end
+    
+else No auth changes
+    
+    note over GH,AI: **LÍNEA 368: Direct Execution**
+    
+    GH -> AI: optimize balanced
+    AI --> GH: Plan generated
+    
+    GH -> AI: ts-node execute
+    activate AI
+    
+    AI -> AI: Analyze PR changes
+    AI -> AI: Calculate priorities
+    AI -> Tests: Execute optimized tests
+    activate Tests
+    Tests --> AI: Results
+    deactivate Tests
+    
+    alt Tests PASS
+        AI --> GH: ✅ Success
+        deactivate AI
+    else Tests FAIL
+        AI --> GH: ⚠️ Fallback
+        deactivate AI
+        
+        GH -> Tests: npm run test:smoke
+        activate Tests
+        Tests --> GH: Smoke results
+        deactivate Tests
+    end
+end
+
+== Cleanup ==
+GH -> Server: Kill server process
+deactivate Server
+GH -> GH: Clean temp files
+
+GH --> Dev: 📊 Final report
+deactivate GH
+
+@enduml
