@@ -5,7 +5,7 @@ import { CustomWorld } from '../support/world';
 // REQ-PERF-001: Response time under normal load
 Given('I am using the application under normal conditions', async function (this: CustomWorld) {
   await this.page.goto(this.baseURL);
-  await this.page.waitForLoadState('networkidle');
+  await this.page.waitForLoadState('domcontentloaded', { timeout: 10000 });
 });
 
 When('I perform any user interaction:', async function (this: CustomWorld, dataTable) {
@@ -141,7 +141,7 @@ When('I request product data or user information', async function (this: CustomW
   
   // Make API requests by interacting with the UI
   await this.navigateToDashboard();
-  await this.page.waitForLoadState('networkidle');
+  await this.page.waitForLoadState('domcontentloaded', { timeout: 10000 });
   
   (this as any).totalResponseSize = responseSize;
 });
@@ -166,7 +166,7 @@ Then('unnecessary data should not be transmitted', async function (this: CustomW
 // REQ-REL-001: Graceful error handling
 Given('I am using the application', async function (this: CustomWorld) {
   await this.page.goto(this.baseURL);
-  await this.page.waitForLoadState('networkidle');
+  await this.page.waitForLoadState('domcontentloaded', { timeout: 10000 });
 });
 
 When('various types of errors occur:', async function (this: CustomWorld, dataTable) {
@@ -282,7 +282,7 @@ When('then restored', async function (this: CustomWorld) {
 Then('the application should detect the connectivity restoration', async function (this: CustomWorld) {
   // Try to interact with the application
   await this.page.reload();
-  await this.page.waitForLoadState('networkidle');
+  await this.page.waitForLoadState('domcontentloaded', { timeout: 10000 });
   
   const isWorking = await this.page.locator('body').isVisible();
   expect(isWorking).toBe(true);
@@ -364,7 +364,7 @@ When('I perform many operations over time', async function (this: CustomWorld) {
   // Simulate extended usage
   for (let i = 0; i < 10; i++) {
     await this.page.reload();
-    await this.page.waitForLoadState('networkidle');
+    await this.page.waitForLoadState('domcontentloaded', { timeout: 10000 });
     await this.page.locator('.add-product-btn').click();
     await this.page.locator('.add-product-btn').click(); // Toggle form
     await this.page.waitForTimeout(100);

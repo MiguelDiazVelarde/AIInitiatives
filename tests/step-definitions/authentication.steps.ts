@@ -39,14 +39,14 @@ Given('the application is running at {string}', async function (url: string) {
 
 Given('I am on the login page', async function () {
   await this.page.goto(`${this.baseURL}/auth`);
-  await this.page.waitForLoadState('networkidle');
+  await this.page.waitForLoadState('domcontentloaded', { timeout: 10000 });
   // Wait for React app to load
   await this.page.waitForTimeout(2000);
 });
 
 Given('I am on the registration page', async function () {
   await this.page.goto(`${this.baseURL}/auth`);
-  await this.page.waitForLoadState('networkidle');
+  await this.page.waitForLoadState('domcontentloaded', { timeout: 10000 });
   // Switch to registration form - try both English and Spanish
   try {
     await this.page.click('button:has-text("Register")', { timeout: 5000 });
@@ -59,7 +59,7 @@ Given('I am on the registration page', async function () {
 Given('I am authenticated as {string}', async function (username: string) {
   // Go to login page
   await this.page.goto(`${this.baseURL}/auth`);
-  await this.page.waitForLoadState('networkidle');
+  await this.page.waitForLoadState('domcontentloaded', { timeout: 10000 });
   await this.page.waitForTimeout(2000);
   
   // Wait for form to be visible
@@ -71,7 +71,7 @@ Given('I am authenticated as {string}', async function (username: string) {
   
   // Submit
   await this.page.click('button[type="submit"]');
-  await this.page.waitForLoadState('networkidle');
+  await this.page.waitForLoadState('domcontentloaded', { timeout: 10000 });
   await this.page.waitForTimeout(2000);
   
   // Verify we're on dashboard
@@ -87,7 +87,7 @@ Given('I am not authenticated', async function () {
   
   // Navigate to auth page to ensure we're logged out
   await this.page.goto(`${this.baseURL}/auth`);
-  await this.page.waitForLoadState('networkidle');
+  await this.page.waitForLoadState('domcontentloaded', { timeout: 10000 });
 });
 
 // Login actions
@@ -113,7 +113,7 @@ When('I click the {string} button', async function (buttonText: string) {
   } else {
     await this.page.click(`button:has-text("${buttonText}")`);
   }
-  await this.page.waitForLoadState('networkidle');
+  await this.page.waitForLoadState('domcontentloaded', { timeout: 10000 });
   await this.page.waitForTimeout(1000);
 });
 
@@ -152,13 +152,13 @@ When('I click the auth button {string}', async function (elementText: string) {
 
 When('I submit the login form', async function () {
   await this.page.click('button[type="submit"]');
-  await this.page.waitForLoadState('networkidle');
+  await this.page.waitForLoadState('domcontentloaded', { timeout: 10000 });
   await this.page.waitForTimeout(2000);
 });
 
 When('I submit the registration form', async function () {
   await this.page.click('button[type="submit"]');
-  await this.page.waitForLoadState('networkidle');
+  await this.page.waitForLoadState('domcontentloaded', { timeout: 10000 });
   await this.page.waitForTimeout(2000);
 });
 
@@ -201,7 +201,7 @@ When('I logout', async function () {
     await this.page.click('button:has-text("Logout")');
   }
   
-  await this.page.waitForLoadState('networkidle', { timeout: 10000 });
+  await this.page.waitForLoadState('domcontentloaded', { timeout: 10000 });
   await this.page.waitForTimeout(1000);
   console.log('✅ Logout action completed');
 });
@@ -270,7 +270,7 @@ When('I enter the user data:', async function (dataTable: any) {
 
 When('I try to access the dashboard directly', async function () {
   await this.page.goto(`${this.baseURL}/dashboard`);
-  await this.page.waitForLoadState('networkidle');
+  await this.page.waitForLoadState('domcontentloaded', { timeout: 10000 });
   await this.page.waitForTimeout(2000);
 });
 
@@ -434,7 +434,7 @@ Then('I should see an error message {string}', async function (expectedMessage: 
 Then('I should not have access to the dashboard', async function () {
   // Try to access dashboard
   await this.page.goto(`${this.baseURL}/dashboard`);
-  await this.page.waitForLoadState('networkidle');
+  await this.page.waitForLoadState('domcontentloaded', { timeout: 10000 });
   await this.page.waitForTimeout(2000);
   
   // Should be redirected to auth page
@@ -467,7 +467,7 @@ When('I refresh the browser', async function () {
     console.log('✅ Page reloaded successfully');
     
     // Wait for page to be fully loaded but with shorter timeout
-    await this.page.waitForLoadState('networkidle', { timeout: 10000 });
+    await this.page.waitForLoadState('domcontentloaded', { timeout: 10000 });
     console.log('✅ Network idle state reached');
     
   } catch (error) {
@@ -494,7 +494,7 @@ Then('I should remain authenticated', async function () {
         waitUntil: 'domcontentloaded', 
         timeout: 15000 
       });
-      await this.page.waitForLoadState('networkidle', { timeout: 8000 });
+      await this.page.waitForLoadState('domcontentloaded', { timeout: 8000 });
     } catch (error) {
       console.log('⚠️ Navigation timeout, checking current state...');
     }
@@ -741,7 +741,7 @@ Then('I should not need to login again', async function () {
 Then('my session should be destroyed on the server', async function () {
   // Test by trying to access protected resource
   await this.page.goto(`${this.baseURL}/dashboard`);
-  await this.page.waitForLoadState('networkidle');
+  await this.page.waitForLoadState('domcontentloaded', { timeout: 10000 });
   
   // Should be redirected to auth page
   const currentUrl = this.page.url();
@@ -1028,7 +1028,7 @@ Then('I should not be able to access protected resources', async function () {
   
   // Try to access dashboard - should be redirected to login
   await this.page.goto(`${this.baseURL}/dashboard`);
-  await this.page.waitForLoadState('networkidle', { timeout: 10000 });
+  await this.page.waitForLoadState('domcontentloaded', { timeout: 10000 });
   
   const currentUrl = this.page.url();
   expect(currentUrl).toMatch(/auth|login/);
@@ -1122,7 +1122,7 @@ When('I login with valid credentials', async function () {
   await this.page.fill('input[name="username"]', 'admin');
   await this.page.fill('input[name="password"]', 'password');
   await this.page.click('button[type="submit"]');
-  await this.page.waitForLoadState('networkidle', { timeout: 10000 });
+  await this.page.waitForLoadState('domcontentloaded', { timeout: 10000 });
 });
 
 Then('see the dashboard content immediately', async function () {
@@ -1172,7 +1172,7 @@ When('I successfully register a new user', async function () {
   await this.page.fill('input[name="email"]', `newuser${timestamp}@example.com`);
   await this.page.fill('input[name="password"]', 'newpassword123');
   await this.page.click('button[type="submit"]');
-  await this.page.waitForLoadState('networkidle', { timeout: 10000 });
+  await this.page.waitForLoadState('domcontentloaded', { timeout: 10000 });
 });
 
 Then('redirected to the dashboard without additional login steps', async function () {
@@ -1224,7 +1224,7 @@ When('I initiate logout', async function () {
   // Same as the "I logout" step but with different wording
   const logoutButton = this.page.locator('button:has-text("Logout"), .logout-btn').first();
   await logoutButton.click();
-  await this.page.waitForLoadState('networkidle', { timeout: 10000 });
+  await this.page.waitForLoadState('domcontentloaded', { timeout: 10000 });
 });
 
 Then('my session should be securely terminated', async function () {

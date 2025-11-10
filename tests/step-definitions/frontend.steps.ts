@@ -5,7 +5,7 @@ import { CustomWorld } from '../support/world';
 // React Framework Steps
 Given('the frontend application is loaded', async function (this: CustomWorld) {
   await this.page.goto('/');
-  await this.page.waitForLoadState('networkidle');
+  await this.page.waitForLoadState('domcontentloaded', { timeout: 10000 });
 });
 
 When('I examine the application architecture', async function (this: CustomWorld) {
@@ -132,7 +132,7 @@ Given('the application has multiple pages\\/views', async function (this: Custom
 When('I navigate between different sections', async function (this: CustomWorld) {
   for (const view of this.multipleViews) {
     await this.page.goto(view);
-    await this.page.waitForLoadState('networkidle');
+    await this.page.waitForLoadState('domcontentloaded', { timeout: 10000 });
   }
   this.navigationTested = true;
 });
@@ -298,7 +298,7 @@ Then('responses should be processed correctly', async function (this: CustomWorl
 Then('loading states should be managed during requests', async function (this: CustomWorld) {
   // Check for loading indicators
   await this.page.goto('/dashboard');
-  await this.page.waitForLoadState('networkidle');
+  await this.page.waitForLoadState('domcontentloaded', { timeout: 10000 });
   const content = await this.page.content();
   expect(content.length).toBeGreaterThan(0);
 });

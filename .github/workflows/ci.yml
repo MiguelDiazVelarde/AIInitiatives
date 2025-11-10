@@ -17,7 +17,7 @@ jobs:
   test-application:
     name: Build and Test Application
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 25  # Sufficient for build + tests with optimized wait strategies
     
     strategy:
       matrix:

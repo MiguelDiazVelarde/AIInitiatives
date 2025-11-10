@@ -284,7 +284,7 @@ Then('each should return the appropriate HTTP status code', async function (this
 // REQ-FRONT-001: React framework implementation
 Given('the frontend application is running', async function (this: CustomWorld) {
   await this.page.goto(this.baseURL);
-  await this.page.waitForLoadState('networkidle');
+  await this.page.waitForLoadState('domcontentloaded', { timeout: 10000 });
 });
 
 When('I inspect the application structure', async function (this: CustomWorld) {
@@ -322,7 +322,7 @@ Then('follow React best practices', async function (this: CustomWorld) {
 // REQ-FRONT-004: React Router implementation
 Given('I am navigating through the application', async function (this: CustomWorld) {
   await this.page.goto(this.baseURL);
-  await this.page.waitForLoadState('networkidle');
+  await this.page.waitForLoadState('domcontentloaded', { timeout: 10000 });
 });
 
 When('I move between different pages', async function (this: CustomWorld) {
@@ -421,7 +421,7 @@ When('I access the application from different browsers:', async function (this: 
   // Test basic functionality in current browser (simulating multi-browser test)
   for (const browserName of browsers) {
     await this.page.goto(this.baseURL);
-    await this.page.waitForLoadState('networkidle');
+    await this.page.waitForLoadState('domcontentloaded', { timeout: 10000 });
     
     // Test basic functionality
     const hasContent = await this.page.locator('body').textContent();
