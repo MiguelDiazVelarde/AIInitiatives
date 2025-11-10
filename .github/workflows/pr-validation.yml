@@ -317,14 +317,6 @@ jobs:
           echo "⚠️ PR analysis failed - will use authentication fallback"
         fi
         
-        # Generate recommendations
-        echo "💡 Generating test recommendations..."
-        if npx ts-node src/test-optimizer/index.ts optimize balanced; then
-          echo "✅ Recommendations generated using optimization strategy"
-        else
-          echo "⚠️ Recommendations failed - will continue with authentication fallback"
-        fi
-        
         # Verify Playwright is working for authentication tests
         echo "🔍 Verifying Playwright setup for authentication testing..."
         if npx playwright --version; then
