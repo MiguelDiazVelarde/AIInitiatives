@@ -1,6 +1,6 @@
 @startuml PR Validation Workflow - Line 368
 
-title PR Validation Workflow Flow\nFocus on Line 368: AI Test Optimizer Execute
+title PR Validation Workflow\nFocus on Line 368: AI Test Optimizer Execute
 
 actor Developer as Dev
 participant "GitHub Actions" as GH
