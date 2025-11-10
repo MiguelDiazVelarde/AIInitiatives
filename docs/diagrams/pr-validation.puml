@@ -1,6 +1,6 @@
 @startuml PR Validation Workflow - Line 368
 
-title Flujo del Workflow PR Validation\nFoco en Línea 368: AI Test Optimizer Execute
+title PR Validation Workflow Flow\nFocus on Line 368: AI Test Optimizer Execute
 
 actor Developer as Dev
 participant "GitHub Actions" as GH
@@ -9,7 +9,7 @@ participant "AI Test Optimizer" as AI
 participant "Express Server" as Server
 participant "Test Suite" as Tests
 
-Dev -> GH: Crea/Actualiza Pull Request
+Dev -> GH: Creates/Updates Pull Request
 activate GH
 
 == Setup Phase ==
@@ -26,13 +26,13 @@ loop Health Check (15 attempts)
 end
 Server --> GH: ✅ Server ready
 
-== Análisis de Cambios ==
+== Change Analysis ==
 GH -> Git: git diff base..head\n--name-only
 Git --> GH: CHANGED_FILES
 
 alt Auth files changed
     
-    note over GH: 🔐 Prioridad: Auth Tests
+    note over GH: 🔐 Priority: Auth Tests
     
     GH -> AI: optimize balanced
     AI --> GH: Optimization plan
@@ -43,7 +43,7 @@ alt Auth files changed
     deactivate Tests
     
     alt Auth tests PASS
-        note over GH,AI: **LÍNEA 368: Execute AI Optimizer**
+        note over GH,AI: **LINE 368: Execute AI Optimizer**
         GH -> AI: ts-node execute
         activate AI
         
@@ -64,7 +64,7 @@ alt Auth files changed
     
 else No auth changes
     
-    note over GH,AI: **LÍNEA 368: Direct Execution**
+    note over GH,AI: **LINE 368: Direct Execution**
     
     GH -> AI: optimize balanced
     AI --> GH: Plan generated

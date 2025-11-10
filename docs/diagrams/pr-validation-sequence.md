@@ -1,6 +1,6 @@
-# PR Validation Workflow - Diagrama de Secuencia
+# PR Validation Workflow - Sequence Diagram
 
-## 🔄 Flujo Completo del Workflow
+## 🔄 Complete Workflow Flow
 
 ```mermaid
 sequenceDiagram
@@ -11,12 +11,12 @@ sequenceDiagram
     participant Server as Express Server
     participant Tests as Test Suite
     
-    Dev->>GH: Crea/Actualiza PR
+    Dev->>GH: Creates/Updates PR
     activate GH
     
     Note over GH: 📥 Checkout & Setup
-    GH->>Git: Checkout código del PR
-    Git-->>GH: Código descargado
+    GH->>Git: Checkout PR code
+    Git-->>GH: Code downloaded
     GH->>GH: Install Node.js 18
     GH->>GH: npm ci (dependencies)
     GH->>GH: Install Playwright browsers
@@ -30,65 +30,65 @@ sequenceDiagram
     GH->>Server: node dist/server/index.js
     activate Server
     Server-->>GH: Server PID
-    GH->>Server: Health check (15 intentos)
+    GH->>Server: Health check (15 attempts)
     Server-->>GH: ✅ Ready
     
-    Note over GH,Git: 🔍 Análisis de Cambios
+    Note over GH,Git: 🔍 Change Analysis
     GH->>Git: git diff base..head --name-only
-    Git-->>GH: Lista de archivos modificados
+    Git-->>GH: List of modified files
     
-    alt Archivos de Auth cambiados
-        Note over GH,Tests: 🔐 Prioridad: Authentication
+    alt Auth Files Changed
+        Note over GH,Tests: 🔐 Priority: Authentication
         GH->>AI: optimize balanced
-        AI-->>GH: Plan de optimización
+        AI-->>GH: Optimization plan
         
         GH->>Tests: npm run test:auth
         activate Tests
-        Tests-->>GH: Resultados (23 scenarios)
+        Tests-->>GH: Results (23 scenarios)
         deactivate Tests
         
-        alt Auth Tests PASAN
-            Note over GH,AI: 🤖 Línea 368 - Execute AI Optimizer
+        alt Auth Tests PASS
+            Note over GH,AI: 🤖 Line 368 - Execute AI Optimizer
             GH->>AI: ts-node execute
             activate AI
-            AI->>AI: Lee plan optimizado
-            AI->>AI: Selecciona tests adicionales
-            AI->>Tests: Ejecuta tests seleccionados
+            AI->>AI: Read optimized plan
+            AI->>AI: Select additional tests
+            AI->>Tests: Execute selected tests
             activate Tests
-            Tests-->>AI: Resultados
+            Tests-->>AI: Results
             deactivate Tests
-            AI-->>GH: ✅ Completado
+            AI-->>GH: ✅ Completed
             deactivate AI
-        else Auth Tests FALLAN
-            Note over GH: ⚠️ Termina con resumen
-            GH-->>Dev: ❌ PR necesita correcciones
+        else Auth Tests FAIL
+            Note over GH: ⚠️ End with summary
+            GH-->>Dev: ❌ PR needs corrections
         end
         
-    else Sin cambios de Auth
-        Note over GH,AI: 🤖 Línea 368 - Direct Execution
+    else No Auth Changes
+        Note over GH,AI: 🤖 Line 368 - Direct Execution
         GH->>AI: optimize balanced
-        AI-->>GH: Plan generado
+        AI-->>GH: Plan generated
         
         GH->>AI: ts-node execute
         activate AI
-        AI->>AI: Analiza cambios del PR
-        AI->>AI: Decide tests relevantes
-        AI->>Tests: Ejecuta tests optimizados
+        AI->>AI: Analyze PR changes
+        AI->>AI: Decide relevant tests
+        AI->>Tests: Execute optimized tests
         activate Tests
-        Tests-->>AI: Resultados
+        Tests-->>AI: Results
         deactivate Tests
         
-        alt AI Tests PASAN
+        alt AI Tests PASS
             AI-->>GH: ✅ Success
             deactivate AI
-        else AI Tests FALLAN
-            AI-->>GH: ⚠️ Fallback necesario
+        else AI Tests FAIL
+            AI-->>GH: ⚠️ Fallback required
             deactivate AI
             
             Note over GH,Tests: 🔥 Fallback: Smoke Tests
             GH->>Tests: npm run test:smoke
             activate Tests
-            Tests-->>GH: Resultados básicos
+            Tests-->>GH: Basic results
             deactivate Tests
         end
     end
@@ -96,39 +96,39 @@ sequenceDiagram
     Note over GH,Server: 🛑 Cleanup
     GH->>Server: kill SERVER_PID
     deactivate Server
-    GH->>GH: Limpiar archivos temporales
+    GH->>GH: Clean temporary files
     
-    GH-->>Dev: 📊 Reporte final
+    GH-->>Dev: 📊 Final report
     deactivate GH
 ```
 
-## 🎯 Punto Crítico: Línea 368
+## 🎯 Critical Point: Line 368
 
 ```mermaid
 flowchart TD
-    A[Línea 368: ts-node execute] --> B{Lee plan de optimización}
-    B --> C[Carga execution-history.json]
-    C --> D[Analiza archivos del PR]
-    D --> E{Calcula prioridades}
+    A[Line 368: ts-node execute] --> B{Read optimization plan}
+    B --> C[Load execution-history.json]
+    C --> D[Analyze PR files]
+    D --> E{Calculate priorities}
     
-    E -->|High| F[Tests críticos]
-    E -->|Medium| G[Tests importantes]
-    E -->|Low| H[Tests opcionales]
+    E -->|High| F[Critical tests]
+    E -->|Medium| G[Important tests]
+    E -->|Low| H[Optional tests]
     
-    F --> I[Ejecuta con Cucumber]
+    F --> I[Execute with Cucumber]
     G --> I
     H --> I
     
-    I --> J{Resultado?}
-    J -->|✅ Todos pasan| K[Exit 0]
-    J -->|❌ Alguno falla| L[Exit 1]
+    I --> J{Result?}
+    J -->|✅ All pass| K[Exit 0]
+    J -->|❌ Some fail| L[Exit 1]
     
-    K --> M[Genera reporte HTML/JSON]
+    K --> M[Generate HTML/JSON report]
     L --> M
-    M --> N[Retorna a GitHub Actions]
+    M --> N[Return to GitHub Actions]
 ```
 
-## 📋 Estados del Workflow
+## 📋 Workflow States
 
 ```mermaid
 stateDiagram-v2
@@ -166,11 +166,11 @@ stateDiagram-v2
     CleanupFail --> [*]
 ```
 
-## 🔍 Detalle: AI Test Optimizer Execute
+## 🔍 Detail: AI Test Optimizer Execute
 
 ```mermaid
 graph LR
-    subgraph "AI Optimizer (Línea 368)"
+    subgraph "AI Optimizer (Line 368)"
         A[execute command] --> B[Load Config]
         B --> C[Read execution-history.json]
         C --> D[Analyze PR changes]
@@ -192,23 +192,23 @@ graph LR
     end
 ```
 
-## 📊 Métricas del Workflow
+## 📊 Workflow Metrics
 
-| Fase | Tiempo Promedio | Notas |
-|------|-----------------|-------|
-| Checkout & Setup | 1-2 min | Incluye dependencias |
+| Phase | Average Time | Notes |
+|-------|--------------|-------|
+| Checkout & Setup | 1-2 min | Includes dependencies |
 | Build | 2-3 min | Server + Client |
-| Server Start | 30-45 seg | Con health checks |
-| Auth Tests | 3-5 min | Si hay cambios de auth |
-| AI Optimizer (línea 368) | 2-8 min | Depende de tests seleccionados |
-| Cleanup | 10-15 seg | Stop server + limpieza |
-| **Total** | **8-18 min** | Varía según cambios |
+| Server Start | 30-45 sec | With health checks |
+| Auth Tests | 3-5 min | If auth changes present |
+| AI Optimizer (line 368) | 2-8 min | Depends on selected tests |
+| Cleanup | 10-15 sec | Stop server + cleanup |
+| **Total** | **8-18 min** | Varies by changes |
 
-## 🎨 Leyenda
+## 🎨 Legend
 
-- 🔐 Flujo prioritario de autenticación
-- 🤖 Ejecución del AI Test Optimizer
-- 🔥 Fallback a smoke tests
-- ✅ Éxito / Camino feliz
-- ❌ Fallo / Necesita corrección
-- ⚠️ Advertencia / Continúa con limitaciones
+- 🔐 Priority authentication flow
+- 🤖 AI Test Optimizer execution
+- 🔥 Fallback to smoke tests
+- ✅ Success / Happy path
+- ❌ Failure / Needs correction
+- ⚠️ Warning / Continues with limitations

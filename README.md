@@ -17,7 +17,7 @@ A modern web application built with **React**, **TypeScript**, **Express.js** an
 - 🎯 **Intelligent Strategies** - Quick (5min), Balanced (30min), Smoke (1.3min) test execution modes
 - ✅ **Production-Ready Authentication** - 20+ scenarios with enhanced error handling and timeout optimization
 - 🧹 **Clean & Organized Codebase** - Streamlined structure with optimized file organization
-- 📊 **Visual Documentation** - Interactive sequence diagrams for CI/CD workflows ([ver diagramas](docs/diagrams/))
+- 📊 **Visual Documentation** - Interactive sequence diagrams for CI/CD workflows ([view diagrams](docs/diagrams/))
 
 ## 🧹 **CLEAN & OPTIMIZED PROJECT STRUCTURE**
 

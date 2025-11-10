@@ -1,85 +1,94 @@
 # PR Validation Workflow Diagrams
 
-Este directorio contiene diagramas de secuencia del workflow de validación de Pull Requests.
+This directory contains sequence diagrams for the Pull Request validation workflow.
 
-## 📊 Archivos Disponibles
+## 📊 Available Files
 
 ### 1. **pr-validation-sequence.md** (Mermaid)
-- ✅ **Recomendado**: Se renderiza automáticamente en GitHub
-- Incluye 4 diagramas diferentes:
-  - Secuencia completa
-  - Flowchart de línea 368
+
+- ✅ **Recommended**: Renders automatically on GitHub
+- Includes 4 different diagrams:
+  - Complete sequence
+  - Line 368 flowchart
   - State diagram
-  - Graph del AI Optimizer
-- **Visualizar**: Abrir directamente en GitHub
+  - AI Optimizer graph
+- **View**: Open directly on GitHub
 
 ### 2. **pr-validation.puml** (PlantUML)
-- Para documentación técnica
-- Más detallado que Mermaid
-- **Visualizar online**: https://www.plantuml.com/plantuml/uml/
-- **Visualizar local**: Instalar extensión PlantUML en VS Code
 
-### 3. **pr-validation.drawio** 
-- Formato editable en Diagrams.net
-- **Abrir en**: https://app.diagrams.net/
-- **O usar**: Extensión Draw.io Integration en VS Code
+- For technical documentation
+- More detailed than Mermaid
+- **View online**: <https://www.plantuml.com/plantuml/uml/>
+- **View locally**: Install PlantUML extension in VS Code
 
-## 🎯 Foco: Línea 368
+### 3. **pr-validation.drawio**
 
-Todos los diagramas destacan la ejecución de:
+- Editable format in Diagrams.net
+- **Open in**: <https://app.diagrams.net/>
+- **Or use**: Draw.io Integration extension in VS Code
+
+## 🎯 Focus: Line 368
+
+All diagrams highlight the execution of:
+
 ```bash
 npx ts-node src/test-optimizer/index.ts execute
 ```
 
-Este es el punto donde el AI Test Optimizer:
-1. Lee el plan de optimización generado previamente
-2. Selecciona tests basados en los cambios del PR
-3. Ejecuta los tests con Cucumber
-4. Genera reportes y actualiza el historial
+This is the point where the AI Test Optimizer:
 
-## 🚀 Cómo Usar
+1. Reads the previously generated optimization plan
+2. Selects tests based on PR changes
+3. Executes tests with Cucumber
+4. Generates reports and updates history
 
-### Ver en GitHub (Mermaid)
-1. Navega a `pr-validation-sequence.md` en GitHub
-2. Los diagramas se renderizan automáticamente
+## 🚀 How to Use
 
-### Editar PlantUML
+### View on GitHub (Mermaid)
+
+1. Navigate to `pr-validation-sequence.md` on GitHub
+2. Diagrams render automatically
+
+### Edit PlantUML
+
 ```bash
-# Instalar extensión
+# Install extension
 code --install-extension jebbs.plantuml
 
-# O usar online
-# Copiar contenido de pr-validation.puml
-# Pegar en https://www.plantuml.com/plantuml/uml/
+# Or use online
+# Copy pr-validation.puml content
+# Paste at https://www.plantuml.com/plantuml/uml/
 ```
 
-### Exportar a PNG/SVG
+### Export to PNG/SVG
 
-#### Desde Mermaid:
+#### From Mermaid
+
 ```bash
 npm install -g @mermaid-js/mermaid-cli
 mmdc -i pr-validation-sequence.md -o output.png
 ```
 
-#### Desde PlantUML:
+#### From PlantUML
+
 ```bash
-# Con Java instalado
+# With Java installed
 plantuml pr-validation.puml
 ```
 
-## 📖 Referencias
+## 📖 References
 
 - [Mermaid Documentation](https://mermaid.js.org/)
 - [PlantUML Guide](https://plantuml.com/)
 - [Diagrams.net](https://app.diagrams.net/)
 
-## 🎨 Leyenda
+## 🎨 Legend
 
-| Símbolo | Significado |
-|---------|-------------|
-| 🔐 | Flujo de autenticación prioritario |
-| 🤖 | AI Test Optimizer en acción |
-| 🔥 | Fallback a smoke tests |
-| ✅ | Operación exitosa |
-| ❌ | Error / Corrección requerida |
-| ⚠️ | Advertencia / Continúa |
+| Symbol | Meaning |
+|--------|---------|
+| 🔐 | Priority authentication flow |
+| 🤖 | AI Test Optimizer in action |
+| 🔥 | Fallback to smoke tests |
+| ✅ | Successful operation |
+| ❌ | Error / Correction required |
+| ⚠️ | Warning / Continues |
