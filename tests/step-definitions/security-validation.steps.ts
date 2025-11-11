@@ -6,7 +6,7 @@ import { CustomWorld } from '../support/world';
 When('I submit invalid data that passes client validation somehow', async function (this: CustomWorld) {
   // This step simulates bypassing client validation and testing server validation
   await this.page.goto(`${this.baseURL}/auth/register`);
-  await this.page.waitForLoadState('networkidle');
+  await this.page.waitForLoadState('domcontentloaded', { timeout: 10000 });
   
   // Use page.evaluate to bypass client-side validation
   await this.page.evaluate(() => {
@@ -166,7 +166,7 @@ Given('I register a new user with password {string}', async function (this: Cust
   await this.page.fill('input[name="email"]', `test_${Date.now()}@example.com`);
   await this.page.fill('input[name="password"]', password);
   await this.page.click('button[type="submit"]');
-  await this.page.waitForLoadState('networkidle');
+  await this.page.waitForLoadState('domcontentloaded', { timeout: 10000 });
 });
 
 Then('the password should be stored as a bcrypt hash', async function (this: CustomWorld) {
@@ -216,7 +216,7 @@ Then('session data should be protected', async function (this: CustomWorld) {
 Then('the session should be completely destroyed', async function (this: CustomWorld) {
   // Try to access dashboard directly
   await this.page.goto(`${this.baseURL}/dashboard`);
-  await this.page.waitForLoadState('networkidle');
+  await this.page.waitForLoadState('domcontentloaded', { timeout: 10000 });
   
   // Should be redirected to login
   const currentURL = this.page.url();
@@ -297,7 +297,7 @@ When('I try to access any protected resource:', async function (this: CustomWorl
     } else {
       // Test page endpoints
       await this.page.goto(`${this.baseURL}${endpoint.endpoint}`);
-      await this.page.waitForLoadState('networkidle');
+      await this.page.waitForLoadState('domcontentloaded', { timeout: 10000 });
       
       // Should be redirected to auth page
       const currentURL = this.page.url();

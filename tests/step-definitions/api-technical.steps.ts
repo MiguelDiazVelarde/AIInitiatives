@@ -260,7 +260,9 @@ When('I make requests with different conditions:', async function (this: CustomW
       }
         
       default:
-        response = await this.page.request.get(`${this.baseURL}/api/invalid-endpoint`);
+        response = await this.page.request.get(`${this.baseURL}/api/invalid-endpoint`, {
+          timeout: 5000 // Reduce timeout for expected 404
+        });
     }
     
     results.push({

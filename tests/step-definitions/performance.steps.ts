@@ -5,7 +5,7 @@ import { CustomWorld } from '../support/world';
 // Performance-related steps
 Given('the application is running', async function (this: CustomWorld) {
   await this.page.goto(this.baseURL);
-  await this.page.waitForLoadState('networkidle');
+  await this.page.waitForLoadState('domcontentloaded', { timeout: 10000 });
 });
 
 Given('I have access to the system', async function (this: CustomWorld) {

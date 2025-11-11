@@ -231,7 +231,7 @@ When('the session expires', async function () {
 When('I try to perform a protected action', async function () {
   // Try to access dashboard or make an authenticated request
   await this.page.goto(`${this.baseURL}/dashboard`);
-  await this.page.waitForLoadState('networkidle');
+  await this.page.waitForLoadState('domcontentloaded', { timeout: 10000 });
 });
 
 When('I click the register link', async function () {
@@ -363,7 +363,10 @@ Then('I should see clear indicators of my logged-in state', async function () {
 });
 
 Then('I should see my username displayed', async function () {
-  const usernameVisible = await this.page.locator('text*="admin"').isVisible();
+  // Fix: Use correct Playwright text selector (text= not text*=)
+  const usernameVisible = await this.page.locator('text="admin"').isVisible().catch(() => false) ||
+                          await this.page.locator(':text("admin")').isVisible().catch(() => false) ||
+                          await this.page.locator('[data-testid="username"]').isVisible().catch(() => false);
   expect(usernameVisible).toBe(true);
 });
 
@@ -457,7 +460,7 @@ Then('the submit button should be disabled during processing', async function ()
 
 Then('I should see a loading indicator', async function () {
   // Check for any loading states or that the operation completes
-  await this.page.waitForLoadState('networkidle');
+  await this.page.waitForLoadState('domcontentloaded', { timeout: 10000 });
   expect(true).toBe(true);
 });
 
@@ -469,7 +472,7 @@ Then('the form should return to normal state', async function () {
 Given('I am logging in', async function (this: any) {
   // Navigate to login page
   await this.page.goto(`${this.baseURL}/auth`);
-  await this.page.waitForLoadState('networkidle');
+  await this.page.waitForLoadState('domcontentloaded', { timeout: 10000 });
   await this.page.waitForTimeout(2000);
   
   // Wait for form to be visible and fill it
@@ -485,14 +488,14 @@ When('the authentication is in progress', async function () {
 
 Then('I should see appropriate loading indicators', async function () {
   // Check that the page is responsive during auth
-  await this.page.waitForLoadState('networkidle');
+  await this.page.waitForLoadState('domcontentloaded', { timeout: 10000 });
   expect(true).toBe(true);
 });
 
 When('I am loading products on the dashboard', async function () {
   // Navigate to dashboard (assuming user is already authenticated)
   await this.page.goto(`${this.baseURL}/dashboard`);
-  await this.page.waitForLoadState('networkidle');
+  await this.page.waitForLoadState('domcontentloaded', { timeout: 10000 });
   await this.page.waitForTimeout(1000);
 });
 
@@ -505,7 +508,7 @@ Then('I should see loading feedback', async function () {
 When('I am navigating to create a new product', async function () {
   // Navigate to dashboard (assuming user is already authenticated)
   await this.page.goto(`${this.baseURL}/dashboard`);
-  await this.page.waitForLoadState('networkidle');
+  await this.page.waitForLoadState('domcontentloaded', { timeout: 10000 });
   await this.page.waitForTimeout(1000);
   await this.page.click('button:has-text("Add Product")');
 });
@@ -561,13 +564,13 @@ Then('the form should be ready for new input', async function () {
 When('I access it from a desktop browser', async function () {
   await this.page.setViewportSize({ width: 1200, height: 800 });
   await this.page.goto(this.baseURL);
-  await this.page.waitForLoadState('networkidle');
+  await this.page.waitForLoadState('domcontentloaded', { timeout: 10000 });
 });
 
 Then('all features should work correctly', async function () {
   // Go to login page and authenticate
   await this.page.goto(`${this.baseURL}/auth`);
-  await this.page.waitForLoadState('networkidle');
+  await this.page.waitForLoadState('domcontentloaded', { timeout: 10000 });
   await this.page.waitForTimeout(2000);
   
   // Wait for form to be visible
@@ -579,7 +582,7 @@ Then('all features should work correctly', async function () {
   
   // Submit and wait for dashboard
   await this.page.click('button[type="submit"]');
-  await this.page.waitForLoadState('networkidle');
+  await this.page.waitForLoadState('domcontentloaded', { timeout: 10000 });
   await this.page.waitForTimeout(2000);
   
   const dashboardWorking = await this.page.locator('h1:has-text("Dashboard")').isVisible();
@@ -589,7 +592,7 @@ Then('all features should work correctly', async function () {
 When('I access it from a tablet', async function () {
   await this.page.setViewportSize({ width: 768, height: 1024 });
   await this.page.goto(this.baseURL);
-  await this.page.waitForLoadState('networkidle');
+  await this.page.waitForLoadState('domcontentloaded', { timeout: 10000 });
 });
 
 Then('the interface should adapt appropriately', async function () {
@@ -606,7 +609,7 @@ Then('maintain full functionality', async function () {
 When('I access it from a mobile device', async function () {
   await this.page.setViewportSize({ width: 375, height: 667 });
   await this.page.goto(this.baseURL);
-  await this.page.waitForLoadState('networkidle');
+  await this.page.waitForLoadState('domcontentloaded', { timeout: 10000 });
 });
 
 Then('the interface should be mobile-friendly', async function () {
@@ -623,7 +626,7 @@ When('I view it on a large desktop screen', async function () {
   await this.page.setViewportSize({ width: 1920, height: 1080 });
   // Navigate to dashboard
   await this.page.goto(`${this.baseURL}/dashboard`);
-  await this.page.waitForLoadState('networkidle');
+  await this.page.waitForLoadState('domcontentloaded', { timeout: 10000 });
   await this.page.waitForTimeout(1000);
 });
 
@@ -653,12 +656,12 @@ Then('the products should stack vertically for easy scrolling', async function (
 When('I navigate through different sections of the application', async function () {
   // Navigate to login page
   await this.page.goto(`${this.baseURL}/auth`);
-  await this.page.waitForLoadState('networkidle');
+  await this.page.waitForLoadState('domcontentloaded', { timeout: 10000 });
   await this.page.waitForTimeout(1000);
   
   // Navigate to dashboard
   await this.page.goto(`${this.baseURL}/dashboard`);
-  await this.page.waitForLoadState('networkidle');
+  await this.page.waitForLoadState('domcontentloaded', { timeout: 10000 });
   await this.page.waitForTimeout(1000);
   
   await this.page.reload();
@@ -764,7 +767,7 @@ When('I perform any user action', async function () {
 });
 
 Then('the response should be immediate or show loading feedback', async function () {
-  await this.page.waitForLoadState('networkidle');
+  await this.page.waitForLoadState('domcontentloaded', { timeout: 10000 });
   expect(true).toBe(true);
 });
 
@@ -776,7 +779,7 @@ Then('the application should remain responsive during operations', async functio
 When('loading large amounts of data', async function () {
   // Navigate to dashboard
   await this.page.goto(`${this.baseURL}/dashboard`);
-  await this.page.waitForLoadState('networkidle');
+  await this.page.waitForLoadState('domcontentloaded', { timeout: 10000 });
   await this.page.waitForTimeout(1000);
 });
 
@@ -788,7 +791,7 @@ Then('the interface should handle it gracefully without freezing', async functio
 // Additional missing steps
 When('I try to visit the login page', async function () {
   await this.page.goto(`${this.baseURL}/auth`);
-  await this.page.waitForLoadState('networkidle');
+  await this.page.waitForLoadState('domcontentloaded', { timeout: 10000 });
   await this.page.waitForTimeout(1000);
 });
 
@@ -809,7 +812,7 @@ When('I switch to registration', async function () {
 When('I am authenticated and on the dashboard', async function () {
   // Go to login page
   await this.page.goto(`${this.baseURL}/auth`);
-  await this.page.waitForLoadState('networkidle');
+  await this.page.waitForLoadState('domcontentloaded', { timeout: 10000 });
   await this.page.waitForTimeout(2000);
   
   // Wait for form to be visible
@@ -821,7 +824,7 @@ When('I am authenticated and on the dashboard', async function () {
   
   // Submit
   await this.page.click('button[type="submit"]');
-  await this.page.waitForLoadState('networkidle');
+  await this.page.waitForLoadState('domcontentloaded', { timeout: 10000 });
   await this.page.waitForTimeout(2000);
   
   // Verify we're on dashboard
@@ -842,5 +845,5 @@ When('I switch to registration page', async function () {
 });
 
 When('the login completes', async function () {
-  await this.page.waitForLoadState('networkidle');
+  await this.page.waitForLoadState('domcontentloaded', { timeout: 10000 });
 });

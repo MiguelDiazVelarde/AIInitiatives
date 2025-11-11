@@ -5,7 +5,7 @@ import { CustomWorld } from '../support/world';
 // Security-related steps
 Given('I am entering data in any form field', async function (this: CustomWorld) {
   await this.page.goto(`${this.baseURL}/auth/register`);
-  await this.page.waitForLoadState('networkidle');
+  await this.page.waitForLoadState('domcontentloaded', { timeout: 10000 });
 });
 
 Given('I am performing state-changing operations', async function (this: CustomWorld) {
