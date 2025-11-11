@@ -276,6 +276,7 @@ The AI Test Optimizer provides live metrics and can be monitored through:
 - **🆕 Test Analysis**: Historical data analysis + predictive modeling
 - **🆕 Optimization Strategies**: Multi-strategy test execution planning
 - **🆕 API Integration**: RESTful test optimizer service
+- **🆕 ML Predictor**: Logistic regression model for test failure prediction ([learn more](#-ml-predictor-how-it-works))
 
 ## 📋 Prerequisites
 
@@ -723,7 +724,114 @@ This project demonstrates a **production-ready AI-powered testing platform** tha
 
 ---
 
-## 🤝 Contributing
+## � ML Predictor: How It Works
+
+### Machine Learning-Based Test Failure Prediction
+
+The AI Test Optimizer uses a custom **Machine Learning predictor** (`MLPredictor.ts`) that intelligently predicts which tests are most likely to fail, enabling smart prioritization and faster defect detection.
+
+### 🎯 Core Features
+
+**Feature Extraction (8 Dimensions):**
+The system converts each test into a numerical feature vector:
+
+1. **Historical Failure Rate** (30% weight) - Test's failure frequency in past executions
+2. **Execution Time** (10% weight) - Duration normalized to 30-second baseline
+3. **Test Age** (10% weight) - Days since last execution (max 30 days)
+4. **Code Complexity** (20% weight) - Combined complexity of mapped source files
+5. **Code Change Impact** (15% weight) - Relevance of recent code changes to test
+6. **Test Type** (5% weight) - Playwright tests flagged as more flaky
+7. **Criticality Level** (5% weight) - Business impact (low/medium/high/critical)
+8. **Recent Failure Streak** (5% weight) - Consecutive failures in last 10 runs
+
+### 🤖 Prediction Models
+
+**Primary Model: Logistic Regression**
+- Uses gradient descent training over 100 epochs
+- Learns optimal feature weights from execution history
+- Automatically retrains with every 50 new test results
+- Maintains rolling window of 1000 most recent samples
+
+**Fallback Model: Weighted Average**
+- Activates when insufficient training data exists
+- Uses expert-defined weights based on domain knowledge
+- Ensures predictions even for new test suites
+
+### 📊 Prediction Output
+
+Each test receives:
+- **Failure Probability** (0-1): Likelihood of test failing
+- **Confidence Score** (0-1): Reliability of prediction based on historical data
+- **Factor Analysis**: Breakdown of contributing risk factors
+- **Human-Readable Reasoning**: Explanation of risk assessment
+
+**Example High-Risk Prediction:**
+```json
+{
+  "testId": "auth-login-session-persistence",
+  "failureProbability": 0.85,
+  "confidence": 0.72,
+  "factors": {
+    "historicalFailureRate": 0.8,
+    "executionTime": 0.9,
+    "testAge": 0.6,
+    "complexity": 0.7,
+    "codeChangeImpact": 0.8,
+    "isPlaywright": 1.0,
+    "criticalityLevel": 0.75,
+    "recentFailures": 0.6
+  },
+  "reasoning": "High failure risk. Factors: High historical failure rate, Long execution time, Test not run recently, High code complexity, Significant code changes in related areas, Playwright test (typically more flaky), Critical functionality test, Recent failure pattern"
+}
+```
+
+### 🎓 Continuous Learning
+
+The model automatically improves over time:
+1. **Data Collection**: Each test execution result is captured
+2. **Feature Extraction**: Results converted to training samples
+3. **Model Update**: When 50+ new samples collected, model retrains
+4. **Performance Validation**: Accuracy/precision/recall tracked on 20% holdout set
+
+### 📈 Model Evaluation Metrics
+
+- **Accuracy**: Percentage of correct predictions
+- **Precision**: Of predicted failures, how many actually failed
+- **Recall**: Of actual failures, how many were predicted
+- **F1 Score**: Harmonic mean of precision and recall
+
+### ⚡ Integration with Test Optimizer
+
+```typescript
+// 1. Predict failure probabilities for all tests
+const predictions = await mlPredictor.predictTestFailures(testCases, codeChanges);
+
+// 2. Sort by risk (highest probability first)
+predictions.sort((a, b) => b.failureProbability - a.failureProbability);
+
+// 3. Prioritize high-risk tests in execution plan
+const highRiskTests = predictions
+  .filter(p => p.failureProbability > 0.5)
+  .map(p => p.testId);
+
+// 4. Update model after execution for continuous improvement
+await mlPredictor.updateModel(testResults);
+```
+
+### 🚀 Benefits
+
+✅ **Intelligent Prioritization** - Run tests most likely to fail first  
+✅ **Faster Feedback** - Detect failures earlier in test execution  
+✅ **Adaptive Learning** - Model improves as test history grows  
+✅ **Explainable AI** - Clear reasoning for each prediction  
+✅ **Lightweight** - No external ML dependencies, pure TypeScript  
+✅ **Real-time** - Predictions generated in milliseconds  
+
+This ML-powered approach enables the AI Test Optimizer to be truly **intelligent** rather than just rule-based, continuously adapting to your project's unique testing patterns.
+
+---
+
+## �🤝 Contributing
 
 1. Fork the project
 2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
