@@ -214,12 +214,26 @@ Then('session data should be protected', async function (this: CustomWorld) {
 });
 
 Then('the session should be completely destroyed', async function (this: CustomWorld) {
+  // Small delay to ensure session destruction is complete
+  await this.page.waitForTimeout(500);
+  
   // Try to access dashboard directly
   await this.page.goto(`${this.baseURL}/dashboard`);
+  
+  // Wait for potential redirect to auth page
+  try {
+    await this.page.waitForURL(/.*auth/, { timeout: 5000 });
+    console.log('✅ Session destroyed - redirected to auth page');
+  } catch {
+    console.log('⚠️ No redirect detected after session destruction');
+  }
+  
   await this.page.waitForLoadState('domcontentloaded', { timeout: 10000 });
+  await this.page.waitForTimeout(500);
   
   // Should be redirected to login
   const currentURL = this.page.url();
+  console.log(`📍 Current URL after session destruction check: ${currentURL}`);
   expect(currentURL).toContain('/auth');
 });
 
@@ -296,11 +310,23 @@ When('I try to access any protected resource:', async function (this: CustomWorl
       }
     } else {
       // Test page endpoints
+      await this.page.waitForTimeout(500); // Small delay for state propagation
       await this.page.goto(`${this.baseURL}${endpoint.endpoint}`);
+      
+      // Wait for potential redirect
+      try {
+        await this.page.waitForURL(/.*auth/, { timeout: 5000 });
+        console.log(`✅ Correctly redirected to auth when accessing ${endpoint.endpoint}`);
+      } catch {
+        console.log(`⚠️ No redirect detected for ${endpoint.endpoint}`);
+      }
+      
       await this.page.waitForLoadState('domcontentloaded', { timeout: 10000 });
+      await this.page.waitForTimeout(500);
       
       // Should be redirected to auth page
       const currentURL = this.page.url();
+      console.log(`📍 URL after accessing ${endpoint.endpoint}: ${currentURL}`);
       expect(currentURL).toContain('/auth');
     }
   }
