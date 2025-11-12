@@ -56,9 +56,18 @@ Then('the following endpoints should be available:', async function (this: Custo
   console.log('📋 Expected endpoints:', expectedEndpoints);
   
   for (const expected of expectedEndpoints) {
-    const result = results.find((r: any) => 
-      r.method === expected.method && r.path === expected.endpoint
-    );
+    // Handle parameterized paths like /api/products/:id
+    const result = results.find((r: any) => {
+      if (r.method !== expected.method) return false;
+      
+      // Direct match
+      if (r.path === expected.endpoint) return true;
+      
+      // Handle :id parameter (e.g., /api/products/:id matches /api/products/test-id)
+      const expectedPattern = expected.endpoint.replace(':id', '[^/]+');
+      const regex = new RegExp(`^${expectedPattern}$`);
+      return regex.test(r.path);
+    });
     
     console.log(`🔍 Looking for ${expected.method} ${expected.endpoint}, found:`, result);
     

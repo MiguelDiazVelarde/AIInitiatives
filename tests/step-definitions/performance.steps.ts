@@ -82,12 +82,14 @@ Then('the dashboard should load quickly', async function (this: CustomWorld) {
 });
 
 Then('product lists should appear promptly', async function (this: CustomWorld) {
-  await expect(this.page.locator('form, .product-container')).toBeVisible({ timeout: 3000 });
+  // Check for dashboard elements (products section, add button, or product list)
+  await expect(this.page.locator('.products-section, .add-product-btn, .product-list, .no-products')).toBeVisible({ timeout: 3000 });
 });
 
 Then('the interface should be usable immediately', async function (this: CustomWorld) {
-  const formVisible = await this.page.locator('input[name="name"]').isVisible();
-  expect(formVisible).toBe(true);
+  // Check if Add Product button is visible (form might be hidden initially)
+  const addButtonVisible = await this.page.locator('button:has-text("Add Product")').isVisible();
+  expect(addButtonVisible).toBe(true);
 });
 
 Then('the system should maintain good performance for all users', async function (this: CustomWorld) {

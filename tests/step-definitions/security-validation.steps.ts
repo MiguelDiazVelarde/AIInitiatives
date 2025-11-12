@@ -180,6 +180,9 @@ Then('the password should be stored as a bcrypt hash', async function (this: Cus
   // This would typically require server-side verification
   // For now, we'll verify that login works with the original password
   
+  // Wait for any ongoing navigation from registration
+  await this.page.waitForTimeout(1000);
+  
   // Clear session data inline
   await this.context.clearCookies();
   await this.page.evaluate(() => {
@@ -189,6 +192,7 @@ Then('the password should be stored as a bcrypt hash', async function (this: Cus
   
   // Navigate to login inline
   await this.page.goto(`${this.baseURL}/auth`, { waitUntil: 'domcontentloaded', timeout: 15000 });
+  await this.page.waitForLoadState('networkidle', { timeout: 10000 }).catch(() => {});
   await this.page.waitForSelector('input[name="username"]', { timeout: 10000 });
   
   await this.page.fill('input[name="username"]', 'admin');
@@ -379,6 +383,10 @@ When('I try to inject JavaScript code', async function (this: CustomWorld) {
   
   // Navigate to dashboard inline
   await this.page.goto(`${this.baseURL}/dashboard`, { waitUntil: 'domcontentloaded', timeout: 15000 });
+  
+  // Click Add Product to show form
+  await this.page.click('button:has-text("Add Product")');
+  await this.page.waitForSelector('input[name="name"]', { timeout: 5000 });
   
   for (const payload of xssPayloads) {
     await this.page.fill('input[name="name"]', payload);
