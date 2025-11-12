@@ -83,8 +83,19 @@ Then('the product list should be populated', async function (this: CustomWorld) 
 
 // REQ-PERF-003: Concurrent user session handling
 Given('multiple users are accessing the application simultaneously', async function (this: CustomWorld) {
-  // Simulate multiple operations happening concurrently
-  await this.login('admin', 'password');
+  // Simulate multiple operations happening concurrently - inline login
+  try {
+    await this.page.request.post(`${this.baseURL}/api/auth/register`, {
+      data: { username: 'admin', email: 'admin@example.com', password: 'password' }
+    });
+  } catch (e) { /* User may already exist */ }
+  
+  await this.page.goto(`${this.baseURL}/auth`);
+  await this.page.fill('input[name="username"]', 'admin');
+  await this.page.fill('input[name="password"]', 'password');
+  await this.page.click('button[type="submit"]');
+  await this.page.waitForURL(/.*\//, { timeout: 15000 });
+  
   await this.page.goto(`${this.baseURL}/dashboard`, { waitUntil: 'domcontentloaded', timeout: 15000 });
 });
 

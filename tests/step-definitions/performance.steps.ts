@@ -82,8 +82,8 @@ Then('the dashboard should load quickly', async function (this: CustomWorld) {
 });
 
 Then('product lists should appear promptly', async function (this: CustomWorld) {
-  // Check for dashboard elements (products section, add button, or product list)
-  await expect(this.page.locator('.products-section, .add-product-btn, .product-list, .no-products')).toBeVisible({ timeout: 3000 });
+  // Check for dashboard elements (products section, add button, or product list) - use first() for strict mode
+  await expect(this.page.locator('.products-section, .add-product-btn, .product-list, .no-products').first()).toBeVisible({ timeout: 3000 });
 });
 
 Then('the interface should be usable immediately', async function (this: CustomWorld) {

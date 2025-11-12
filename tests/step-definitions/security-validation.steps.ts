@@ -169,9 +169,15 @@ Given('I register a new user with password {string}', async function (this: Cust
   await this.page.click('button.link-button:has-text("Register")');
   await this.page.waitForSelector('input[name="email"]', { timeout: 5000 });
   
-  await this.page.fill('input[name="username"]', `user_${Date.now()}`);
+  const username = `user_${Date.now()}`;
+  await this.page.fill('input[name="username"]', username);
   await this.page.fill('input[name="email"]', `test_${Date.now()}@example.com`);
   await this.page.fill('input[name="password"]', password);
+  
+  // Store credentials for later use
+  (this as any).registeredUsername = username;
+  (this as any).registeredPassword = password;
+  
   await this.page.click('button[type="submit"]');
   await this.page.waitForLoadState('domcontentloaded', { timeout: 10000 });
 });
@@ -180,8 +186,11 @@ Then('the password should be stored as a bcrypt hash', async function (this: Cus
   // This would typically require server-side verification
   // For now, we'll verify that login works with the original password
   
+  const username = (this as any).registeredUsername;
+  const password = (this as any).registeredPassword;
+  
   // Wait for any ongoing navigation from registration
-  await this.page.waitForTimeout(1000);
+  await this.page.waitForTimeout(2000);
   
   // Clear session data inline
   await this.context.clearCookies();
@@ -195,11 +204,12 @@ Then('the password should be stored as a bcrypt hash', async function (this: Cus
   await this.page.waitForLoadState('networkidle', { timeout: 10000 }).catch(() => {});
   await this.page.waitForSelector('input[name="username"]', { timeout: 10000 });
   
-  await this.page.fill('input[name="username"]', 'admin');
-  await this.page.fill('input[name="password"]', 'password');
+  await this.page.fill('input[name="username"]', username);
+  await this.page.fill('input[name="password"]', password);
   await this.page.click('button[type="submit"]');
+  await this.page.waitForTimeout(2000);
   
-  const dashboardVisible = await this.page.locator('h1:has-text("Dashboard")').isVisible();
+  const dashboardVisible = await this.page.locator('h1:has-text("Dashboard")').isVisible({ timeout: 5000 });
   expect(dashboardVisible).toBe(true);
 });
 
@@ -380,6 +390,19 @@ When('I try to inject JavaScript code', async function (this: CustomWorld) {
     '<img src="x" onerror="alert(\'XSS\')">',
     'javascript:alert("XSS")'
   ];
+  
+  // Login first to access dashboard
+  try {
+    await this.page.request.post(`${this.baseURL}/api/auth/register`, {
+      data: { username: 'admin', email: 'admin@example.com', password: 'password' }
+    });
+  } catch (e) { /* User may already exist */ }
+  
+  await this.page.goto(`${this.baseURL}/auth`);
+  await this.page.fill('input[name="username"]', 'admin');
+  await this.page.fill('input[name="password"]', 'password');
+  await this.page.click('button[type="submit"]');
+  await this.page.waitForURL(/.*\//, { timeout: 15000 });
   
   // Navigate to dashboard inline
   await this.page.goto(`${this.baseURL}/dashboard`, { waitUntil: 'domcontentloaded', timeout: 15000 });
