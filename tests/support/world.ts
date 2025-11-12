@@ -122,6 +122,20 @@ export class CustomWorld {
   }
 
   async login(username: string, password: string) {
+    // Try to register user first (will fail silently if already exists)
+    try {
+      await this.page.request.post(`${this.baseURL}/api/auth/register`, {
+        data: {
+          username: username,
+          email: `${username}@example.com`,
+          password: password
+        }
+      });
+    } catch (error) {
+      // User might already exist, that's ok
+      console.log(`ℹ️ User ${username} registration skipped (may already exist)`);
+    }
+    
     await this.navigateToLogin();
     await this.page.fill('input[name="username"]', username);
     await this.page.fill('input[name="password"]', password);
