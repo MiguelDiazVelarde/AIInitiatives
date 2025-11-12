@@ -412,6 +412,12 @@ When('I try to inject JavaScript code', async function (this: CustomWorld) {
   const currentUrl = this.page.url();
   console.log('📍 Current URL after navigation:', currentUrl);
   
+  // Check if we got redirected (not authenticated)
+  if (!currentUrl.includes('/dashboard')) {
+    console.log('❌ Not on dashboard, got redirected to:', currentUrl);
+    throw new Error(`Authentication failed - redirected to ${currentUrl} instead of dashboard`);
+  }
+  
   await this.page.waitForSelector('button:has-text("Add Product")', { timeout: 10000 });
   
   // Click Add Product to show form
