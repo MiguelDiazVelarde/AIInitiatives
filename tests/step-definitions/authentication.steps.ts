@@ -755,12 +755,26 @@ Then('I should not need to login again', async function () {
 });
 
 Then('my session should be destroyed on the server', async function () {
+  // Small delay to ensure auth state is fully propagated
+  await this.page.waitForTimeout(500);
+  
   // Test by trying to access protected resource
   await this.page.goto(`${this.baseURL}/dashboard`);
+  
+  // Wait for potential redirect to auth page
+  try {
+    await this.page.waitForURL(/.*auth/, { timeout: 5000 });
+    console.log('✅ Session destroyed - redirected to auth page');
+  } catch {
+    console.log('⚠️ No redirect detected after logout');
+  }
+  
   await this.page.waitForLoadState('domcontentloaded', { timeout: 10000 });
+  await this.page.waitForTimeout(500);
   
   // Should be redirected to auth page
   const currentUrl = this.page.url();
+  console.log(`📍 Current URL after logout: ${currentUrl}`);
   expect(currentUrl).toContain('/auth');
 });
 
@@ -1042,11 +1056,25 @@ Then('still have access to the dashboard', async function () {
 Then('I should not be able to access protected resources', async function () {
   console.log('🚫 Verifying no access to protected resources...');
   
+  // Small delay to ensure auth state is fully propagated
+  await this.page.waitForTimeout(500);
+  
   // Try to access dashboard - should be redirected to login
   await this.page.goto(`${this.baseURL}/dashboard`);
+  
+  // Wait for potential redirect to auth page
+  try {
+    await this.page.waitForURL(/.*auth/, { timeout: 5000 });
+    console.log('✅ Correctly redirected to auth page');
+  } catch {
+    console.log('⚠️ No redirect detected, checking current URL...');
+  }
+  
   await this.page.waitForLoadState('domcontentloaded', { timeout: 10000 });
+  await this.page.waitForTimeout(500);
   
   const currentUrl = this.page.url();
+  console.log(`📍 Current URL after trying to access dashboard: ${currentUrl}`);
   expect(currentUrl).toMatch(/auth|login/);
 });
 

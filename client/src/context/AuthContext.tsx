@@ -33,6 +33,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   const logout = useCallback(() => {
     setUser(null);
+    // Clear any stored data
+    localStorage.clear();
+    sessionStorage.clear();
     navigate('/auth', { replace: true });
   }, [navigate]);
 
