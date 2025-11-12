@@ -416,6 +416,16 @@ When('I try to inject JavaScript code', async function (this: CustomWorld) {
   
   // Click Add Product to show form
   await this.page.click('button:has-text("Add Product")');
+  await this.page.waitForTimeout(1000); // Wait for form animation
+  
+  // Verify form is visible before trying to fill
+  const formVisible = await this.page.locator('input[name="name"]').isVisible().catch(() => false);
+  if (!formVisible) {
+    console.log('⚠️ Form not visible after clicking Add Product, trying to click again');
+    await this.page.click('button:has-text("Add Product")');
+    await this.page.waitForTimeout(1000);
+  }
+  
   await this.page.waitForSelector('input[name="name"]', { timeout: 10000 });
   
   for (const payload of xssPayloads) {
