@@ -110,6 +110,13 @@ When('I click the {string} button', async function (buttonText: string) {
     } catch {
       await this.page.click('button:has-text("Cerrar Sesión")');
     }
+    // Wait for navigation to auth page after logout
+    try {
+      await this.page.waitForURL(/.*auth/, { timeout: 5000 });
+      console.log('✅ Redirected to auth page after logout');
+    } catch {
+      console.log('⚠️ No immediate redirect detected after logout');
+    }
   } else {
     await this.page.click(`button:has-text("${buttonText}")`);
   }
@@ -199,6 +206,15 @@ When('I logout', async function () {
     console.log('❌ No logout button found, trying generic approach...');
     // Fallback: try to find any button containing "logout" text (case insensitive)
     await this.page.click('button:has-text("Logout")');
+  }
+  
+  // Wait for navigation to auth page after logout
+  console.log('⏳ Waiting for redirect to auth page...');
+  try {
+    await this.page.waitForURL(/.*auth/, { timeout: 5000 });
+    console.log('✅ Redirected to auth page');
+  } catch (error) {
+    console.log('⚠️ No immediate redirect detected, continuing...');
   }
   
   await this.page.waitForLoadState('domcontentloaded', { timeout: 10000 });
