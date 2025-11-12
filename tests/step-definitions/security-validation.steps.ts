@@ -418,21 +418,28 @@ When('I try to inject JavaScript code', async function (this: CustomWorld) {
     throw new Error(`Authentication failed - redirected to ${currentUrl} instead of dashboard`);
   }
   
+  // Wait for Add Product button and ensure form can be shown
   await this.page.waitForSelector('button:has-text("Add Product")', { timeout: 10000 });
+  console.log('✅ Add Product button found');
   
-  // Click Add Product to show form
-  await this.page.click('button:has-text("Add Product")');
-  await this.page.waitForTimeout(1000); // Wait for form animation
-  
-  // Verify form is visible before trying to fill
-  const formVisible = await this.page.locator('input[name="name"]').isVisible().catch(() => false);
-  if (!formVisible) {
-    console.log('⚠️ Form not visible after clicking Add Product, trying to click again');
+  // Click Add Product to show form - retry up to 3 times if needed
+  let formVisible = false;
+  for (let i = 0; i < 3; i++) {
     await this.page.click('button:has-text("Add Product")');
-    await this.page.waitForTimeout(1000);
+    console.log(`🔘 Clicked Add Product (attempt ${i + 1})`);
+    await this.page.waitForTimeout(1500); // Wait for form animation
+    
+    formVisible = await this.page.locator('input[name="name"]').isVisible().catch(() => false);
+    console.log(`📝 Form visible: ${formVisible}`);
+    
+    if (formVisible) break;
   }
   
-  await this.page.waitForSelector('input[name="name"]', { timeout: 10000 });
+  if (!formVisible) {
+    throw new Error('Form did not become visible after 3 click attempts');
+  }
+  
+  await this.page.waitForSelector('input[name="name"]', { timeout: 5000 });
   
   for (const payload of xssPayloads) {
     await this.page.fill('input[name="name"]', payload);
