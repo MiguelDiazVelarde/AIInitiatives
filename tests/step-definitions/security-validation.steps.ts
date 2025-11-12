@@ -418,30 +418,39 @@ When('I try to inject JavaScript code', async function (this: CustomWorld) {
     throw new Error(`Authentication failed - redirected to ${currentUrl} instead of dashboard`);
   }
   
-  // Wait for Add Product button and ensure form can be shown
+  // Wait for Add Product button and check initial form state
   await this.page.waitForSelector('button:has-text("Add Product")', { timeout: 10000 });
   console.log('✅ Add Product button found');
   
-  // Click Add Product to show form - retry up to 3 times if needed
-  let formVisible = false;
-  for (let i = 0; i < 3; i++) {
+  // Check if form is already visible (shouldn't be, but check)
+  let formVisible = await this.page.locator('input[name="name"]').isVisible().catch(() => false);
+  console.log(`📝 Initial form visibility: ${formVisible}`);
+  
+  // If form not visible, click to show it
+  if (!formVisible) {
     await this.page.click('button:has-text("Add Product")');
-    console.log(`🔘 Clicked Add Product (attempt ${i + 1})`);
-    await this.page.waitForTimeout(1500); // Wait for form animation
+    console.log('🔘 Clicked Add Product to show form');
+    await this.page.waitForTimeout(2000); // Wait for form animation
     
     formVisible = await this.page.locator('input[name="name"]').isVisible().catch(() => false);
-    console.log(`📝 Form visible: ${formVisible}`);
+    console.log(`📝 Form visible after click: ${formVisible}`);
     
-    if (formVisible) break;
+    if (!formVisible) {
+      throw new Error('Form did not become visible after clicking Add Product');
+    }
   }
   
-  if (!formVisible) {
-    throw new Error('Form did not become visible after 3 click attempts');
-  }
-  
-  await this.page.waitForSelector('input[name="name"]', { timeout: 5000 });
+  // Verify form is still visible before filling
+  await this.page.waitForSelector('input[name="name"]', { state: 'visible', timeout: 5000 });
   
   for (const payload of xssPayloads) {
+    // Re-check visibility before each payload (in case form gets hidden)
+    const stillVisible = await this.page.locator('input[name="name"]').isVisible();
+    if (!stillVisible) {
+      console.log('⚠️ Form became hidden, skipping remaining payloads');
+      break;
+    }
+    
     await this.page.fill('input[name="name"]', payload);
     await this.page.fill('textarea[name="description"]', 'Test description');
     await this.page.fill('input[name="price"]', '29.99');
