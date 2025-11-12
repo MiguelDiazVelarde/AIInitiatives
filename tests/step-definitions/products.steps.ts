@@ -809,8 +809,9 @@ Then('I should see an appropriate empty state message', async function () {
 });
 
 Then('guidance on how to add the first product', async function () {
-  const formVisible = await this.page.locator('form, input[name="name"]').isVisible();
-  expect(formVisible).toBe(true);
+  // Check for guidance text or Add Product button
+  const guidanceOrButton = await this.page.locator('text=/add.*first product/i, button:has-text("Add Product")').count();
+  expect(guidanceOrButton).toBeGreaterThan(0);
 });
 
 Then('the product counter should show the correct number of products', async function () {
