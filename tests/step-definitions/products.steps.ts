@@ -54,8 +54,17 @@ Given('there is a product {string} in the list', async function (productName: st
 When('I complete the product form with:', async function (dataTable: any) {
   const productData = dataTable.rowsHash();
   
+  // First, click "Add Product" button to show the form if it's not visible
+  const formVisible = await this.page.locator('input[name="name"]').isVisible().catch(() => false);
+  if (!formVisible) {
+    console.log('📝 Form not visible, clicking Add Product button...');
+    await this.page.click('button.add-product-btn, button:has-text("Add Product")');
+    await this.page.waitForTimeout(500); // Wait for form animation
+  }
+  
   // Wait for form to be visible
   await this.page.waitForSelector('input[name="name"]', { timeout: 10000 });
+  console.log('✅ Product form is now visible');
   
   // Fill each field
   if (productData.name) {
@@ -669,10 +678,16 @@ Given('I have products in the system', async function () {
   // Add a test product if none exists
   const productExists = await this.page.locator('.product-item, .product-card').count();
   if (productExists === 0) {
+    // Click Add Product button first
+    await this.page.click('button.add-product-btn, button:has-text("Add Product")');
+    await this.page.waitForTimeout(500);
+    
+    // Wait for form and fill it
+    await this.page.waitForSelector('input[name="name"]', { timeout: 10000 });
     await this.page.fill('input[name="name"]', 'Test Product');
-    await this.page.fill('input[name="description"]', 'Test Description');
+    await this.page.fill('textarea[name="description"]', 'Test Description');
     await this.page.fill('input[name="price"]', '29.99');
-    await this.page.fill('input[name="category"]', 'Electronics');
+    await this.page.selectOption('select[name="category"]', 'electronics');
     await this.page.fill('input[name="stock"]', '10');
     await this.page.click('button[type="submit"]');
     await this.page.waitForTimeout(1000);
@@ -683,11 +698,16 @@ Given('I have a product in the system', async function () {
   await this.page.goto(`${this.baseURL}/dashboard`);
   await this.page.waitForLoadState('domcontentloaded', { timeout: 10000 });
   
-  // Add a single test product
+  // Click Add Product button first
+  await this.page.click('button.add-product-btn, button:has-text("Add Product")');
+  await this.page.waitForTimeout(500);
+  
+  // Wait for form and add a single test product
+  await this.page.waitForSelector('input[name="name"]', { timeout: 10000 });
   await this.page.fill('input[name="name"]', 'Single Test Product');
-  await this.page.fill('input[name="description"]', 'Single Test Description');
+  await this.page.fill('textarea[name="description"]', 'Single Test Description');
   await this.page.fill('input[name="price"]', '19.99');
-  await this.page.fill('input[name="category"]', 'Test Category');
+  await this.page.selectOption('select[name="category"]', 'electronics');
   await this.page.fill('input[name="stock"]', '5');
   await this.page.click('button[type="submit"]');
   await this.page.waitForTimeout(1000);
@@ -699,19 +719,25 @@ Given('I have multiple products in the system', async function () {
   
   // Add multiple test products
   const products = [
-    { name: 'Product 1', description: 'Description 1', price: '19.99', category: 'Electronics', stock: '10' },
-    { name: 'Product 2', description: 'Description 2', price: '29.99', category: 'Books', stock: '5' },
-    { name: 'Product 3', description: 'Description 3', price: '39.99', category: 'Clothing', stock: '8' }
+    { name: 'Product 1', description: 'Description 1', price: '19.99', category: 'electronics', stock: '10' },
+    { name: 'Product 2', description: 'Description 2', price: '29.99', category: 'electronics', stock: '5' },
+    { name: 'Product 3', description: 'Description 3', price: '39.99', category: 'electronics', stock: '8' }
   ];
   
   for (const product of products) {
+    // Click Add Product button to show form
+    await this.page.click('button.add-product-btn, button:has-text("Add Product")');
+    await this.page.waitForTimeout(500);
+    
+    // Wait for form and fill it
+    await this.page.waitForSelector('input[name="name"]', { timeout: 10000 });
     await this.page.fill('input[name="name"]', product.name);
-    await this.page.fill('input[name="description"]', product.description);
+    await this.page.fill('textarea[name="description"]', product.description);
     await this.page.fill('input[name="price"]', product.price);
-    await this.page.fill('input[name="category"]', product.category);
+    await this.page.selectOption('select[name="category"]', product.category);
     await this.page.fill('input[name="stock"]', product.stock);
     await this.page.click('button[type="submit"]');
-    await this.page.waitForTimeout(500);
+    await this.page.waitForTimeout(1000);
   }
 });
 
