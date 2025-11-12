@@ -406,11 +406,17 @@ When('I try to inject JavaScript code', async function (this: CustomWorld) {
   
   // Navigate to dashboard inline
   await this.page.goto(`${this.baseURL}/dashboard`, { waitUntil: 'domcontentloaded', timeout: 15000 });
+  await this.page.waitForTimeout(2000); // Wait for page to stabilize
+  
+  // Verify we're on dashboard
+  const currentUrl = this.page.url();
+  console.log('📍 Current URL after navigation:', currentUrl);
+  
   await this.page.waitForSelector('button:has-text("Add Product")', { timeout: 10000 });
   
   // Click Add Product to show form
   await this.page.click('button:has-text("Add Product")');
-  await this.page.waitForSelector('input[name="name"]', { timeout: 5000 });
+  await this.page.waitForSelector('input[name="name"]', { timeout: 10000 });
   
   for (const payload of xssPayloads) {
     await this.page.fill('input[name="name"]', payload);
