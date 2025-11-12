@@ -406,6 +406,7 @@ When('I try to inject JavaScript code', async function (this: CustomWorld) {
   
   // Navigate to dashboard inline
   await this.page.goto(`${this.baseURL}/dashboard`, { waitUntil: 'domcontentloaded', timeout: 15000 });
+  await this.page.waitForSelector('button:has-text("Add Product")', { timeout: 10000 });
   
   // Click Add Product to show form
   await this.page.click('button:has-text("Add Product")');
