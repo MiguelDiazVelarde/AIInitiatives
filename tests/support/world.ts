@@ -173,7 +173,7 @@ export class CustomWorld {
     await this.page.fill('input[name="name"]', productData.name);
     await this.page.fill('textarea[name="description"]', productData.description);
     await this.page.fill('input[name="price"]', productData.price);
-    await this.page.selectOption('select[name="category"]', productData.category);
+    await this.page.fill('input[name="category"]', productData.category); // Category is a text input, not select
     await this.page.fill('input[name="stock"]', productData.stock);
     await this.page.click('button[type="submit"]');
     await this.page.waitForLoadState('networkidle');

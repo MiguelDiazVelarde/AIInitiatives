@@ -529,19 +529,7 @@ When('I fill out the product form completely', async function () {
   await this.page.fill('input[name="name"]', 'Test Product');
   await this.page.fill('textarea[name="description"]', 'Test Description');
   await this.page.fill('input[name="price"]', '29.99');
-  
-  // Handle select element more carefully
-  try {
-    await this.page.selectOption('select[name="category"]', 'electronics');
-  } catch (error) {
-    console.log('⚠️ Category select not found or different options available:', error instanceof Error ? error.message : String(error));
-    // Try alternative approach
-    const categoryOptions = await this.page.locator('select[name="category"] option').all();
-    if (categoryOptions.length > 1) {
-      await this.page.selectOption('select[name="category"]', { index: 1 });
-    }
-  }
-  
+  await this.page.fill('input[name="category"]', 'electronics'); // Category is a text input, not select
   await this.page.fill('input[name="stock"]', '10');
   console.log('✅ Product form filled completely');
 });

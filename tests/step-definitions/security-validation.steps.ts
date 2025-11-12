@@ -96,7 +96,7 @@ When('I enter data with wrong types:', async function (this: CustomWorld, dataTa
     }
   }
   
-  await this.page.selectOption('select[name="category"]', 'electronics');
+  await this.page.fill('input[name="category"]', 'electronics');
 });
 
 Then('the system should reject the invalid types', async function (this: CustomWorld) {
@@ -362,7 +362,7 @@ When('I try to inject JavaScript code', async function (this: CustomWorld) {
     await this.page.fill('input[name="name"]', payload);
     await this.page.fill('textarea[name="description"]', 'Test description');
     await this.page.fill('input[name="price"]', '29.99');
-    await this.page.selectOption('select[name="category"]', 'electronics');
+    await this.page.fill('input[name="category"]', 'electronics');
     await this.page.fill('input[name="stock"]', '10');
     
     await this.page.click('button[type="submit"]');

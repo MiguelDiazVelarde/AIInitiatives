@@ -22,7 +22,7 @@ Given('there are registered products', async function () {
   await this.page.fill('input[name="name"]', 'Test Product');
   await this.page.fill('textarea[name="description"]', 'Test Description');
   await this.page.fill('input[name="price"]', '99.99');
-  await this.page.selectOption('select[name="category"]', 'electronics');
+  await this.page.fill('input[name="category"]', 'electronics');
   await this.page.fill('input[name="stock"]', '10');
   
   // Submit form
@@ -43,7 +43,7 @@ Given('there is a product {string} in the list', async function (productName: st
   await this.page.fill('input[name="name"]', productName);
   await this.page.fill('textarea[name="description"]', 'Test Description');
   await this.page.fill('input[name="price"]', '50.00');
-  await this.page.selectOption('select[name="category"]', 'other');
+  await this.page.fill('input[name="category"]', 'other');
   await this.page.fill('input[name="stock"]', '5');
   
   // Submit form
@@ -77,7 +77,7 @@ When('I complete the product form with:', async function (dataTable: any) {
     await this.page.fill('input[name="price"]', productData.price);
   }
   if (productData.category) {
-    await this.page.selectOption('select[name="category"]', productData.category);
+    await this.page.fill('input[name="category"]', productData.category);
   }
   if (productData.stock) {
     await this.page.fill('input[name="stock"]', productData.stock);
@@ -152,7 +152,7 @@ When('I complete the form with category {string}', async function (category: str
   await this.page.fill('input[name="name"]', 'Test Product');
   await this.page.fill('textarea[name="description"]', 'Test Description');
   await this.page.fill('input[name="price"]', '29.99');
-  await this.page.selectOption('select[name="category"]', category);
+  await this.page.fill('input[name="category"]', category);
   await this.page.fill('input[name="stock"]', '15');
 });
 
@@ -560,11 +560,11 @@ When('I delete a product', async function () {
 });
 
 When('I select category {string} from the dropdown', async function (category: string) {
-  await this.page.selectOption('select[name="category"]', category);
+  await this.page.fill('input[name="category"]', category);
 });
 
 Then('the category should be accepted', async function () {
-  const selectedValue = await this.page.inputValue('select[name="category"]');
+  const selectedValue = await this.page.inputValue('input[name="category"]');
   expect(selectedValue).toBeTruthy();
 });
 
@@ -687,7 +687,7 @@ Given('I have products in the system', async function () {
     await this.page.fill('input[name="name"]', 'Test Product');
     await this.page.fill('textarea[name="description"]', 'Test Description');
     await this.page.fill('input[name="price"]', '29.99');
-    await this.page.selectOption('select[name="category"]', 'electronics');
+    await this.page.fill('input[name="category"]', 'electronics');
     await this.page.fill('input[name="stock"]', '10');
     await this.page.click('button[type="submit"]');
     await this.page.waitForTimeout(1000);
@@ -707,7 +707,7 @@ Given('I have a product in the system', async function () {
   await this.page.fill('input[name="name"]', 'Single Test Product');
   await this.page.fill('textarea[name="description"]', 'Single Test Description');
   await this.page.fill('input[name="price"]', '19.99');
-  await this.page.selectOption('select[name="category"]', 'electronics');
+  await this.page.fill('input[name="category"]', 'electronics');
   await this.page.fill('input[name="stock"]', '5');
   await this.page.click('button[type="submit"]');
   await this.page.waitForTimeout(1000);
@@ -734,7 +734,7 @@ Given('I have multiple products in the system', async function () {
     await this.page.fill('input[name="name"]', product.name);
     await this.page.fill('textarea[name="description"]', product.description);
     await this.page.fill('input[name="price"]', product.price);
-    await this.page.selectOption('select[name="category"]', product.category);
+    await this.page.fill('input[name="category"]', product.category);
     await this.page.fill('input[name="stock"]', product.stock);
     await this.page.click('button[type="submit"]');
     await this.page.waitForTimeout(1000);

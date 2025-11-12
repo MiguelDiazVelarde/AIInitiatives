@@ -142,11 +142,11 @@ Given('I am creating a new product', async function (this: CustomWorld) {
 });
 
 When('I enter non-numeric values in price field', async function (this: CustomWorld) {
-  await this.page.fill('[data-testid="product-name"]', 'Test Product');
-  await this.page.fill('[data-testid="product-description"]', 'Test Description');
-  await this.page.fill('[data-testid="product-price"]', 'not-a-number');
-  await this.page.selectOption('[data-testid="product-category"]', 'Electronics');
-  await this.page.fill('[data-testid="product-stock"]', '10');
+  await this.page.fill('input[name="name"]', 'Test Product');
+  await this.page.fill('textarea[name="description"]', 'Test Description');
+  await this.page.fill('input[name="price"]', 'not-a-number');
+  await this.page.fill('input[name="category"]', 'Electronics');
+  await this.page.fill('input[name="stock"]', '10');
 });
 
 Then('the system should reject the input', async function (this: CustomWorld) {
@@ -221,12 +221,20 @@ When('I create a new product', async function (this: CustomWorld) {
     stock: 10
   };
   
-  await this.page.fill('[data-testid="product-name"]', this.newProduct.name);
-  await this.page.fill('[data-testid="product-description"]', this.newProduct.description);
-  await this.page.fill('[data-testid="product-price"]', this.newProduct.price.toString());
-  await this.page.selectOption('[data-testid="product-category"]', this.newProduct.category);
-  await this.page.fill('[data-testid="product-stock"]', this.newProduct.stock.toString());
-  await this.page.click('[data-testid="submit-product-button"]');
+  // Click Add Product button to show form if not visible
+  const formVisible = await this.page.locator('input[name="name"]').isVisible().catch(() => false);
+  if (!formVisible) {
+    await this.page.click('button.add-product-btn, button:has-text("Add Product")');
+    await this.page.waitForTimeout(500);
+  }
+  
+  await this.page.fill('input[name="name"]', this.newProduct.name);
+  await this.page.fill('textarea[name="description"]', this.newProduct.description);
+  await this.page.fill('input[name="price"]', this.newProduct.price.toString());
+  await this.page.fill('input[name="category"]', this.newProduct.category);
+  await this.page.fill('input[name="stock"]', this.newProduct.stock.toString());
+  await this.page.click('button[type="submit"]');
+  await this.page.waitForTimeout(1000);
 });
 
 Then('the product data should be stored with proper structure', async function (this: CustomWorld) {
