@@ -116,7 +116,8 @@ Then('provide clear error messages about expected types', async function (this: 
 // REQ-DATA-004: Email format validation
 When('I enter invalid email formats:', async function (this: CustomWorld, dataTable) {
   const emails = dataTable.hashes();
-  await this.navigateToRegister();
+  await this.page.goto(`${this.baseURL}/auth`); 
+  await this.page.waitForSelector('input[name="username"]');
   
   for (const emailData of emails) {
     await this.page.fill('input[name="username"]', 'testuser');
@@ -161,7 +162,8 @@ Then('each should be accepted', async function (this: CustomWorld) {
 
 // REQ-SEC-001: Password encryption verification
 Given('I register a new user with password {string}', async function (this: CustomWorld, password: string) {
-  await this.navigateToRegister();
+  await this.page.goto(`${this.baseURL}/auth`); 
+  await this.page.waitForSelector('input[name="username"]');
   await this.page.fill('input[name="username"]', `user_${Date.now()}`);
   await this.page.fill('input[name="email"]', `test_${Date.now()}@example.com`);
   await this.page.fill('input[name="password"]', password);
@@ -250,7 +252,8 @@ Then('session data should be cleared from server', async function (this: CustomW
 
 // REQ-SEC-003 & REQ-SEC-004: Input validation and XSS protection
 Given('I am submitting any form in the application', async function (this: CustomWorld) {
-  await this.navigateToRegister();
+  await this.page.goto(`${this.baseURL}/auth`);
+  await this.page.waitForSelector('input[name="username"]');
   await this.page.waitForSelector('form', { timeout: 10000 });
 });
 

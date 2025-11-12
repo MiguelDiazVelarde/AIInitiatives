@@ -125,7 +125,18 @@ Then('no user should experience significant delays', async function (this: Custo
 
 // REQ-PERF-004: API response optimization
 Given('I am making API requests', async function (this: CustomWorld) {
-  await this.login('admin', 'password');
+  // Register and login inline
+  try {
+    await this.page.request.post(`${this.baseURL}/api/auth/register`, {
+      data: { username: 'admin', email: 'admin@example.com', password: 'password' }
+    });
+  } catch (e) { /* User may already exist */ }
+  
+  await this.page.goto(`${this.baseURL}/auth`);
+  await this.page.fill('input[name="username"]', 'admin');
+  await this.page.fill('input[name="password"]', 'password');
+  await this.page.click('button[type="submit"]');
+  await this.page.waitForURL(/.*\//, { timeout: 15000 });
 });
 
 When('I request product data or user information', async function (this: CustomWorld) {

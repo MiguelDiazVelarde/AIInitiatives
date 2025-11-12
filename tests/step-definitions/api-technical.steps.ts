@@ -64,7 +64,18 @@ Then('the following endpoints should be available:', async function (this: Custo
 
 // REQ-API-002: Product management endpoints
 Given('I am authenticated', async function (this: CustomWorld) {
-  await this.login('admin', 'password');
+  // Register and login inline
+  try {
+    await this.page.request.post(`${this.baseURL}/api/auth/register`, {
+      data: { username: 'admin', email: 'admin@example.com', password: 'password' }
+    });
+  } catch (e) { /* User may already exist */ }
+  
+  await this.page.goto(`${this.baseURL}/auth`);
+  await this.page.fill('input[name="username"]', 'admin');
+  await this.page.fill('input[name="password"]', 'password');
+  await this.page.click('button[type="submit"]');
+  await this.page.waitForURL(/.*\//, { timeout: 15000 });
 });
 
 When('I check the product endpoints', async function (this: CustomWorld) {
@@ -123,7 +134,18 @@ When('I check the product endpoints', async function (this: CustomWorld) {
 
 // REQ-API-003: Consistent JSON response format
 Given('I am making various API requests', async function (this: CustomWorld) {
-  await this.login('admin', 'password');
+  // Register and login inline
+  try {
+    await this.page.request.post(`${this.baseURL}/api/auth/register`, {
+      data: { username: 'admin', email: 'admin@example.com', password: 'password' }
+    });
+  } catch (e) { /* User may already exist */ }
+  
+  await this.page.goto(`${this.baseURL}/auth`);
+  await this.page.fill('input[name="username"]', 'admin');
+  await this.page.fill('input[name="password"]', 'password');
+  await this.page.click('button[type="submit"]');
+  await this.page.waitForURL(/.*\//, { timeout: 15000 });
 });
 
 When('I call any API endpoint', async function (this: CustomWorld) {

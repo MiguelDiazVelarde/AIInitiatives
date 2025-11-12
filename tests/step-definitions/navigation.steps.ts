@@ -522,7 +522,15 @@ Then('I should see submission progress indicators', async function () {
 When('I fill out the product form completely', async function () {
   console.log('🔄 Filling product form...');
   
-  // Wait for form elements to be available with longer timeout
+  // Click Add Product button to show form if not visible
+  const formVisible = await this.page.locator('input[name="name"]').isVisible().catch(() => false);
+  if (!formVisible) {
+    console.log('📝 Form not visible, clicking Add Product button...');
+    await this.page.click('button.add-product-btn, button:has-text("Add Product")');
+    await this.page.waitForTimeout(500);
+  }
+  
+  // Wait for form elements to be available
   await this.page.waitForSelector('input[name="name"]', { timeout: 30000 });
   console.log('✅ Product form found');
   

@@ -393,7 +393,11 @@ Given('there are no products', async function () {
 });
 
 When('I view the dashboard', async function () {
-  await this.navigateToDashboard();
+  await this.page.goto(`${this.baseURL}/dashboard`, { 
+    waitUntil: 'domcontentloaded',
+    timeout: 15000 
+  });
+  await this.page.waitForTimeout(500);
 });
 
 Then('I should see encouragement to {string}', async function (message: string) {
@@ -810,8 +814,9 @@ Then('I should see an appropriate empty state message', async function () {
 
 Then('guidance on how to add the first product', async function () {
   // Check for guidance text or Add Product button
-  const guidanceOrButton = await this.page.locator('text=/add.*first product/i, button:has-text("Add Product")').count();
-  expect(guidanceOrButton).toBeGreaterThan(0);
+  const guidanceText = await this.page.locator('text=/add.*first product/i').count();
+  const addButton = await this.page.locator('button:has-text("Add Product")').count();
+  expect(guidanceText + addButton).toBeGreaterThan(0);
 });
 
 Then('the product counter should show the correct number of products', async function () {
@@ -856,8 +861,15 @@ Given('I have created multiple products', async function () {
     await this.page.click('button.add-product-btn, button:has-text("Add Product")');
     await this.page.waitForTimeout(500);
     await this.page.waitForSelector('input[name="name"]', { timeout: 10000 });
-    await this.addProduct(product);
-    await this.page.waitForTimeout(500);
+    
+    // Fill form fields directly
+    await this.page.fill('input[name="name"]', product.name);
+    await this.page.fill('textarea[name="description"]', product.description);
+    await this.page.fill('input[name="price"]', product.price);
+    await this.page.fill('input[name="category"]', product.category);
+    await this.page.fill('input[name="stock"]', product.stock);
+    await this.page.click('button[type="submit"]');
+    await this.page.waitForTimeout(1000);
   }
 });
 
@@ -896,13 +908,14 @@ When('I add or delete a product', async function () {
   await this.page.click('button.add-product-btn, button:has-text("Add Product")');
   await this.page.waitForTimeout(500);
   await this.page.waitForSelector('input[name="name"]', { timeout: 10000 });
-  await this.addProduct({
-    name: 'Dynamic Product',
-    description: 'Test',
-    price: '15.99',
-    category: 'electronics',
-    stock: '5'
-  });
+  
+  // Fill form fields directly
+  await this.page.fill('input[name="name"]', 'Dynamic Product');
+  await this.page.fill('textarea[name="description"]', 'Test');
+  await this.page.fill('input[name="price"]', '15.99');
+  await this.page.fill('input[name="category"]', 'electronics');
+  await this.page.fill('input[name="stock"]', '5');
+  await this.page.click('button[type="submit"]');
   await this.page.waitForTimeout(1000);
 });
 
@@ -948,4 +961,18 @@ Then('the form should prevent submission until valid', async function () {
   // HTML5 required attributes prevent submission
   const formVisible = await this.page.locator('input[name="name"]').isVisible();
   expect(formVisible).toBe(true);
+});
+
+Then('I should see a price validation error', async function () {
+  // Check for HTML5 validation or custom error message
+  const priceField = this.page.locator('input[name="price"]');
+  const isInvalid = await priceField.evaluate((el: HTMLInputElement) => !el.validity.valid || el.validationMessage !== '');
+  expect(isInvalid).toBe(true);
+});
+
+Then('I should see a stock validation error', async function () {
+  // Check for HTML5 validation or custom error message
+  const stockField = this.page.locator('input[name="stock"]');
+  const isInvalid = await stockField.evaluate((el: HTMLInputElement) => !el.validity.valid || el.validationMessage !== '');
+  expect(isInvalid).toBe(true);
 });

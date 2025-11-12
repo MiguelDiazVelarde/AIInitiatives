@@ -9,8 +9,20 @@ Given('I am entering data in any form field', async function (this: CustomWorld)
 });
 
 Given('I am performing state-changing operations', async function (this: CustomWorld) {
-  await this.login('admin', 'password');
-  await this.navigateToDashboard();
+  // Register and login inline
+  try {
+    await this.page.request.post(`${this.baseURL}/api/auth/register`, {
+      data: { username: 'admin', email: 'admin@example.com', password: 'password' }
+    });
+  } catch (e) { /* User may already exist */ }
+  
+  await this.page.goto(`${this.baseURL}/auth`);
+  await this.page.fill('input[name="username"]', 'admin');
+  await this.page.fill('input[name="password"]', 'password');
+  await this.page.click('button[type="submit"]');
+  await this.page.waitForURL(/.*\//, { timeout: 15000 });
+  
+  await this.page.goto(`${this.baseURL}/dashboard`, { waitUntil: 'domcontentloaded', timeout: 15000 });
 });
 
 When('requests are made to the server', async function (this: CustomWorld) {

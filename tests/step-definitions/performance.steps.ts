@@ -15,11 +15,33 @@ Given('I have access to the system', async function (this: CustomWorld) {
 });
 
 Given('I am performing typical application operations', async function (this: CustomWorld) {
-  await this.login('admin', 'password');
+  // Register and login
+  try {
+    await this.page.request.post(`${this.baseURL}/api/auth/register`, {
+      data: { username: 'admin', email: 'admin@example.com', password: 'password' }
+    });
+  } catch (e) { /* User may already exist */ }
+  
+  await this.page.goto(`${this.baseURL}/auth`);
+  await this.page.fill('input[name="username"]', 'admin');
+  await this.page.fill('input[name="password"]', 'password');
+  await this.page.click('button[type="submit"]');
+  await this.page.waitForURL(/.*\//, { timeout: 15000 });
 });
 
 Given('I am logged into the application', async function (this: CustomWorld) {
-  await this.login('admin', 'password');
+  // Register and login
+  try {
+    await this.page.request.post(`${this.baseURL}/api/auth/register`, {
+      data: { username: 'admin', email: 'admin@example.com', password: 'password' }
+    });
+  } catch (e) { /* User may already exist */ }
+  
+  await this.page.goto(`${this.baseURL}/auth`);
+  await this.page.fill('input[name="username"]', 'admin');
+  await this.page.fill('input[name="password"]', 'password');
+  await this.page.click('button[type="submit"]');
+  await this.page.waitForURL(/.*\//, { timeout: 15000 });
 });
 
 Given('multiple users are accessing the system simultaneously', async function (this: CustomWorld) {
@@ -29,14 +51,14 @@ Given('multiple users are accessing the system simultaneously', async function (
 
 When('I login, view products, create items, or navigate', async function (this: CustomWorld) {
   const startTime = Date.now();
-  await this.login('admin', 'password');
-  await this.navigateToDashboard();
+  // Already logged in from previous step
+  await this.page.goto(`${this.baseURL}/dashboard`, { waitUntil: 'domcontentloaded', timeout: 15000 });
   this.navigationTime = Date.now() - startTime;
 });
 
 When('they perform various operations at the same time', async function (this: CustomWorld) {
   // Simulate concurrent operations
-  await this.navigateToDashboard();
+  await this.page.goto(`${this.baseURL}/dashboard`, { waitUntil: 'domcontentloaded', timeout: 15000 });
 });
 
 Then('each operation should complete within acceptable time limits', async function (this: CustomWorld) {
