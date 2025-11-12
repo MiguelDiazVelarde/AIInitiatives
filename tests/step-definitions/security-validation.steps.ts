@@ -164,6 +164,11 @@ Then('each should be accepted', async function (this: CustomWorld) {
 Given('I register a new user with password {string}', async function (this: CustomWorld, password: string) {
   await this.page.goto(`${this.baseURL}/auth`); 
   await this.page.waitForSelector('input[name="username"]');
+  
+  // Switch to register mode to access email field
+  await this.page.click('button.link-button:has-text("Register")');
+  await this.page.waitForSelector('input[name="email"]', { timeout: 5000 });
+  
   await this.page.fill('input[name="username"]', `user_${Date.now()}`);
   await this.page.fill('input[name="email"]', `test_${Date.now()}@example.com`);
   await this.page.fill('input[name="password"]', password);

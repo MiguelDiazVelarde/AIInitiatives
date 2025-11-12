@@ -26,7 +26,9 @@ Given('I am performing state-changing operations', async function (this: CustomW
 });
 
 When('requests are made to the server', async function (this: CustomWorld) {
-  // Make a test request
+  // Make a test request - click Add Product to show form first
+  await this.page.click('button:has-text("Add Product")');
+  await this.page.waitForSelector('input[name="name"]', { timeout: 5000 });
   await this.page.fill('input[name="name"]', 'Test Product');
   await this.page.click('button[type="submit"]');
 });

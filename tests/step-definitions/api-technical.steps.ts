@@ -51,14 +51,19 @@ Then('the following endpoints should be available:', async function (this: Custo
   const expectedEndpoints = dataTable.hashes();
   const results = (this as any).endpointResults || [];
   
+  console.log('📊 Endpoint results:', results);
+  console.log('📋 Expected endpoints:', expectedEndpoints);
+  
   for (const expected of expectedEndpoints) {
     const result = results.find((r: any) => 
       r.method === expected.method && r.path === expected.endpoint
     );
     
-    expect(result).toBeTruthy();
-    expect(result.exists).toBe(true);
-    expect(result.status).not.toBe(404);
+    console.log(`🔍 Looking for ${expected.method} ${expected.endpoint}, found:`, result);
+    
+    expect(result, `Endpoint ${expected.method} ${expected.endpoint} not found in results`).toBeTruthy();
+    expect(result.exists, `Endpoint ${expected.method} ${expected.endpoint} does not exist`).toBe(true);
+    expect(result.status, `Endpoint ${expected.method} ${expected.endpoint} returned 404`).not.toBe(404);
   }
 });
 
