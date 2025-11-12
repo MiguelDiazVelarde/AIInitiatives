@@ -115,6 +115,9 @@ Then('response times should remain acceptable', async function (this: CustomWorl
 });
 
 Then('no user should experience significant delays', async function (this: CustomWorld) {
+  // Ensure we're on dashboard after reload
+  await this.page.goto(`${this.baseURL}/dashboard`, { waitUntil: 'domcontentloaded', timeout: 15000 });
+  
   // Verify quick response to user interaction
   const startTime = Date.now();
   await this.page.click('button:has-text("Add Product")', { timeout: 5000 });

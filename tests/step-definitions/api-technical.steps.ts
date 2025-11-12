@@ -49,7 +49,8 @@ When('I check the authentication endpoints', async function (this: CustomWorld) 
 
 Then('the following endpoints should be available:', async function (this: CustomWorld, dataTable) {
   const expectedEndpoints = dataTable.hashes();
-  const results = (this as any).endpointResults || [];
+  // Try both endpointResults (auth endpoints) and productEndpointResults (product endpoints)
+  const results = (this as any).endpointResults || (this as any).productEndpointResults || [];
   
   console.log('📊 Endpoint results:', results);
   console.log('📋 Expected endpoints:', expectedEndpoints);

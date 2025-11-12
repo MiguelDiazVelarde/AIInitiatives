@@ -179,8 +179,18 @@ Given('I register a new user with password {string}', async function (this: Cust
 Then('the password should be stored as a bcrypt hash', async function (this: CustomWorld) {
   // This would typically require server-side verification
   // For now, we'll verify that login works with the original password
-  await this.clearSessionData();
-  await this.navigateToLogin();
+  
+  // Clear session data inline
+  await this.context.clearCookies();
+  await this.page.evaluate(() => {
+    localStorage.clear();
+    sessionStorage.clear();
+  });
+  
+  // Navigate to login inline
+  await this.page.goto(`${this.baseURL}/auth`, { waitUntil: 'domcontentloaded', timeout: 15000 });
+  await this.page.waitForSelector('input[name="username"]', { timeout: 10000 });
+  
   await this.page.fill('input[name="username"]', 'admin');
   await this.page.fill('input[name="password"]', 'password');
   await this.page.click('button[type="submit"]');
@@ -259,7 +269,10 @@ Then('session data should be cleared from server', async function (this: CustomW
 Given('I am submitting any form in the application', async function (this: CustomWorld) {
   await this.page.goto(`${this.baseURL}/auth`);
   await this.page.waitForSelector('input[name="username"]');
-  await this.page.waitForSelector('form', { timeout: 10000 });
+  
+  // Switch to register mode to access email field
+  await this.page.click('button.link-button:has-text("Register")');
+  await this.page.waitForSelector('input[name="email"]', { timeout: 5000 });
 });
 
 When('I include various types of potentially harmful input', async function (this: CustomWorld) {
@@ -364,7 +377,8 @@ When('I try to inject JavaScript code', async function (this: CustomWorld) {
     'javascript:alert("XSS")'
   ];
   
-  await this.navigateToDashboard();
+  // Navigate to dashboard inline
+  await this.page.goto(`${this.baseURL}/dashboard`, { waitUntil: 'domcontentloaded', timeout: 15000 });
   
   for (const payload of xssPayloads) {
     await this.page.fill('input[name="name"]', payload);

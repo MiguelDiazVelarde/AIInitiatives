@@ -76,7 +76,7 @@ Then('the interface should remain responsive during operations', async function 
 
 Then('the dashboard should load quickly', async function (this: CustomWorld) {
   const startTime = Date.now();
-  await this.navigateToDashboard();
+  await this.page.goto(`${this.baseURL}/dashboard`, { waitUntil: 'domcontentloaded', timeout: 15000 });
   const loadTime = Date.now() - startTime;
   expect(loadTime).toBeLessThan(3000); // 3 seconds max
 });
