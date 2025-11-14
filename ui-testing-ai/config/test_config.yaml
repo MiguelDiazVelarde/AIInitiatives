@@ -1,0 +1,94 @@
+# Test Configuration for UI Testing with AI
+
+# Visual Testing Settings
+visual_testing:
+  similarity_threshold: 0.95  # 95% similarity required
+  ignore_antialiasing: true
+  ignore_colors: false
+  pixel_tolerance: 10
+  save_diff_images: true
+  diff_output_dir: "screenshots/diff"
+
+# Self-Healing Test Settings
+self_healing:
+  max_strategies: 5
+  timeout: 10  # seconds
+  retry_count: 3
+  learning_enabled: true
+  history_file: "config/locator_history.json"
+  
+  # Locator strategies priority (higher = more reliable)
+  strategy_weights:
+    id: 1.0
+    name: 0.9
+    css_selector: 0.8
+    xpath: 0.7
+    link_text: 0.6
+    class_name: 0.5
+    tag_name: 0.3
+
+# GUI Validation Settings
+gui_validation:
+  check_accessibility: true
+  check_contrast: true
+  check_responsive: true
+  min_contrast_ratio: 4.5  # WCAG AA standard
+  
+  # Element size thresholds
+  min_button_size: 44  # pixels (mobile touch target)
+  min_font_size: 12    # pixels
+  max_page_width: 1920 # pixels
+  
+  # Validation rules
+  rules:
+    - name: "broken_images"
+      enabled: true
+      severity: "high"
+    
+    - name: "invisible_elements"
+      enabled: true
+      severity: "medium"
+    
+    - name: "overlapping_elements"
+      enabled: true
+      severity: "medium"
+    
+    - name: "tiny_text"
+      enabled: true
+      severity: "low"
+
+# WebDriver Settings
+webdriver:
+  browser: "chrome"  # chrome, firefox, edge, safari
+  headless: false
+  window_size: "1920,1080"
+  implicit_wait: 10
+  page_load_timeout: 30
+  
+  # Chrome options
+  chrome_options:
+    - "--disable-extensions"
+    - "--disable-gpu"
+    - "--no-sandbox"
+    - "--disable-dev-shm-usage"
+
+# Screenshot Settings
+screenshots:
+  baseline_dir: "screenshots/baseline"
+  current_dir: "screenshots/current"
+  diff_dir: "screenshots/diff"
+  format: "png"
+  full_page: true
+
+# Reporting
+reporting:
+  output_dir: "reports"
+  generate_html: true
+  generate_json: true
+  include_screenshots: true
+  
+# Logging
+logging:
+  level: "INFO"  # DEBUG, INFO, WARNING, ERROR
+  file: "logs/ui_testing.log"
+  console: true
