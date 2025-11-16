@@ -7,7 +7,7 @@ Este módulo implementa los conceptos del **ISTQB CT-AI Capítulo 11.6** para te
 ```
 ┌─────────────────────────────────────────────────────────────────┐
 │                     UI Testing with AI                          │
-│                  (ISTQB CT-AI 11.6)                            │
+│                  (ISTQB CT-AI 11.6)                             │
 └─────────────────────────────────────────────────────────────────┘
                               │
                               │
@@ -72,12 +72,12 @@ Este módulo implementa los conceptos del **ISTQB CT-AI Capítulo 11.6** para te
 │    → float (Color distribution similarity)          │
 │                                                     │
 │  - _detect_differences(img1, img2)                  │
-│    → List[VisualDifference] (Contours)             │
+│    → List[VisualDifference] (Contours)              │
 │                                                     │
 │  - _classify_differences(diffs, shape)              │
-│    → List[VisualDifference] (With severity)        │
+│    → List[VisualDifference] (With severity)         │
 │                                                     │
-│  - _save_diff_visualization(baseline, current, ...)│
+│  - _save_diff_visualization(baseline, current, ...) │
 │    → None (Saves annotated image)                   │
 └─────────────────────────────────────────────────────┘
          Uses: OpenCV, scikit-image, imagehash
@@ -123,7 +123,7 @@ Este módulo implementa los conceptos del **ISTQB CT-AI Capítulo 11.6** para te
 │    → Optional[WebElement]                           │
 │                                                     │
 │  - _prepare_strategies(element_name, strategies)    │
-│    → List[LocatorStrategy] (With history)          │
+│    → List[LocatorStrategy] (With history)           │
 │                                                     │
 │  - _record_success(element_name, strategy, time)    │
 │    → None (Updates statistics)                      │
@@ -155,7 +155,7 @@ Este módulo implementa los conceptos del **ISTQB CT-AI Capítulo 11.6** para te
 │    = success / (success + failure)                  │
 │                                                     │
 │  + reliability_score: float                         │
-│    = success_rate*0.7 + time*0.2 + recency*0.1     │
+│    = success_rate*0.7 + time*0.2 + recency*0.1      │
 └─────────────────────────────────────────────────────┘
 ```
 
@@ -237,7 +237,7 @@ donde:
 
 ```
 ┌──────────┐    screenshot    ┌────────────┐
-│ Browser  │ ─────────────→  │ File       │
+│ Browser  │ ─────────────→   │ File       │
 │          │                  │ System     │
 └──────────┘                  └────────────┘
                                     │
@@ -298,7 +298,7 @@ donde:
                     │                                       │
                     ▼                                       ▼
             ┌──────────────┐                        ┌──────────────┐
-            │ ✅ Success    │                        │ ❌ Failure    │
+            │ ✅ Success   │                        │ ❌ Failure  │
             │ Update stats │                        │ Update stats │
             │ Return elem  │                        │ Try next     │
             └──────────────┘                        └──────────────┘
@@ -315,7 +315,7 @@ donde:
 ### GUI Validation
 
 ```
-┌──────────┐      validate      ┌────────────┐
+┌──────────┐      validate       ┌────────────┐
 │ Browser  │  ─────────────────→ │ GUI        │
 │ Page     │                     │ Validator  │
 └──────────┘                     └────────────┘
