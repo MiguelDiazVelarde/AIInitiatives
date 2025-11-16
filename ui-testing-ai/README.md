@@ -1,79 +1,79 @@
 # UI Testing with AI
 
-Implementación práctica de los conceptos del **Capítulo 11.6 del ISTQB CT-AI**: "Using AI for Testing User Interfaces"
+Practical implementation of **ISTQB CT-AI Chapter 11.6** concepts: "Using AI for Testing User Interfaces"
 
-## 📋 Descripción
+## 📋 Description
 
-Este módulo implementa técnicas de testing de UI usando AI, incluyendo:
+This module implements UI testing techniques using AI, including:
 
-### 11.6.1 Testing a través del GUI
-- **Self-Healing Tests**: Tests que se adaptan automáticamente a cambios en la UI
-- **AI Object Locator**: Identificación inteligente de elementos usando múltiples estrategias
-- **Histórico de Estabilidad**: Aprende qué localizadores son más confiables
+### 11.6.1 Testing Through the GUI
+- **Self-Healing Tests**: Tests that automatically adapt to UI changes
+- **AI Object Locator**: Intelligent element identification using multiple strategies
+- **Stability History**: Learns which locators are most reliable
 
-### 11.6.2 Testing del GUI
-- **Visual Regression Testing**: Detecta cambios visuales no intencionados
-- **Computer Vision**: Compara screenshots usando algoritmos de visión por computadora
-- **Validación de Renderizado**: Identifica elementos mal renderizados o inaccesibles
+### 11.6.2 Testing the GUI
+- **Visual Regression Testing**: Detects unintended visual changes
+- **Computer Vision**: Compares screenshots using computer vision algorithms
+- **Rendering Validation**: Identifies poorly rendered or inaccessible elements
 
-## 🏗️ Estructura del Proyecto
+## 🏗️ Project Structure
 
 ```
 ui-testing-ai/
-├── README.md                    # Este archivo
-├── ARCHITECTURE.md              # Arquitectura detallada
-├── requirements.txt             # Dependencias Python
-├── pytest.ini                   # Configuración de pytest
-├── tests/                       # Tests de ejemplo
+├── README.md                    # This file
+├── ARCHITECTURE.md              # Detailed architecture
+├── requirements.txt             # Python dependencies
+├── pytest.ini                   # Pytest configuration
+├── tests/                       # Example tests
 │   ├── __init__.py
 │   ├── test_visual_regression.py
 │   ├── test_gui_validation.py
 │   └── test_self_healing.py
-├── utils/                       # Utilidades AI
+├── utils/                       # AI utilities
 │   ├── __init__.py
-│   ├── visual_comparator.py    # Comparación visual con CV
-│   ├── ai_object_locator.py    # Localización inteligente
-│   └── gui_validator.py        # Validación de GUI
-├── screenshots/                 # Capturas de pantalla
-│   ├── baseline/               # Imágenes de referencia
-│   ├── current/                # Imágenes actuales
-│   └── diff/                   # Diferencias visuales
-├── config/                      # Configuraciones
+│   ├── visual_comparator.py    # Visual comparison with CV
+│   ├── ai_object_locator.py    # Intelligent locator
+│   └── gui_validator.py        # GUI validation
+├── screenshots/                 # Screenshots
+│   ├── baseline/               # Reference images
+│   ├── current/                # Current images
+│   └── diff/                   # Visual differences
+├── config/                      # Configuration
 │   └── test_config.yaml
-└── diagrams/                    # Diagramas de secuencia
+└── diagrams/                    # Sequence diagrams
     ├── visual-testing-flow.md
     ├── self-healing-flow.md
     └── gui-validation-flow.md
 ```
 
-## 🚀 Instalación
+## 🚀 Installation
 
-### Requisitos Previos
+### Prerequisites
 - Python 3.8+
 - pip
 
-### Instalar Dependencias
+### Install Dependencies
 
 ```bash
 cd ui-testing-ai
 pip install -r requirements.txt
 ```
 
-### Instalar Playwright (Opcional)
+### Install Playwright (Optional)
 
 ```bash
 playwright install
 ```
 
-## 🧪 Ejecución de Tests
+## 🧪 Test Execution
 
-### Ejecutar todos los tests
+### Run all tests
 
 ```bash
 pytest tests/ -v
 ```
 
-### Ejecutar tests específicos
+### Run specific tests
 
 ```bash
 # Visual regression testing
@@ -86,21 +86,21 @@ pytest tests/test_self_healing.py -v
 pytest tests/test_gui_validation.py -v
 ```
 
-### Generar reporte HTML
+### Generate HTML report
 
 ```bash
 pytest tests/ --html=reports/test_report.html --self-contained-html
 ```
 
-## 📊 Diagramas de Secuencia
+## 📊 Sequence Diagrams
 
-Ver los diagramas en la carpeta `diagrams/`:
+See diagrams in the `diagrams/` folder:
 
-- **Visual Testing Flow**: Proceso de comparación visual
-- **Self-Healing Flow**: Cómo funcionan los tests auto-reparables
-- **GUI Validation Flow**: Proceso de validación de elementos
+- **Visual Testing Flow**: Visual comparison process
+- **Self-Healing Flow**: How self-healing tests work
+- **GUI Validation Flow**: Element validation process
 
-## 🎯 Casos de Uso
+## 🎯 Use Cases
 
 ### 1. Visual Regression Testing
 
@@ -125,7 +125,7 @@ from selenium.webdriver.common.by import By
 
 locator = AIObjectLocator()
 
-# Define múltiples estrategias
+# Define multiple strategies
 strategies = [
     {"by": By.ID, "value": "login-button"},
     {"by": By.NAME, "value": "login"},
@@ -148,26 +148,26 @@ for issue in issues:
     print(f"{issue['severity']}: {issue['description']}")
 ```
 
-## 🔧 Configuración
+## 🔧 Configuration
 
-Edita `config/test_config.yaml` para ajustar:
+Edit `config/test_config.yaml` to adjust:
 
-- Threshold de similitud visual
-- Estrategias de localización
-- Reglas de validación
-- Timeouts y reintentos
+- Visual similarity threshold
+- Locator strategies
+- Validation rules
+- Timeouts and retries
 
-## 📚 Referencias
+## 📚 References
 
-- **ISTQB CT-AI Syllabus**: Capítulo 11.6
+- **ISTQB CT-AI Syllabus**: Chapter 11.6
 - **OpenCV Documentation**: https://docs.opencv.org/
 - **Selenium Documentation**: https://selenium-python.readthedocs.io/
 - **Playwright Documentation**: https://playwright.dev/python/
 
-## 🤝 Contribuciones
+## 🤝 Contributions
 
-Este módulo es independiente del resto del proyecto `aiinitiatives` y puede ser usado como referencia para implementar testing de UI con AI.
+This module is independent from the rest of the `aiinitiatives` project and can be used as a reference for implementing UI testing with AI.
 
-## 📄 Licencia
+## 📄 License
 
-Ver LICENSE en la raíz del proyecto principal.
+See LICENSE in the root of the main project.

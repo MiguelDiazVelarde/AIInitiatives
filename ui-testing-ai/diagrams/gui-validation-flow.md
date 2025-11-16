@@ -1,6 +1,6 @@
 # GUI Validation Flow - Sequence Diagram
 
-Este diagrama muestra el flujo de **GUI Validation** implementado según ISTQB CT-AI 11.6.2.
+This diagram shows the **GUI Validation** flow implemented according to ISTQB CT-AI 11.6.2.
 
 ## Diagrama de Secuencia
 
@@ -266,7 +266,7 @@ Impact: Hard to read, especially on mobile
 Fix: Increase font size to 12px+
 ```
 
-## Ejemplo de Reporte
+## Example Report
 
 ```text
 ======================================================================
@@ -322,7 +322,7 @@ health_score = max(0, health_score)
 # = 58/100 (Needs Improvement)
 ```
 
-## Criterios de Validación Configurables
+## Configurable Validation Criteria
 
 ```yaml
 gui_validation:
@@ -344,28 +344,28 @@ gui_validation:
       severity: "medium"
 ```
 
-## Ejemplo de Uso
+## Example Usage
 
 ```python
 from utils.gui_validator import GUIValidator
 
-# Crear validador con reglas personalizadas
+# Create validator with custom rules
 validator = GUIValidator(
     min_contrast_ratio=4.5,
     min_button_size=44,
     min_font_size=12
 )
 
-# Validar página
+# Validate page
 driver.get("https://example.com")
 issues = validator.validate_page(driver)
 
-# Obtener resumen
+# Get summary
 summary = validator.get_summary()
 print(f"Total issues: {summary['total_issues']}")
 print(f"Critical: {summary['by_severity']['critical']}")
 
-# Imprimir reporte detallado
+# Print detailed report
 validator.print_report()
 
 # Calcular health score

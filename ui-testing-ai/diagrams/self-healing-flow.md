@@ -1,6 +1,6 @@
 # Self-Healing Test Flow - Sequence Diagram
 
-Este diagrama muestra el flujo de **Self-Healing Tests** implementado según ISTQB CT-AI 11.6.1.
+This diagram shows the **Self-Healing Tests** flow implemented according to ISTQB CT-AI 11.6.1.
 
 ## Diagrama de Secuencia
 
@@ -124,15 +124,15 @@ donde:
 
 ```mermaid
 graph TD
-    A[Primera Ejecución] -->|Todas las estrategias<br/>tienen peso igual| B[Intentar en orden definido]
-    B --> C{Alguna funcionó?}
-    C -->|Sí| D[Registrar éxito<br/>Incrementar reliability_score]
-    C -->|No| E[Registrar fallo<br/>Decrementar reliability_score]
+    A[First Execution] -->|All strategies<br/>have equal weight| B[Try in defined order]
+    B --> C{Any worked?}
+    C -->|Yes| D[Record success<br/>Increase reliability_score]
+    C -->|No| E[Record failure<br/>Decrease reliability_score]
     
-    D --> F[Segunda Ejecución]
+    D --> F[Second Execution]
     E --> F
     
-    F -->|Estrategias reordenadas<br/>por reliability| G[Intentar estrategia más confiable primero]
+    F -->|Strategies reordered<br/>by reliability| G[Try most reliable strategy first]
     G --> H{Funcionó?}
     H -->|Sí| I[Reforzar confiabilidad]
     H -->|No| J[Penalizar confiabilidad<br/>Intentar siguiente]
@@ -149,9 +149,9 @@ graph TD
     style J fill:#FFB6C1
 ```
 
-## Ejemplo de Evolución
+## Evolution Example
 
-### Run 1 - Sin Historial
+### Run 1 - No History
 ```
 Strategies (equal priority):
 1. by=id, value=login-btn         [reliability: 0.50]
@@ -162,7 +162,7 @@ Strategies (equal priority):
 Result: Strategy #3 (css) worked ✅
 ```
 
-### Run 2 - Después de 1 éxito
+### Run 2 - After 1 Success
 ```
 Strategies (reordered by reliability):
 1. by=css, value=.btn-login       [reliability: 0.70] ⭐ PROMOTED
@@ -173,7 +173,7 @@ Strategies (reordered by reliability):
 Result: Strategy #1 (css) tried first, worked ✅
 ```
 
-### Run 10 - Después de múltiples ejecuciones
+### Run 10 - After Multiple Executions
 ```
 Strategies (learned optimal order):
 1. by=css, value=.btn-login       [reliability: 0.95] ⭐⭐⭐ HIGHLY RELIABLE
@@ -184,9 +184,9 @@ Strategies (learned optimal order):
 Result: Strategy #1 works immediately, fast execution ⚡
 ```
 
-## Adaptación a Cambios en el DOM
+## Adapting to DOM Changes
 
-### Escenario: El ID del botón cambió
+### Scenario: Button ID Changed
 
 ```mermaid
 sequenceDiagram
@@ -216,16 +216,16 @@ sequenceDiagram
     Note over Locator: CSS strategy now most reliable<br/>ID strategy demoted for future runs
 ```
 
-## Ejemplo de Código
+## Code Example
 
 ```python
 from utils.ai_object_locator import AIObjectLocator
 from selenium.webdriver.common.by import By
 
-# Crear locator con historial persistente
+# Create locator with persistent history
 locator = AIObjectLocator(history_file="config/locator_history.json")
 
-# Definir múltiples estrategias
+# Define multiple strategies
 strategies = [
     {"by": "id", "value": "login-button"},
     {"by": "name", "value": "login"},
@@ -234,7 +234,7 @@ strategies = [
     {"by": "class_name", "value": "login-btn"}
 ]
 
-# Buscar elemento con AI
+# Find element with AI
 element = locator.find_element_smart(
     driver=driver,
     element_name="login_button",
@@ -244,21 +244,21 @@ element = locator.find_element_smart(
 )
 
 if element:
-    element.click()  # Test continúa normalmente
+    element.click()  # Test continues normally
     
-# Ver estadísticas de aprendizaje
+# View learning statistics
 locator.print_stats("login_button")
 ```
 
-## Beneficios del Self-Healing
+## Self-Healing Benefits
 
-| Problema Tradicional | Solución Self-Healing |
+| Traditional Problem | Self-Healing Solution |
 |---------------------|----------------------|
-| ID cambió → Test falla | Prueba otro locator automáticamente |
-| XPath frágil → Rompe frecuentemente | Aprende a evitar XPath inestables |
-| Mantenimiento manual | Adaptación automática |
-| Tests flaky | Tests robustos |
-| Costo alto de mantenimiento | Bajo mantenimiento |
+| ID changed → Test fails | Automatically tries another locator |
+| Fragile XPath → Breaks frequently | Learns to avoid unstable XPath |
+| Manual maintenance | Automatic adaptation |
+| Flaky tests | Robust tests |
+| High maintenance cost | Low maintenance |
 
 ## Referencia ISTQB CT-AI
 

@@ -1,6 +1,6 @@
 # Visual Testing Flow - Sequence Diagram
 
-Este diagrama muestra el flujo completo del **Visual Regression Testing** implementado según ISTQB CT-AI 11.6.2.
+This diagram shows the complete **Visual Regression Testing** flow implemented according to ISTQB CT-AI 11.6.2.
 
 ## Diagrama de Secuencia
 
@@ -117,20 +117,20 @@ sequenceDiagram
 
 ### 2. **MSE (Mean Squared Error)**
 - Rango: 0 a ∞ (0 = idéntico)
-- Mide diferencias pixel por pixel
-- Peso: 20% del score total
+- Measures pixel by pixel differences
+- Weight: 20% of total score
 
 ### 3. **Histogram Correlation**
-- Rango: 0 a 1 (1 = idéntico)
-- Compara distribución de colores
-- Peso: 20% del score total
+- Range: 0 to 1 (1 = identical)
+- Compares color distribution
+- Weight: 20% of total score
 
 ### 4. **Perceptual Hash**
-- Rango: 0 a 64 bits diferentes
-- Hash visual de la imagen
-- Peso: 10% del score total
+- Range: 0 to 64 different bits
+- Visual hash of the image
+- Weight: 10% of total score
 
-## Clasificación de Severidad
+## Severity Classification
 
 ```
 ┌──────────────────────────────────────────┐
@@ -150,12 +150,12 @@ sequenceDiagram
 └──────────────────────────────────────────┘
 ```
 
-## Ejemplo de Uso
+## Example Usage
 
 ```python
 from utils.visual_comparator import VisualComparator
 
-# Crear comparador con umbral de 95%
+# Create comparator with 95% threshold
 comparator = VisualComparator(
     threshold=0.95,
     pixel_tolerance=10,
@@ -185,9 +185,9 @@ is_acceptable = (
 )
 ```
 
-La imagen se considera **aceptable** si:
-1. El score de similitud está por encima del threshold (default: 0.95)
-2. No hay diferencias de alta severidad
+The image is considered **acceptable** if:
+1. The similarity score is above the threshold (default: 0.95)
+2. There are no high severity differences
 
 ## Referencia ISTQB CT-AI
 

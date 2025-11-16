@@ -1,8 +1,8 @@
 # UI Testing with AI - Architecture
 
-## 📐 Arquitectura General
+## 📏 General Architecture
 
-Este módulo implementa los conceptos del **ISTQB CT-AI Capítulo 11.6** para testing de interfaces de usuario usando Inteligencia Artificial.
+This module implements **ISTQB CT-AI Chapter 11.6** concepts for user interface testing using Artificial Intelligence.
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
@@ -41,11 +41,11 @@ Este módulo implementa los conceptos del **ISTQB CT-AI Capítulo 11.6** para te
                     └──────────────────┘
 ```
 
-## 🏗️ Componentes Principales
+## 🏗️ Main Components
 
 ### 1. Visual Comparator (ISTQB 11.6.2)
 
-**Propósito**: Detectar cambios visuales no intencionados usando Computer Vision
+**Purpose**: Detect unintended visual changes using Computer Vision
 
 ```python
 ┌─────────────────────────────────────────────────────┐
@@ -82,31 +82,31 @@ Este módulo implementa los conceptos del **ISTQB CT-AI Capítulo 11.6** para te
          Uses: OpenCV, scikit-image, imagehash
 ```
 
-**Algoritmos Utilizados**:
+**Algorithms Used**:
 
 1. **SSIM (Structural Similarity Index)**
-   - Peso: 50%
-   - Compara estructura, luminancia, contraste
-   - Robusto a cambios menores
+   - Weight: 50%
+   - Compares structure, luminance, contrast
+   - Robust to minor changes
 
 2. **MSE (Mean Squared Error)**
-   - Peso: 20%
-   - Diferencia pixel por pixel
-   - Sensible a cambios pequeños
+   - Weight: 20%
+   - Pixel-by-pixel difference
+   - Sensitive to small changes
 
 3. **Histogram Correlation**
-   - Peso: 20%
-   - Compara distribución de colores
-   - Detecta cambios de paleta
+   - Weight: 20%
+   - Compares color distribution
+   - Detects palette changes
 
 4. **Perceptual Hash**
-   - Peso: 10%
-   - Hash visual robusto
-   - Identifica imágenes similares
+   - Weight: 10%
+   - Robust visual hash
+   - Identifies similar images
 
 ### 2. AI Object Locator (ISTQB 11.6.1)
 
-**Propósito**: Localizar elementos UI de forma robusta usando múltiples estrategias que aprenden
+**Purpose**: Locate UI elements robustly using multiple learning strategies
 
 ```python
 ┌─────────────────────────────────────────────────────┐
@@ -158,14 +158,14 @@ Este módulo implementa los conceptos del **ISTQB CT-AI Capítulo 11.6** para te
 └─────────────────────────────────────────────────────┘
 ```
 
-**Algoritmo de Aprendizaje**:
+**Learning Algorithm**:
 
 ```text
 Reliability Score = (Success Rate × 0.70) +
                    (Speed Score × 0.20) +
                    (Recency Score × 0.10)
 
-donde:
+where:
   Success Rate = successful_finds / total_attempts
   Speed Score = 1 / (1 + avg_response_time_seconds)
   Recency Score = 1 / (1 + days_since_last_use)
@@ -173,7 +173,7 @@ donde:
 
 ### 3. GUI Validator (ISTQB 11.6.2)
 
-**Propósito**: Validar calidad y accesibilidad de la UI usando heurísticas
+**Purpose**: Validate UI quality and accessibility using heuristics
 
 ```python
 ┌─────────────────────────────────────────────────────┐
@@ -218,7 +218,7 @@ donde:
 └─────────────────────────────────────────────────────┘
 ```
 
-**Reglas de Validación**:
+**Validation Rules**:
 
 | Check | Issue Type | Severity | Detection Method |
 |-------|-----------|----------|------------------|
@@ -230,7 +230,7 @@ donde:
 | Small Buttons | `small_touch_target` | MEDIUM | Size < 44×44px |
 | Tiny Text | `tiny_text` | LOW | Font size < 12px |
 
-## 🔄 Flujo de Datos
+## 🔄 Data Flow
 
 ### Visual Regression Testing
 
@@ -344,7 +344,7 @@ donde:
                               └─────────────────┘
 ```
 
-## 📊 Persistencia de Datos
+## 📊 Data Persistence
 
 ### Locator History (JSON)
 
@@ -394,7 +394,7 @@ screenshots/
     └── dashboard_diff.png
 ```
 
-## 🧪 Integración con Pytest
+## 🧪 Pytest Integration
 
 ```python
 # pytest.ini configuration
@@ -412,9 +412,9 @@ $ pytest -m gui_validation      # Only validation tests
 $ pytest -m "not slow"          # Skip slow tests
 ```
 
-## 🔧 Configuración
+## 🔧 Configuration
 
-Toda la configuración está centralizada en `config/test_config.yaml`:
+All configuration is centralized in `config/test_config.yaml`:
 
 ```yaml
 visual_testing:
@@ -433,7 +433,7 @@ gui_validation:
   min_font_size: 12
 ```
 
-## 📈 Métricas y Reportes
+## 📈 Metrics and Reports
 
 ### Visual Testing Metrics
 
@@ -457,18 +457,18 @@ gui_validation:
 - **Severity Distribution**: Critical/High/Medium/Low
 - **Pass/Fail**: Based on severity thresholds
 
-## 🔗 Referencias
+## 🔗 References
 
 - **ISTQB CT-AI Syllabus**: Chapter 11.6
 - **OpenCV Documentation**: <https://docs.opencv.org/>
 - **Selenium WebDriver**: <https://selenium-python.readthedocs.io/>
 - **WCAG Guidelines**: <https://www.w3.org/WAI/WCAG21/quickref/>
 
-## 💡 Extensibilidad
+## 💡 Extensibility
 
-El sistema está diseñado para ser extensible:
+The system is designed to be extensible:
 
-1. **Nuevos Tipos de Validación**: Agregar métodos a `GUIValidator`
-2. **Nuevas Métricas Visuales**: Agregar cálculos a `VisualComparator`
-3. **Estrategias Personalizadas**: Definir nuevos locators en `AIObjectLocator`
-4. **Integración con AI Models**: Conectar modelos ML para clasificación avanzada
+1. **New Validation Types**: Add methods to `GUIValidator`
+2. **New Visual Metrics**: Add calculations to `VisualComparator`
+3. **Custom Strategies**: Define new locators in `AIObjectLocator`
+4. **AI Model Integration**: Connect ML models for advanced classification

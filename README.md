@@ -59,6 +59,7 @@ The project has been recently **cleaned and optimized** to maintain only essenti
 - 🆕 **Machine Learning** - Predictive test failure analysis
 - 🆕 **Smart Prioritization** - Code-change aware test selection
 - 🆕 **Performance Analytics** - Test execution insights and reporting
+- 🆕 **UI Testing with AI** - ISTQB CT-AI 11.6 implementation with self-healing tests and visual regression
 
 ## 🔐 **AUTHENTICATION TESTING - 100% COMPLETE**
 
@@ -423,6 +424,33 @@ test-optimizer-reports/   # Generated Optimization Reports
 reports/                  # Test Execution Reports
 ├── cucumber_report.html  # Latest test execution report
 └── cucumber_report.json  # Test results in JSON format
+
+ui-testing-ai/            # UI Testing with AI (ISTQB CT-AI 11.6)
+├── README.md             # UI testing documentation
+├── ARCHITECTURE.md       # Detailed architecture
+├── QUICK_START.md        # Getting started guide
+├── requirements.txt      # Python dependencies
+├── pytest.ini            # Pytest configuration
+├── tests/                # Test examples
+│   ├── test_visual_regression.py   # Visual regression tests
+│   ├── test_self_healing.py        # Self-healing locator tests
+│   └── test_gui_validation.py      # GUI validation tests
+├── utils/                # AI testing utilities
+│   ├── visual_comparator.py        # Computer vision comparison
+│   ├── ai_object_locator.py        # Self-healing element locator
+│   └── gui_validator.py            # GUI quality validation
+├── screenshots/          # Screenshot storage
+│   ├── baseline/         # Reference images
+│   ├── current/          # Test images
+│   └── diff/             # Difference visualizations
+├── config/               # Configuration files
+│   ├── test_config.yaml  # Test settings
+│   └── locator_history.json  # Locator learning data
+├── diagrams/             # Sequence diagrams
+│   ├── visual-testing-flow.md
+│   ├── self-healing-flow.md
+│   └── gui-validation-flow.md
+└── example_*.py          # Runnable examples
 ```
 
 ## 🚀 Available Scripts
@@ -605,6 +633,110 @@ npm run test:products    # Product management tests
 npm run test:navigation  # UI navigation tests
 ```
 
+## 🎨 UI Testing with AI (ISTQB CT-AI 11.6)
+
+### 📐 ISTQB CT-AI Implementation
+
+Complete implementation of **Chapter 11.6: "Using AI for Testing User Interfaces"** with production-ready examples.
+
+#### 11.6.1 Testing Through the GUI
+
+**Self-Healing Tests** - Tests that adapt automatically to UI changes:
+
+- **AI Object Locator** - Intelligent element identification with multiple strategies
+- **Reliability Learning** - Learns which locators are most stable over time
+- **Automatic Fallback** - Tries alternative strategies when primary fails
+- **JSON Persistence** - Stores historical success/failure data
+
+**Features:**
+
+- Multiple locator strategies (ID, CSS, XPath, tag name, text, partial text)
+- Reliability scoring based on success rate, speed, and recency
+- Automatic strategy sorting by reliability
+- Detailed statistics and reporting
+
+#### 11.6.2 Testing the GUI
+
+**Visual Regression Testing** - Detects unintended visual changes:
+
+- **Computer Vision Algorithms** - SSIM, MSE, histogram correlation, perceptual hashing
+- **Difference Detection** - Identifies and classifies changed regions
+- **Severity Classification** - Categorizes changes as high/medium/low
+- **Visual Diff Reports** - Side-by-side comparison with highlighted differences
+
+**GUI Quality Validation** - Automated UI quality checks:
+
+- Broken image detection
+- Invisible element detection
+- Overlapping element detection
+- Accessibility validation (alt text, labels, ARIA)
+- Touch target size validation (44×44px minimum)
+- Text readability checks (font size, contrast)
+- Form label validation
+
+### 🚀 Quick Start (UI Testing AI)
+
+```bash
+# Navigate to UI testing module
+cd ui-testing-ai
+
+# Install Python dependencies
+pip install -r requirements.txt
+
+# Run example tests
+python example_visual_regression.py
+python example_self_healing.py
+python example_gui_validation.py
+
+# Run full test suite with pytest
+pytest tests/ -v
+
+# Run specific test type
+pytest -m visual              # Visual regression only
+pytest -m self_healing        # Self-healing tests only
+pytest -m gui_validation      # GUI validation only
+```
+
+### 📊 UI Testing Features
+
+| Feature | Technology | ISTQB Section |
+|---------|-----------|---------------|
+| **Self-Healing Tests** | Selenium + ML | 11.6.1 |
+| **Visual Regression** | OpenCV + SSIM | 11.6.2 |
+| **GUI Validation** | Heuristics + CV | 11.6.2 |
+| **Element Locator** | Multi-strategy AI | 11.6.1 |
+| **Diff Visualization** | PIL + matplotlib | 11.6.2 |
+
+### 🔧 Configuration
+
+UI testing is configured via `ui-testing-ai/config/test_config.yaml`:
+
+```yaml
+visual_testing:
+  similarity_threshold: 0.95
+  pixel_tolerance: 10
+  ignore_antialiasing: true
+
+self_healing:
+  max_strategies: 5
+  timeout: 10
+  learning_enabled: true
+
+gui_validation:
+  min_contrast_ratio: 4.5
+  min_button_size: 44
+  min_font_size: 12
+```
+
+### 📚 Documentation
+
+Complete documentation available in `ui-testing-ai/`:
+
+- **README.md** - Overview and usage
+- **ARCHITECTURE.md** - Detailed architecture with diagrams
+- **QUICK_START.md** - Step-by-step tutorial
+- **diagrams/** - Sequence diagrams for all flows
+
 ## 🌟 Future Improvements
 
 - [ ] Persistent database (MongoDB/PostgreSQL)
@@ -620,6 +752,9 @@ npm run test:navigation  # UI navigation tests
 - [ ] Visual test analytics dashboard
 - [ ] Distributed test execution across multiple environments
 - [ ] A/B testing for optimization strategies
+- [ ] Integration of UI Testing AI with main CI/CD pipeline
+- [ ] Cross-browser visual regression testing
+- [ ] AI-powered test generation from screenshots
 
 ## 📝 API Endpoints
 
@@ -702,11 +837,13 @@ curl -X POST http://localhost:3001/api/optimize \
 - 📋 **Clean Documentation** - Kept only relevant and up-to-date project documentation
 
 ### 🌟 **Innovation Highlights**
+
 - 🧠 **First-class AI Integration** - Machine learning directly in CI/CD
 - 📊 **Real-time Analytics** - Live performance monitoring and reporting
 - 🎮 **Developer Experience** - Simple commands for complex optimizations
 - 🔌 **API-First Design** - Complete REST API for external integrations
 - 🔐 **Complete Auth Testing** - Production-ready authentication test suite with 100% coverage
+- 🎨 **ISTQB CT-AI Compliance** - Full implementation of Chapter 11.6 UI Testing standards
 
 ---
 
@@ -715,12 +852,13 @@ curl -X POST http://localhost:3001/api/optimize \
 This project demonstrates a **production-ready AI-powered testing platform** that successfully:
 
 1. ✅ **Reduces test execution time** by up to 75% while maintaining quality
-2. ✅ **Integrates seamlessly** with existing CI/CD workflows  
+2. ✅ **Integrates seamlessly** with existing CI/CD workflows
 3. ✅ **Provides intelligent insights** through machine learning analysis
 4. ✅ **Scales automatically** with codebase growth and complexity
 5. ✅ **Maintains clean codebase** with optimized project structure and organization
+6. ✅ **Implements ISTQB standards** with AI-powered UI testing (self-healing, visual regression, GUI validation)
 
-**The AI Test Optimizer is now live and actively optimizing testing workflows in production with a clean, maintainable codebase.**
+**The AI Test Optimizer is now live and actively optimizing testing workflows in production with a clean, maintainable codebase. The UI Testing AI module provides production-ready implementation of ISTQB CT-AI Chapter 11.6.**
 
 ---
 
