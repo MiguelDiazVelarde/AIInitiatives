@@ -10,7 +10,6 @@ Este módulo implementa los conceptos del **ISTQB CT-AI Capítulo 11.6** para te
 │                  (ISTQB CT-AI 11.6)                             │
 └─────────────────────────────────────────────────────────────────┘
                               │
-                              │
         ┌─────────────────────┼─────────────────────┐
         │                     │                     │
         ▼                     ▼                     ▼
@@ -72,10 +71,10 @@ Este módulo implementa los conceptos del **ISTQB CT-AI Capítulo 11.6** para te
 │    → float (Color distribution similarity)          │
 │                                                     │
 │  - _detect_differences(img1, img2)                  │
-│    → List[VisualDifference] (Contours)              │
+│    → List[VisualDifference] (Contours)             │
 │                                                     │
 │  - _classify_differences(diffs, shape)              │
-│    → List[VisualDifference] (With severity)         │
+│    → List[VisualDifference] (With severity)        │
 │                                                     │
 │  - _save_diff_visualization(baseline, current, ...) │
 │    → None (Saves annotated image)                   │
@@ -161,7 +160,7 @@ Este módulo implementa los conceptos del **ISTQB CT-AI Capítulo 11.6** para te
 
 **Algoritmo de Aprendizaje**:
 
-```
+```text
 Reliability Score = (Success Rate × 0.70) +
                    (Speed Score × 0.20) +
                    (Recency Score × 0.10)
@@ -235,7 +234,7 @@ donde:
 
 ### Visual Regression Testing
 
-```
+```text
 ┌──────────┐    screenshot    ┌────────────┐
 │ Browser  │ ─────────────→   │ File       │
 │          │                  │ System     │
@@ -268,7 +267,7 @@ donde:
 
 ### Self-Healing Test
 
-```
+```text
 ┌──────────┐     element name     ┌────────────┐
 │  Test    │  ─────────────────→  │ AI Object  │
 │          │     strategies       │ Locator    │
@@ -314,7 +313,7 @@ donde:
 
 ### GUI Validation
 
-```
+```text
 ┌──────────┐      validate       ┌────────────┐
 │ Browser  │  ─────────────────→ │ GUI        │
 │ Page     │                     │ Validator  │
@@ -377,7 +376,7 @@ donde:
 
 ### Screenshot Organization
 
-```
+```text
 screenshots/
 ├── baseline/           # Reference images (golden master)
 │   ├── homepage.png
@@ -461,9 +460,9 @@ gui_validation:
 ## 🔗 Referencias
 
 - **ISTQB CT-AI Syllabus**: Chapter 11.6
-- **OpenCV Documentation**: https://docs.opencv.org/
-- **Selenium WebDriver**: https://selenium-python.readthedocs.io/
-- **WCAG Guidelines**: https://www.w3.org/WAI/WCAG21/quickref/
+- **OpenCV Documentation**: <https://docs.opencv.org/>
+- **Selenium WebDriver**: <https://selenium-python.readthedocs.io/>
+- **WCAG Guidelines**: <https://www.w3.org/WAI/WCAG21/quickref/>
 
 ## 💡 Extensibilidad
 
