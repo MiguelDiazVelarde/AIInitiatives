@@ -2,7 +2,7 @@
 
 This diagram shows the complete **Visual Regression Testing** flow implemented according to ISTQB CT-AI 11.6.2.
 
-## Diagrama de Secuencia
+## Sequence Diagram
 
 ```mermaid
 sequenceDiagram

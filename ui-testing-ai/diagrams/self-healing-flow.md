@@ -2,7 +2,7 @@
 
 This diagram shows the **Self-Healing Tests** flow implemented according to ISTQB CT-AI 11.6.1.
 
-## Diagrama de Secuencia
+## Sequence Diagram
 
 ```mermaid
 sequenceDiagram

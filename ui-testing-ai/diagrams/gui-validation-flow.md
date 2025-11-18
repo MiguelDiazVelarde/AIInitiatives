@@ -2,7 +2,7 @@
 
 This diagram shows the **GUI Validation** flow implemented according to ISTQB CT-AI 11.6.2.
 
-## Diagrama de Secuencia
+## Sequence Diagram
 
 ```mermaid
 sequenceDiagram
