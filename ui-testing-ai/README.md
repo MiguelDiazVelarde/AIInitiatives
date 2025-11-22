@@ -94,10 +94,13 @@ pytest tests/ --html=reports/test_report.html --self-contained-html
 
 ## 📊 Sequence Diagrams
 
-See diagrams in the `diagrams/` folder:
+Interactive Mermaid diagrams in the `diagrams/` folder:
 
-- **Visual Testing Flow**: Visual comparison process
-- **Self-Healing Flow**: How self-healing tests work
+- **[gui-validation-flow.md](diagrams/gui-validation-flow.md)** - GUI validation according to ISTQB CT-AI 11.6.2
+- **[visual-testing-flow.md](diagrams/visual-testing-flow.md)** - Visual comparison process with computer vision
+- **[self-healing-flow.md](diagrams/self-healing-flow.md)** - Self-healing test locator strategies
+
+All diagrams render automatically on GitHub and VS Code with Mermaid support.
 - **GUI Validation Flow**: Element validation process
 
 ## 🎯 Use Cases

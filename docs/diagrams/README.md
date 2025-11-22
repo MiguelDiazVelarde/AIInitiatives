@@ -1,6 +1,6 @@
-# PR Validation Workflow Diagrams
+# Workflow Diagrams
 
-This directory contains sequence diagrams for the Pull Request validation workflow.
+This directory contains sequence diagrams for CI/CD workflows.
 
 ## 📊 Available Files
 
@@ -8,7 +8,7 @@ This directory contains sequence diagrams for the Pull Request validation workfl
 
 - ✅ **Recommended**: Renders automatically on GitHub
 - Includes 4 different diagrams:
-  - Complete sequence
+  - Complete PR validation sequence
   - Line 368 flowchart
   - State diagram
   - AI Optimizer graph
@@ -16,11 +16,16 @@ This directory contains sequence diagrams for the Pull Request validation workfl
 
 ### 2. **pr-validation.puml** (PlantUML)
 
-- For technical documentation
+- For technical documentation reference
 - More detailed than Mermaid
 - **View online**: [Click to render diagram](http://www.plantuml.com/plantuml/proxy?src=https://raw.githubusercontent.com/MiguelDiazVelarde/AIInitiatives/main/docs/diagrams/pr-validation.puml)
 - **View locally**: Install PlantUML extension in VS Code
 - **Alternative**: Copy content and paste at <https://www.plantuml.com/plantuml/uml/>
+
+## 🤖 Test Optimizer Diagrams
+
+Detailed test optimizer flow diagrams are located in:
+- **`src/test-optimizer/diagrams/test-optimizer-flow.md`** - Complete AI-driven test optimization sequence
 
 ### 3. **pr-validation.drawio**
 
