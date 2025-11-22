@@ -7,18 +7,20 @@ Practical implementation of **ISTQB CT-AI Chapter 11.6** concepts: "Using AI for
 This module implements UI testing techniques using AI, including:
 
 ### 11.6.1 Testing Through the GUI
+
 - **Self-Healing Tests**: Tests that automatically adapt to UI changes
 - **AI Object Locator**: Intelligent element identification using multiple strategies
 - **Stability History**: Learns which locators are most reliable
 
 ### 11.6.2 Testing the GUI
+
 - **Visual Regression Testing**: Detects unintended visual changes
 - **Computer Vision**: Compares screenshots using computer vision algorithms
 - **Rendering Validation**: Identifies poorly rendered or inaccessible elements
 
 ## 🏗️ Project Structure
 
-```
+```text
 ui-testing-ai/
 ├── README.md                    # This file
 ├── ARCHITECTURE.md              # Detailed architecture
@@ -49,6 +51,7 @@ ui-testing-ai/
 ## 🚀 Installation
 
 ### Prerequisites
+
 - Python 3.8+
 - pip
 
@@ -101,7 +104,6 @@ Interactive Mermaid diagrams in the `diagrams/` folder:
 - **[self-healing-flow.md](diagrams/self-healing-flow.md)** - Self-healing test locator strategies
 
 All diagrams render automatically on GitHub and VS Code with Mermaid support.
-- **GUI Validation Flow**: Element validation process
 
 ## 🎯 Use Cases
 
@@ -163,9 +165,9 @@ Edit `config/test_config.yaml` to adjust:
 ## 📚 References
 
 - **ISTQB CT-AI Syllabus**: Chapter 11.6
-- **OpenCV Documentation**: https://docs.opencv.org/
-- **Selenium Documentation**: https://selenium-python.readthedocs.io/
-- **Playwright Documentation**: https://playwright.dev/python/
+- **OpenCV Documentation**: <https://docs.opencv.org/>
+- **Selenium Documentation**: <https://selenium-python.readthedocs.io/>
+- **Playwright Documentation**: <https://playwright.dev/python/>
 
 ## 🤝 Contributions
 

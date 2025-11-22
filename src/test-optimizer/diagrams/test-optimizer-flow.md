@@ -154,20 +154,26 @@ sequenceDiagram
 ## Key Components
 
 ### 1. **RegressionTestOptimizer**
+
 Main orchestrator that coordinates all optimization phases.
 
 ### 2. **CodeAnalyzer**
+
 Analyzes git diffs and code changes to identify affected areas.
 
 ### 3. **MLPredictor**
+
 Uses machine learning to predict test failure probability based on:
+
 - Historical failure patterns
 - Code change impact
 - Test execution characteristics
 - Flakiness metrics
 
 ### 4. **PrioritizationStrategy**
+
 Calculates test priorities using multi-factor scoring:
+
 - **Risk Score (25%)**: Likelihood of failure
 - **Historical Failure Rate (20%)**: Past failure frequency
 - **Code Change Relevance (20%)**: Impact of recent changes
@@ -176,39 +182,47 @@ Calculates test priorities using multi-factor scoring:
 - **Flaky Score (-10%)**: Penalty for unreliable tests
 
 ### 5. **ExecutionOptimizer**
+
 Creates optimized execution plans with:
+
 - Test selection based on strategy
 - Parallel execution grouping
 - Resource optimization
 - Risk assessment
 
 ### 6. **DataStore**
+
 Manages historical test execution data for ML training and analysis.
 
 ### 7. **ReportGenerator**
+
 Generates detailed optimization reports in HTML and JSON formats.
 
 ## Execution Strategies
 
 ### Quick Strategy
+
 - **Max Duration**: 5 minutes
 - **Max Tests**: 20
 - **Focus**: High-priority tests, skip flaky
 - **Use Case**: Fast feedback during development
 
 ### Balanced Strategy
+
 - **Max Duration**: 30 minutes
 - **Max Tests**: 50
 - **Focus**: Time vs risk optimization
 - **Use Case**: Regular CI/CD pipelines
 
 ### Smoke Strategy
+
 - **Max Duration**: 10 minutes
 - **Max Tests**: 15
 - **Focus**: Critical path only
 - **Use Case**: Quick sanity checks
 
 ### Comprehensive Strategy
+
 - **Max Duration**: 60 minutes
 - **Max Tests**: 100
 - **Focus**: Maximum coverage
@@ -217,6 +231,7 @@ Generates detailed optimization reports in HTML and JSON formats.
 ## ML Prediction Features
 
 The ML predictor extracts features including:
+
 - **Historical Metrics**: Past failure rate, execution time trends
 - **Code Change Impact**: Files modified, lines changed, complexity
 - **Test Characteristics**: Duration, dependencies, flakiness
@@ -225,6 +240,7 @@ The ML predictor extracts features including:
 ## Optimization Metrics
 
 The system tracks:
+
 - **Time Saved**: Estimated time reduction vs full suite
 - **Test Reduction**: Percentage of tests skipped
 - **Risk Coverage**: Percentage of high-risk areas tested

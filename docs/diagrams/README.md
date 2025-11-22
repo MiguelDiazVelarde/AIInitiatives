@@ -25,6 +25,7 @@ This directory contains sequence diagrams for CI/CD workflows.
 ## 🤖 Test Optimizer Diagrams
 
 Detailed test optimizer flow diagrams are located in:
+
 - **`src/test-optimizer/diagrams/test-optimizer-flow.md`** - Complete AI-driven test optimization sequence
 
 ### 3. **pr-validation.drawio**
