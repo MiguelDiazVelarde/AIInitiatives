@@ -105,22 +105,22 @@ sequenceDiagram
     Note over History: Strategy Statistics Example:<br/>{<br/>  "login_button": [<br/>    {<br/>      "by": "id", "value": "btn-login",<br/>      "success": 98, "failure": 2,<br/>      "success_rate": 0.98,<br/>      "reliability": 0.96<br/>    },<br/>    {<br/>      "by": "css", "value": ".btn-login",<br/>      "success": 5, "failure": 10,<br/>      "success_rate": 0.33,<br/>      "reliability": 0.31<br/>    }<br/>  ]<br/>}
 ```
 
-## Cálculo del Reliability Score
+## Reliability Score Calculation
 
 ```python
 reliability_score = (
-    success_rate * 0.70 +     # 70% basado en tasa de éxito
-    time_score * 0.20 +       # 20% basado en velocidad
-    recency_score * 0.10      # 10% basado en uso reciente
+    success_rate * 0.70 +     # 70% based on success rate
+    time_score * 0.20 +       # 20% based on speed
+    recency_score * 0.10      # 10% based on recent usage
 )
 
-donde:
+where:
     success_rate = success_count / (success_count + failure_count)
     time_score = 1.0 / (1.0 + avg_response_time)
     recency_score = 1.0 / (1.0 + days_since_last_use)
 ```
 
-## Flujo de Aprendizaje
+## Learning Flow
 
 ```mermaid
 graph TD
@@ -133,14 +133,14 @@ graph TD
     E --> F
     
     F -->|Strategies reordered<br/>by reliability| G[Try most reliable strategy first]
-    G --> H{Funcionó?}
-    H -->|Sí| I[Reforzar confiabilidad]
-    H -->|No| J[Penalizar confiabilidad<br/>Intentar siguiente]
+    G --> H{Did it work?}
+    H -->|Yes| I[Reinforce reliability]
+    H -->|No| J[Penalize reliability<br/>Try next]
     
-    I --> K[Ejecuciones Futuras]
+    I --> K[Future Executions]
     J --> K
     
-    K -->|Sistema aprende continuamente| L[Estrategia óptima siempre primero]
+    K -->|System learns continuously| L[Optimal strategy always first]
     
     style D fill:#90EE90
     style I fill:#90EE90
@@ -260,7 +260,7 @@ locator.print_stats("login_button")
 | Flaky tests | Robust tests |
 | High maintenance cost | Low maintenance |
 
-## Referencia ISTQB CT-AI
+## ISTQB CT-AI Reference
 
 > **11.6.1 Using AI to Test Through the GUI**
 >

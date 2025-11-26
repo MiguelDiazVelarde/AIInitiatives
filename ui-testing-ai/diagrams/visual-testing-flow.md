@@ -108,15 +108,15 @@ sequenceDiagram
     end
 ```
 
-## Métricas Utilizadas
+## Metrics Used
 
 ### 1. **SSIM (Structural Similarity Index)**
-- Rango: 0 a 1 (1 = idéntico)
-- Considera: luminancia, contraste, estructura
-- Peso: 50% del score total
+- Range: 0 to 1 (1 = identical)
+- Considers: luminance, contrast, structure
+- Weight: 50% of total score
 
 ### 2. **MSE (Mean Squared Error)**
-- Rango: 0 a ∞ (0 = idéntico)
+- Range: 0 to ∞ (0 = identical)
 - Measures pixel by pixel differences
 - Weight: 20% of total score
 
@@ -162,21 +162,21 @@ comparator = VisualComparator(
     ignore_antialiasing=True
 )
 
-# Comparar screenshots
+# Compare screenshots
 result = comparator.compare_screenshots(
     baseline_path="screenshots/baseline/page.png",
     current_path="screenshots/current/page.png",
     diff_output_path="screenshots/diff/page_diff.png"
 )
 
-# Analizar resultados
+# Analyze results
 print(f"Similarity: {result['similarity_score']:.2%}")
 print(f"Acceptable: {result['is_acceptable']}")
 print(f"High severity issues: {result['severity_breakdown']['high']}")
 print(f"Recommendation: {result['recommendation']}")
 ```
 
-## Decisión de Aceptabilidad
+## Acceptability Decision
 
 ```python
 is_acceptable = (
@@ -189,7 +189,7 @@ The image is considered **acceptable** if:
 1. The similarity score is above the threshold (default: 0.95)
 2. There are no high severity differences
 
-## Referencia ISTQB CT-AI
+## ISTQB CT-AI Reference
 
 > **11.6.2 Using AI to Test the GUI**
 > 
