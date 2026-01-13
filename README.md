@@ -788,27 +788,63 @@ Check the status of workflows in the [Actions tab](../../actions) of your reposi
 - ✅ Daily analytics and optimization tracking
 - ✅ Debug workflows for troubleshooting
 
-### Local Testing Before Push
+### 🧪 Local Testing Before Push
 
 Run these commands locally to ensure your changes will pass CI:
 
-```bash
-# TypeScript compilation (essential - validates code builds)
-npm run build
+#### **Essential Pre-Commit Checks**
 
-# Security audit (checks for vulnerabilities)
-npm audit --audit-level high
+```bash
+# Full pre-commit validation (recommended)
+npm run pre-commit       # Build + smoke tests
+
+# Or run individually:
+npm run build            # TypeScript compilation
+npm run test:smoke       # Quick smoke tests
+npm audit --audit-level high  # Security check
 ```
 
-**Optional full testing** (requires separate server):
+#### **AI Test Optimizer (Smart Testing)**
+
+```bash
+# Let AI recommend which tests to run based on your changes
+npm run optimizer:recommendations HEAD~1
+
+# Run AI-optimized smoke tests
+npm run optimizer:smoke
+
+# Get optimization statistics
+npm run optimizer:stats
+```
+
+#### **Comprehensive Testing** (Optional)
+
+**Option 1: With separate server (recommended for full testing)**
 ```bash
 # Terminal 1: Start server
 npm start
 
 # Terminal 2: Run tests  
-npm run test:auth        # Authentication tests
+npm run test:auth        # Authentication tests (23 scenarios)
 npm run test:products    # Product management tests
 npm run test:navigation  # UI navigation tests
+npm run test:full        # All tests with HTML report
+```
+
+**Option 2: Complete CI simulation**
+```bash
+# Run full CI pipeline locally
+npm run ci:full          # Build + test + security
+
+# Quick CI check
+npm run ci:quick         # Build + smoke tests only
+```
+
+#### **Pre-Push Validation**
+
+```bash
+# Complete validation before pushing (recommended)
+npm run pre-push         # Full CI checks
 ```
 
 ## 🎨 UI Testing with AI (ISTQB CT-AI 11.6)
@@ -917,22 +953,60 @@ Complete documentation available in `ui-testing-ai/`:
 
 ## 🌟 Future Improvements
 
-- [ ] Persistent database (MongoDB/PostgreSQL)
-- [ ] JWT for authentication
-- [ ] Complete REST API
-- [ ] Image upload
-- [ ] Search and filters
-- [ ] User roles
-- [ ] Docker containerization
-- [ ] Advanced ML models (deep learning, neural networks)
-- [ ] Real-time test failure prediction
-- [ ] Integration with more testing frameworks (Jest, Mocha, Cypress)
-- [ ] Visual test analytics dashboard
-- [ ] Distributed test execution across multiple environments
+### ✅ **Completed Features**
+- [x] Complete REST API for products and authentication
+- [x] AI-powered test optimization with ML predictor
+- [x] Real-time test failure prediction with logistic regression
+- [x] Integration with CI/CD (10 GitHub Actions workflows)
+- [x] Comprehensive test suite with 100% authentication coverage
+- [x] UI Testing AI with ISTQB CT-AI 11.6 implementation
+- [x] Visual regression testing with OpenCV
+- [x] Self-healing tests with adaptive locators
+- [x] Test analytics dashboard and reporting
+- [x] Multi-strategy optimization (smoke, quick, balanced, comprehensive)
+
+### 🚀 **Planned Enhancements**
+
+#### **Infrastructure & Deployment**
+- [ ] Docker containerization with multi-stage builds
+- [ ] Kubernetes deployment configurations
+- [ ] Persistent database (MongoDB/PostgreSQL) migration
+- [ ] Redis caching layer for performance
+- [ ] CDN integration for static assets
+
+#### **Authentication & Security**
+- [ ] JWT token-based authentication
+- [ ] OAuth2 integration (Google, GitHub)
+- [ ] Two-factor authentication (2FA)
+- [ ] User roles and permissions system
+- [ ] API rate limiting and throttling
+
+#### **Features**
+- [ ] Image upload with AWS S3 or Azure Blob Storage
+- [ ] Advanced search with Elasticsearch
+- [ ] Real-time notifications with WebSockets
+- [ ] Product categories and tags system
+- [ ] Shopping cart and checkout flow
+- [ ] User profile management
+
+#### **AI & Testing**
+- [ ] Advanced ML models (neural networks, deep learning)
+- [ ] Integration with Jest, Mocha, Cypress frameworks
+- [ ] Distributed test execution across cloud environments
 - [ ] A/B testing for optimization strategies
 - [ ] Integration of UI Testing AI with main CI/CD pipeline
-- [ ] Cross-browser visual regression testing
+- [ ] Cross-browser visual regression (Firefox, Safari, Edge)
 - [ ] AI-powered test generation from screenshots
+- [ ] Automated flaky test detection and healing
+- [ ] Predictive analytics for release quality
+
+#### **Developer Experience**
+- [ ] GraphQL API layer
+- [ ] OpenAPI/Swagger documentation
+- [ ] Developer portal with interactive docs
+- [ ] VS Code extension for test optimizer
+- [ ] CLI tool for local optimization
+- [ ] Real-time collaboration features
 
 ## 📝 API Endpoints
 
@@ -1147,13 +1221,74 @@ This ML-powered approach enables the AI Test Optimizer to be truly **intelligent
 
 ---
 
-## �🤝 Contributing
+## 🤝 Contributing
 
-1. Fork the project
-2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
+We welcome contributions from the community! This project follows a structured CI/CD workflow to ensure code quality.
+
+### **Quick Start for Contributors**
+
+1. **Fork and Clone**
+   ```bash
+   git clone https://github.com/YOUR_USERNAME/AIInitiatives.git
+   cd AIInitiatives
+   npm install
+   ```
+
+2. **Create Feature Branch**
+   ```bash
+   git checkout -b feature/AmazingFeature
+   ```
+
+3. **Develop and Test**
+   ```bash
+   npm run pre-commit    # Build + smoke tests
+   npm run test:full     # Optional: Full test suite
+   ```
+
+4. **Commit Changes**
+   ```bash
+   git commit -m 'feat: Add some AmazingFeature'
+   ```
+   
+   **Commit Message Convention:**
+   - `feat:` New feature
+   - `fix:` Bug fix
+   - `docs:` Documentation changes
+   - `test:` Test additions or modifications
+   - `refactor:` Code refactoring
+   - `ci:` CI/CD changes
+
+5. **Push and Create PR**
+   ```bash
+   git push origin feature/AmazingFeature
+   ```
+   Then open a Pull Request on GitHub.
+
+### **PR Requirements**
+
+✅ **Your PR must include:**
+- Descriptive title (minimum 10 characters)
+- Detailed description (minimum 20 characters)
+- All tests passing
+- No TypeScript compilation errors
+- No security vulnerabilities
+
+✅ **Automatic Validation:**
+- PR Validation workflow runs automatically
+- AI Test Optimizer suggests relevant tests
+- Security scans for sensitive data
+- Code quality checks
+
+### **Development Guidelines**
+
+For detailed contributing guidelines, see [CONTRIBUTING.md](CONTRIBUTING.md)
+
+**Key Points:**
+- Write tests for new features
+- Follow TypeScript best practices
+- Update documentation as needed
+- Maintain backward compatibility
+- Keep commits focused and atomic
 
 ## 📄 License
 
@@ -1161,10 +1296,45 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 👨‍💻 Author
 
-Miguel Diaz Velarde
+**Miguel Diaz Velarde**
 
 - GitHub: [@MiguelDiazVelarde](https://github.com/MiguelDiazVelarde)
+- Project: [AIInitiatives](https://github.com/MiguelDiazVelarde/AIInitiatives)
+
+## 🙏 Acknowledgments
+
+- **ISTQB CT-AI Syllabus** - UI Testing AI implementation guidance
+- **GitHub Actions** - CI/CD automation platform
+- **TypeScript Community** - Language and tooling support
+- **Open Source Contributors** - Libraries and frameworks used
+
+## 📊 Project Statistics
+
+![GitHub stars](https://img.shields.io/github/stars/MiguelDiazVelarde/AIInitiatives?style=social)
+![GitHub forks](https://img.shields.io/github/forks/MiguelDiazVelarde/AIInitiatives?style=social)
+![GitHub issues](https://img.shields.io/github/issues/MiguelDiazVelarde/AIInitiatives)
+![GitHub pull requests](https://img.shields.io/github/issues-pr/MiguelDiazVelarde/AIInitiatives)
+![Last commit](https://img.shields.io/github/last-commit/MiguelDiazVelarde/AIInitiatives)
+![Repo size](https://img.shields.io/github/repo-size/MiguelDiazVelarde/AIInitiatives)
+
+## 🔗 Related Documentation
+
+- [TESTING.md](TESTING.md) - Comprehensive testing documentation
+- [CONTRIBUTING.md](CONTRIBUTING.md) - Contribution guidelines
+- [TEST-OPTIMIZER-DEBUG-GUIDE.md](TEST-OPTIMIZER-DEBUG-GUIDE.md) - AI optimizer debugging
+- [SERVER-DEBUG-GUIDE.md](SERVER-DEBUG-GUIDE.md) - Server debugging guide
+- [CLIENT-DEBUG-GUIDE.md](CLIENT-DEBUG-GUIDE.md) - Client debugging guide
+- [SYSTEM-REQUIREMENTS.md](SYSTEM-REQUIREMENTS.md) - System requirements
+- [UI Testing AI Documentation](ui-testing-ai/README.md) - ISTQB CT-AI implementation
 
 ---
 
-⭐ If you like this project, give it a star on GitHub!
+<div align="center">
+
+### ⭐ If you like this project, give it a star on GitHub! ⭐
+
+**Built with ❤️ by [Miguel Diaz Velarde](https://github.com/MiguelDiazVelarde)**
+
+*Demonstrating AI-powered testing, intelligent optimization, and modern CI/CD practices*
+
+</div>
