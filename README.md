@@ -1,10 +1,13 @@
 # Products App - AI-Powered Testing & Smart Development Platform
 
-![CI/CD Pipeline](https://github.com/MiguelDiazVelarde/iainitiatives/workflows/CI/CD%20Pipeline/badge.svg)
-![Pull Request Validation](https://github.com/MiguelDiazVelarde/iainitiatives/workflows/Pull%20Request%20Validation/badge.svg)
-![AI Test Optimizer](https://img.shields.io/badge/AI%20Test%20Optimizer-Active-brightgreen)
-![Authentication Tests](https://img.shields.io/badge/Authentication%20Tests-100%25%20Fixed-success)
+![Simplified CI/CD Pipeline](https://github.com/MiguelDiazVelarde/AIInitiatives/workflows/Simplified%20CI/CD%20Pipeline/badge.svg)
+![Simple PR Validation](https://github.com/MiguelDiazVelarde/AIInitiatives/workflows/%F0%9F%94%8D%20Simple%20PR%20Validation/badge.svg)
+![AI Test Optimizer](https://github.com/MiguelDiazVelarde/AIInitiatives/workflows/%F0%9F%A4%96%20AI%20Test%20Optimizer%20-%20Full%20Analysis/badge.svg)
+![Simple Test Suite](https://github.com/MiguelDiazVelarde/AIInitiatives/workflows/Simple%20Test%20Suite/badge.svg)
+![Health Check](https://github.com/MiguelDiazVelarde/AIInitiatives/workflows/Simple%20Health%20Check/badge.svg)
 ![Test Coverage](https://img.shields.io/badge/Test%20Coverage-100%25-success)
+![Authentication Tests](https://img.shields.io/badge/Authentication%20Tests-100%25%20Fixed-success)
+![10 Workflows](https://img.shields.io/badge/GitHub%20Actions-10%20Workflows-blue)
 
 A modern web application built with **React**, **TypeScript**, **Express.js** and **Node.js** featuring an advanced **AI-powered Test Optimization System** that intelligently manages test execution, reduces CI/CD time, and maximizes defect detection coverage. **Now includes comprehensive authentication testing with 100% reliability.**
 
@@ -531,9 +534,9 @@ This project includes a comprehensive test suite with:
 
 See [TESTING.md](TESTING.md) for detailed testing documentation.
 
-## 🔄 CI/CD Pipeline
+## 🔄 CI/CD Pipeline & GitHub Actions Workflows
 
-This project includes a complete CI/CD pipeline using **GitHub Actions** that automatically runs tests and validates code quality on every pull request and commit. **The Test Optimizer is now fully integrated into all workflows.**
+This project includes a **complete CI/CD pipeline** using **GitHub Actions** with **10 automated workflows** that ensure code quality, run intelligent tests, and automate deployments. **The AI Test Optimizer is fully integrated** into all workflows for maximum efficiency.
 
 ### 🤖 AI-Powered Testing Integration
 
@@ -554,64 +557,236 @@ All GitHub Actions workflows now use intelligent test optimization:
 | CI Builds | 30 min | 5 min | **83% faster** |
 | Releases | 60 min | 25 min | **58% faster** |
 
-### Automated Workflows
+### 📋 Complete Workflow Catalog
 
-#### 🔍 Pull Request Validation (`pr-validation.yml`)
-Triggers on every pull request and validates:
-- ✅ PR title and description requirements
-- ✅ TypeScript compilation
-- ✅ Application startup verification
-- ✅ Smoke tests execution
-- ✅ Security scan for sensitive information
-- ✅ Automatic PR summary generation
+#### 🔥 **Production Workflows** (Main CI/CD)
 
-#### 🧪 CI/CD Pipeline (`ci.yml`)
-Comprehensive testing pipeline that runs on:
-- Pull requests to main branch
-- Pushes to main branch
-- Manual triggers
+##### 1️⃣ **Simplified CI/CD Pipeline** (`ci.yml`)
+Main integration and testing workflow for continuous delivery.
 
-**Features:**
-- **Matrix Testing**: Tests across Node.js 20.x and 22.x
-- **Build Verification**: TypeScript compilation and build process
-- **Application Testing**: Full smoke test suite with Playwright
-- **E2E Testing**: Complete end-to-end tests on PR
-- **Security Checks**: Dependency audit and license compliance
-- **Test Reports**: Automatic generation of test result comments
-- **Artifact Upload**: Test results and reports stored for 7 days
+**Triggers:**
+- Pull requests to `main`
+- Pushes to `main`
+- Manual dispatch
 
-#### 🚀 Release Automation (`release.yml`)
-Automated release process triggered by version tags:
-- ✅ Full test suite execution
-- ✅ Build artifact creation
-- ✅ GitHub release generation with notes
+**What it does:**
+- ✅ Builds application (server + client)
+- ✅ Installs Playwright browsers with optimized timeouts
+- ✅ Runs AI-optimized test selection
+- ✅ Executes authentication tests (23 scenarios)
+- ✅ Performs comprehensive smoke tests
+- ✅ Generates test reports and artifacts
+- ✅ Multi-endpoint health checks with 15-attempt verification
+
+**Timeout:** 25 minutes | **Node Version:** 20.x
+
+##### 2️⃣ **🔍 Simple PR Validation** (`pr-validation.yml`)
+Lightweight validation for every pull request with intelligent test selection.
+
+**Triggers:**
+- Pull request opened/synchronized/reopened on `main`
+
+**What it does:**
+- ✅ Basic validation (Git references, Node.js setup)
+- ✅ Install dependencies (root + client)
+- ✅ Playwright browser installation with progress monitoring
+- ✅ Build verification (server + client)
+- ✅ AI Test Optimizer analysis of changed files
+- ✅ Smart test recommendations based on code changes
+- ✅ Targeted test execution (only relevant tests)
+- ✅ Enhanced error detection for authentication scenarios
+- ✅ Flexible validation with graceful degradation
+
+**Timeout:** 30 minutes | **Node Version:** 18
+
+##### 3️⃣ **🤖 AI Test Optimizer - Full Analysis** (`ai-test-optimizer.yml`)
+Dedicated workflow for comprehensive AI-powered test optimization.
+
+**Triggers:**
+- Manual dispatch with analysis type selection
+- Daily schedule (2 AM UTC)
+- Pushes to `main` affecting `src/`, `tests/`, or `client/src/`
+
+**Analysis Types:**
+- `full` - Complete codebase analysis
+- `smart` - Targeted optimization based on changes
+- `recommendations` - Test suggestions for specific files
+- `performance` - Performance metrics and trends
+
+**What it does:**
+- ✅ Full historical analysis with Git history
+- ✅ AI-powered test selection strategies
+- ✅ ML-based failure prediction
+- ✅ Optimization report generation
+- ✅ Performance metrics tracking
+- ✅ Daily trend analysis
+
+**Timeout:** 30 minutes | **Node Version:** 18
+
+##### 4️⃣ **Simple Test Suite** (`comprehensive-tests.yml`)
+Comprehensive test execution with configurable test types.
+
+**Triggers:**
+- Pushes to `main` or `develop`
+- Pull requests to `main` or `develop`
+- Manual dispatch with test type selection (`smoke`, `auth`, `all`)
+
+**What it does:**
+- ✅ Complete build and dependency installation
+- ✅ Playwright browser setup with dependencies
+- ✅ Server startup with health verification
+- ✅ Configurable test execution (63+ scenarios)
+- ✅ Test result reporting with artifacts
+
+**Timeout:** 25 minutes | **Node Version:** 20.x
+
+##### 5️⃣ **Release** (`release.yml`)
+Automated release process with comprehensive validation.
+
+**Triggers:**
+- Version tags (`v*` like `v1.0.0`)
+- Manual dispatch with version input
+
+**What it does:**
+- ✅ Full dependency installation (root + client)
+- ✅ Complete application build
+- ✅ AI-optimized comprehensive test suite
+- ✅ Release artifact creation
+- ✅ GitHub release generation with automated notes
 - ✅ Asset packaging and upload
-- ✅ Staging deployment preparation
 
-### Setting Up CI/CD
+**Timeout:** 45 minutes | **Node Version:** 20.x
+
+#### 📊 **Analytics & Monitoring Workflows**
+
+##### 6️⃣ **Test Optimizer Analytics** (`test-optimizer-analytics.yml`)
+Post-CI analytics and performance tracking.
+
+**Triggers:**
+- After CI/CD Pipeline completes successfully
+- Daily schedule (6 AM UTC)
+- Manual dispatch
+
+**What it does:**
+- ✅ Comprehensive test optimization analytics
+- ✅ Performance trend analysis
+- ✅ Historical data aggregation
+- ✅ ML model performance metrics
+- ✅ Optimization effectiveness reporting
+
+**Timeout:** 20 minutes | **Node Version:** 20.x
+
+##### 7️⃣ **Simple Health Check** (`health-check.yml`)
+Quick application health verification.
+
+**Triggers:**
+- Manual dispatch
+- Pushes to `main`
+
+**What it does:**
+- ✅ Fast dependency installation
+- ✅ Application build verification
+- ✅ Server startup and health endpoint check
+- ✅ Quick smoke test validation
+
+**Timeout:** 5 minutes | **Node Version:** 20.x
+
+#### 🔧 **Debug & Development Workflows**
+
+##### 8️⃣ **Debug Test Workflow** (`debug-test.yml`)
+Diagnostic workflow for troubleshooting test issues.
+
+**Triggers:**
+- Manual dispatch
+- Pushes to `main`
+
+**What it does:**
+- ✅ Project structure verification
+- ✅ PowerShell script validation
+- ✅ Package.json script listing
+- ✅ Test directory inspection
+- ✅ Enhanced debug test execution
+
+**Timeout:** 8 minutes | **Node Version:** 20.x
+
+##### 9️⃣ **🔧 Debug - Ultra Simple Test** (`debug-ultra-simple.yml`)
+Minimal workflow for basic CI/CD testing.
+
+**Triggers:**
+- Manual dispatch
+- Pushes to `main`
+
+**What it does:**
+- ✅ Code checkout
+- ✅ Node.js setup
+- ✅ Dependency installation
+- ✅ Build verification
+- ✅ Success confirmation
+
+**Timeout:** 5 minutes | **Node Version:** 18
+
+##### 🔟 **Debug Workflow Issues** (`debug-comprehensive.yml`)
+Advanced debugging with multiple levels.
+
+**Triggers:**
+- Manual dispatch with debug level selection (`basic`, `detailed`, `verbose`)
+
+**What it does:**
+- ✅ Comprehensive environment checks
+- ✅ Build process validation
+- ✅ Node version verification
+- ✅ Git status inspection
+- ✅ Detailed dependency analysis
+
+**Timeout:** 15 minutes | **Node Version:** 20.x
+
+### 🎯 Workflow Usage Recommendations
+
+| Scenario | Recommended Workflow | Reason |
+|----------|---------------------|---------|
+| **Regular Development** | CI/CD Pipeline | Comprehensive validation |
+| **Pull Request Review** | PR Validation | Fast feedback, targeted tests |
+| **Daily Code Quality** | AI Test Optimizer | Proactive optimization |
+| **Pre-Release Testing** | Release | Full validation suite |
+| **Quick Health Check** | Health Check | Fast server verification |
+| **Debugging CI Issues** | Debug workflows | Diagnostic information |
+| **Performance Analysis** | Test Optimizer Analytics | Optimization insights |
+
+### 🚀 Setting Up CI/CD
 
 The workflows are automatically configured when you push to GitHub. To get the most out of the CI/CD pipeline:
 
 1. **Branch Protection**: Set up branch protection rules on `main` branch
-2. **Required Checks**: Make CI/CD pipeline required before merging
+2. **Required Checks**: Make CI/CD Pipeline and PR Validation required before merging
 3. **Auto-merge**: Enable auto-merge for PRs that pass all checks
+4. **Workflow Permissions**: Ensure workflows have proper permissions for PRs and issues
 
-### GitHub Actions Secrets
+### 🔐 GitHub Actions Secrets & Permissions
 
-No secrets are required for the basic pipeline. For advanced features, you may need:
-- `GITHUB_TOKEN` (automatically provided)
-- Deployment secrets for staging/production (if added)
+**Required Permissions:**
+- `contents: read/write` - Code checkout and releases
+- `pull-requests: write` - PR comments and summaries
+- `issues: write` - Issue creation and updates
+- `checks: write` - Check runs and status
 
-### Workflow Status
+**Secrets:**
+- `GITHUB_TOKEN` - Automatically provided by GitHub Actions
+- No additional secrets required for basic operation
+
+### 📊 Workflow Status & Monitoring
 
 Check the status of workflows in the [Actions tab](../../actions) of your repository.
 
-Current pipeline includes:
-- ✅ Automated PR validation
-- ✅ Multi-version Node.js testing
+**Current Pipeline Includes:**
+- ✅ 10 automated workflows (5 production + 2 analytics + 3 debug)
+- ✅ Intelligent test optimization with AI
+- ✅ Multi-version Node.js testing (18, 20.x)
+- ✅ Comprehensive authentication testing (23 scenarios)
 - ✅ Security and quality checks
-- ✅ Test result reporting
-- ✅ Release automation
+- ✅ Automated test reporting with artifacts
+- ✅ Release automation with GitHub Releases
+- ✅ Daily analytics and optimization tracking
+- ✅ Debug workflows for troubleshooting
 
 ### Local Testing Before Push
 
