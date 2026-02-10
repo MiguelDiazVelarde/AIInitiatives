@@ -253,44 +253,69 @@ Given('I am on the registration page', async function (this: ICustomWorld) {
   // Navigate to auth page (login and registration share the same page)
   await this.page.goto(`${this.baseURL}/auth`);
   await this.page.waitForLoadState('domcontentloaded', { timeout: 10000 });
-  await this.page.waitForTimeout(1000);
+  await this.page.waitForTimeout(1500);
+  
+  // Wait for the auth form to be fully loaded
+  await this.page.waitForSelector('input[name="username"]', { state: 'visible', timeout: 10000 });
   
   // Check if we're already on the registration form (by looking for email field)
   const emailFieldVisible = await this.page.locator('input[name="email"]').isVisible().catch(() => false);
   
+  console.log(`📋 Email field visible: ${emailFieldVisible}`);
+  
   if (!emailFieldVisible) {
+    console.log('🔄 Need to switch from login to registration form...');
+    
     // We're on the login form, click the register toggle button
     const registerSelectors = [
       'button.link-button:has-text("Register")',
       'button:has-text("Register")',
-      'a:has-text("Register")',
-      '.link-button:has-text("Register")'
+      'p:has-text("Don\'t have an account") button',
+      '.link-button',
+      'button[type="button"]'
     ];
     
     let clicked = false;
     for (const selector of registerSelectors) {
       try {
-        await this.page.click(selector, { timeout: 5000 });
-        clicked = true;
-        break;
+        console.log(`🔍 Trying selector: ${selector}`);
+        const element = await this.page.locator(selector).first();
+        await element.waitFor({ state: 'visible', timeout: 5000 });
+        const text = await element.textContent();
+        console.log(`📝 Found element with text: "${text}"`);
+        
+        if (text && text.toLowerCase().includes('register')) {
+          await element.click();
+          console.log(`✅ Clicked register button with selector: ${selector}`);
+          clicked = true;
+          break;
+        }
       } catch (err: unknown) {
         const errMsg = err instanceof Error ? err.message : String(err);
-        console.log(`Selector ${selector} not found: ${errMsg}`);
+        console.log(`❌ Selector ${selector} failed: ${errMsg}`);
         continue;
       }
     }
     
     if (!clicked) {
+      // Dump page content for debugging
+      const bodyText = await this.page.locator('body').textContent();
+      console.log('📄 Page content:', bodyText?.substring(0, 500));
       throw new Error('Could not find register toggle button');
     }
     
-    await this.page.waitForTimeout(500);
+    await this.page.waitForTimeout(1000);
+  } else {
+    console.log('✅ Already on registration form');
   }
   
   // Wait for registration form fields to be visible
+  console.log('⏳ Waiting for registration form fields...');
   await this.page.waitForSelector('input[name="username"]', { state: 'visible', timeout: 10000 });
   await this.page.waitForSelector('input[name="email"]', { state: 'visible', timeout: 10000 });
   await this.page.waitForSelector('input[name="password"]', { state: 'visible', timeout: 10000 });
+  console.log('✅ Registration form is ready');
+  console.log('✅ Registration form is ready');
 });
 
 Given('I am authenticated as {string}', async function (username: string) {
