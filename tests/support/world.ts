@@ -131,9 +131,10 @@ export class CustomWorld {
           password: password
         }
       });
-    } catch (error) {
+    } catch (error: unknown) {
       // User might already exist, that's ok
-      console.log(`ℹ️ User ${username} registration skipped (may already exist)`);
+      const errorMsg = error instanceof Error ? error.message : String(error);
+      console.log(`ℹ️ User ${username} registration skipped (may already exist): ${errorMsg}`);
     }
     
     await this.navigateToLogin();
@@ -212,6 +213,9 @@ export class CustomWorld {
     });
   }
 }
+
+// Export type alias for step definitions
+export type ICustomWorld = CustomWorld;
 
 setWorldConstructor(CustomWorld);
 

@@ -1,5 +1,210 @@
 import { Given, When, Then } from '@cucumber/cucumber';
-import { expect } from '@playwright/test';
+import { expect, Page } from '@playwright/test';
+import type { ICustomWorld } from '../support/world';
+
+// Helper functions to reduce cognitive complexity
+
+async function findErrorInSelectors(page: Page, selectors: string[], patterns: string[]): Promise<{ found: boolean; text: string }> {
+  for (const selector of selectors) {
+    const errorElements = page.locator(selector);
+    const count = await errorElements.count();
+    
+    for (let i = 0; i < count; i++) {
+      const errorElement = errorElements.nth(i);
+      if (await errorElement.isVisible()) {
+        const errorText = await errorElement.textContent();
+        if (errorText) {
+          const foundText = errorText.trim();
+          for (const pattern of patterns) {
+            if (errorText.toLowerCase().includes(pattern.toLowerCase())) {
+              console.log(`Found error message: "${foundText}" matching pattern: "${pattern}"`);
+              return { found: true, text: foundText };
+            }
+          }
+        }
+      }
+    }
+  }
+  return { found: false, text: '' };
+}
+
+async function searchTextPatterns(page: Page, patterns: string[]): Promise<boolean> {
+  for (const pattern of patterns) {
+    try {
+      const textLocator = page.locator(`text*=${pattern}`);
+      if (await textLocator.count() > 0) {
+        await expect(textLocator.first()).toBeVisible({ timeout: 2000 });
+        console.log(`Found error pattern "${pattern}" on page`);
+        return true;
+      }
+    } catch (err: unknown) {
+      const errMsg = err instanceof Error ? err.message : String(err);
+      console.log(`Pattern "${pattern}" not found: ${errMsg}`);
+      continue;
+    }
+  }
+  return false;
+}
+
+async function checkRegistrationFailureIndicators(page: Page): Promise<boolean> {
+  await page.waitForTimeout(1000);
+  const currentUrl = page.url();
+  console.log(`Current URL: ${currentUrl}`);
+  
+  if (currentUrl.includes('/auth') || currentUrl.includes('/register') || currentUrl.includes('/login')) {
+    console.log('Still on auth page - registration likely failed as expected');
+    return true;
+  }
+  
+  const registerButton = page.locator('button:has-text("Register"), input[type="submit"][value*="Register"], [data-testid="register-button"]');
+  if (await registerButton.count() > 0) {
+    console.log('Register button still present - registration likely failed as expected');
+    return true;
+  }
+  
+  if (!currentUrl.includes('/dashboard') && !currentUrl.includes('/home')) {
+    console.log('Not redirected to dashboard - registration likely failed as expected');
+    return true;
+  }
+  
+  return false;
+}
+
+function getErrorPatterns(expectedMessage: string): string[] {
+  const patterns = [expectedMessage];
+  
+  if (expectedMessage.toLowerCase().includes('user already exists')) {
+    patterns.push(
+      'Email already exists',
+      'Username already exists', 
+      'User already registered',
+      'This email is already registered',
+      'This username is already taken',
+      'Account already exists',
+      'Registration failed',
+      'User exists',
+      'already exists',
+      'already registered',
+      'already taken'
+    );
+  }
+  
+  return patterns;
+}
+
+function getErrorSelectors(): string[] {
+  return [
+    '.error',
+    '.alert-error', 
+    '.message.error',
+    '[role="alert"]',
+    '.notification.error',
+    '.form-error',
+    '.validation-error',
+    '.toast',
+    '.snackbar',
+    '[data-testid="error"]',
+    '[data-testid="error-message"]'
+  ];
+}
+
+async function tryFindErrorBySelector(page: Page, expectedMessage: string): Promise<boolean> {
+  const errorSelectors = [
+    '.error', '.error-message', '[data-testid="error"]',
+    '.alert-danger', '.validation-error', '.auth-error', '.form-error'
+  ];
+  
+  for (const selector of errorSelectors) {
+    try {
+      const errorElements = await page.locator(selector).all();
+      for (const errorElement of errorElements) {
+        if (await errorElement.isVisible({ timeout: 3000 })) {
+          const errorText = await errorElement.textContent();
+          console.log(`Found error text with selector ${selector}: "${errorText}"`);
+          if (errorText?.includes(expectedMessage)) {
+            console.log(`Found matching error message: "${errorText}"`);
+            return true;
+          }
+        }
+      }
+    } catch (err: unknown) {
+      const errMsg = err instanceof Error ? err.message : String(err);
+      console.log(`Selector ${selector} failed: ${errMsg}`);
+      continue;
+    }
+  }
+  return false;
+}
+
+async function tryFindErrorByText(page: Page, expectedMessage: string): Promise<boolean> {
+  try {
+    const textElements = await page.locator(`text="${expectedMessage}"`).all();
+    for (const element of textElements) {
+      if (await element.isVisible({ timeout: 3000 })) {
+        console.log('Found error message via text search');
+        return true;
+      }
+    }
+  } catch (err: unknown) {
+    const errMsg = err instanceof Error ? err.message : String(err);
+    console.log(`Text search failed: ${errMsg}`);
+  }
+  return false;
+}
+
+async function findErrorWithAlternatives(page: Page, expectedMessage: string): Promise<boolean> {
+  console.log(`Looking for error message containing: "${expectedMessage}"`);
+  await page.waitForTimeout(2000);
+  
+  // Try selectors first
+  if (await tryFindErrorBySelector(page, expectedMessage)) {
+    return true;
+  }
+  
+  // Try text search
+  if (await tryFindErrorByText(page, expectedMessage)) {
+    return true;
+  }
+  
+  // Try alternative messages for specific cases
+  if (expectedMessage.includes('Username already exists')) {
+    return await checkAlternativeMessages(page, [
+      'User already exists',
+      'Username is already taken',
+      'This username is not available'
+    ]);
+  }
+  
+  return false;
+}
+
+async function checkAlternativeMessages(page: Page, alternativeMessages: string[]): Promise<boolean> {
+  console.log('Searching for alternative duplicate username error messages...');
+  const pageText = await page.textContent('body');
+  
+  for (const altMessage of alternativeMessages) {
+    if (pageText?.includes(altMessage)) {
+      console.log(`Found alternative error message: "${altMessage}"`);
+      return true;
+    }
+  }
+  
+  // Final fallback - check if still on registration page
+  const currentUrl = page.url();
+  if (currentUrl.includes('/auth') || currentUrl.includes('/register')) {
+    console.log('Still on registration page - duplicate username may have been prevented');
+    const hasAnyError = await page.locator('.error, .error-message, input:invalid').first().isVisible({ timeout: 3000 }).catch(() => false);
+    if (hasAnyError) {
+      console.log('Error indicators present - duplicate username validation working');
+      return true;
+    }
+    console.log('No error message found, but registration not completed');
+    return true;
+  }
+  
+  return false;
+}
+
 
 // Background
 Given('the application is running at {string}', async function (url: string) {
@@ -45,13 +250,47 @@ Given('I am on the login page', async function () {
 });
 
 Given('I am on the registration page', async function (this: ICustomWorld) {
-  const page = this.page!;
-  await page.goto(`${this.baseURL}/register`);
+  // Navigate to auth page (login and registration share the same page)
+  await this.page.goto(`${this.baseURL}/auth`);
+  await this.page.waitForLoadState('domcontentloaded', { timeout: 10000 });
+  await this.page.waitForTimeout(1000);
   
-  // Esperar por el formulario de registro en lugar del botón
-  await page.waitForSelector('input[name="username"]', { state: 'visible', timeout: 10000 });
-  await page.waitForSelector('input[name="email"]', { state: 'visible', timeout: 10000 });
-  await page.waitForSelector('input[name="password"]', { state: 'visible', timeout: 10000 });
+  // Check if we're already on the registration form (by looking for email field)
+  const emailFieldVisible = await this.page.locator('input[name="email"]').isVisible().catch(() => false);
+  
+  if (!emailFieldVisible) {
+    // We're on the login form, click the register toggle button
+    const registerSelectors = [
+      'button.link-button:has-text("Register")',
+      'button:has-text("Register")',
+      'a:has-text("Register")',
+      '.link-button:has-text("Register")'
+    ];
+    
+    let clicked = false;
+    for (const selector of registerSelectors) {
+      try {
+        await this.page.click(selector, { timeout: 5000 });
+        clicked = true;
+        break;
+      } catch (err: unknown) {
+        const errMsg = err instanceof Error ? err.message : String(err);
+        console.log(`Selector ${selector} not found: ${errMsg}`);
+        continue;
+      }
+    }
+    
+    if (!clicked) {
+      throw new Error('Could not find register toggle button');
+    }
+    
+    await this.page.waitForTimeout(500);
+  }
+  
+  // Wait for registration form fields to be visible
+  await this.page.waitForSelector('input[name="username"]', { state: 'visible', timeout: 10000 });
+  await this.page.waitForSelector('input[name="email"]', { state: 'visible', timeout: 10000 });
+  await this.page.waitForSelector('input[name="password"]', { state: 'visible', timeout: 10000 });
 });
 
 Given('I am authenticated as {string}', async function (username: string) {
@@ -211,8 +450,9 @@ When('I logout', async function () {
   try {
     await this.page.waitForURL(/.*auth/, { timeout: 5000 });
     console.log('✅ Redirected to auth page');
-  } catch (error) {
-    console.log('⚠️ No immediate redirect detected, continuing...');
+  } catch (error: unknown) {
+    const errorMsg = error instanceof Error ? error.message : String(error);
+    console.log(`⚠️ No immediate redirect detected: ${errorMsg}`);
   }
   
   await this.page.waitForLoadState('domcontentloaded', { timeout: 10000 });
@@ -368,8 +608,9 @@ Then('I should see an error message {string}', async function (expectedMessage: 
           errorFound = true;
           break;
         }
-      } catch (e) {
-        // Continue to next pattern
+      } catch (e: unknown) {
+        const errMsg = e instanceof Error ? e.message : String(e);
+        console.log(`Pattern search failed: ${errMsg}`);
         continue;
       }
     }
@@ -483,8 +724,9 @@ When('I refresh the browser', async function () {
     await this.page.waitForLoadState('domcontentloaded', { timeout: 10000 });
     console.log('✅ Network idle state reached');
     
-  } catch (error) {
-    console.log('⚠️ Refresh timeout, but continuing - page may still be functional');
+  } catch (error: unknown) {
+    const errorMsg = error instanceof Error ? error.message : String(error);
+    console.log(`⚠️ Refresh timeout: ${errorMsg}, but continuing - page may still be functional`);
     // Don't throw error, let subsequent steps validate the state
   }
   
@@ -508,8 +750,9 @@ Then('I should remain authenticated', async function () {
         timeout: 15000 
       });
       await this.page.waitForLoadState('domcontentloaded', { timeout: 8000 });
-    } catch (error) {
-      console.log('⚠️ Navigation timeout, checking current state...');
+    } catch (error: unknown) {
+      const errorMsg = error instanceof Error ? error.message : String(error);
+      console.log(`⚠️ Navigation timeout: ${errorMsg}, checking current state...`);
     }
   }
   
@@ -795,138 +1038,44 @@ Then('any sensitive data should be cleared from the client', async function () {
 
 // Missing step definitions
 Then('I should see an error message containing {string}', async function (expectedMessage: string) {
-  console.log(`🔍 Looking for error message containing: "${expectedMessage}"`);
-  
-  // Wait a moment for the error to appear
-  await this.page.waitForTimeout(2000);
-  
-  // Try multiple selectors for error messages
-  const errorSelectors = [
-    '.error',
-    '.error-message',
-    '[data-testid="error"]',
-    '.alert-danger',
-    '.validation-error',
-    '.auth-error',
-    '.form-error'
-  ];
-  
-  let found = false;
-  
-  for (const selector of errorSelectors) {
-    try {
-      const errorElements = await this.page.locator(selector).all();
-      for (const errorElement of errorElements) {
-        if (await errorElement.isVisible({ timeout: 3000 })) {
-          const errorText = await errorElement.textContent();
-          console.log(`📝 Found error text with selector ${selector}: "${errorText}"`);
-          if (errorText?.includes(expectedMessage)) {
-            console.log(`✅ Found matching error message: "${errorText}"`);
-            found = true;
-            break;
-          }
-        }
-      }
-      if (found) break;
-    } catch {
-      continue;
-    }
-  }
-  
-  if (!found) {
-    try {
-      const textElements = await this.page.locator(`text="${expectedMessage}"`).all();
-      for (const element of textElements) {
-        if (await element.isVisible({ timeout: 3000 })) {
-          found = true;
-          console.log(`✅ Found error message via text search`);
-          break;
-        }
-      }
-    } catch {
-      // Continue
-    }
-  }
-  
-  if (!found && expectedMessage.includes('Username already exists')) {
-    const alternativeMessages = [
-      'User already exists',
-      'Username is already taken',
-      'This username is not available'
-    ];
-    
-    console.log('🔍 Searching for alternative duplicate username error messages...');
-    const pageText = await this.page.textContent('body');
-    
-    for (const altMessage of alternativeMessages) {
-      if (pageText?.includes(altMessage)) {
-        console.log(`✅ Found alternative error message: "${altMessage}"`);
-        found = true;
-        break;
-      }
-    }
-  }
-  
-  if (!found) {
-    const currentUrl = this.page.url();
-    if (currentUrl.includes('/auth') || currentUrl.includes('/register')) {
-      console.log('📍 Still on registration page - duplicate username may have been prevented');
-      const hasAnyError = await this.page.locator('.error, .error-message, input:invalid').first().isVisible({ timeout: 3000 });
-      if (hasAnyError) {
-        console.log('✅ Error indicators present - duplicate username validation working');
-        found = true;
-      } else {
-        console.log('⚠️ No error message found, but registration not completed');
-        found = true;
-      }
-    }
-  }
-  
+  const found = await findErrorWithAlternatives(this.page, expectedMessage);
   expect(found).toBe(true);
 });
 
 When('I submit the registration form with empty fields', async function (this: ICustomWorld) {
-  const page = this.page!;
+  await this.page.fill('input[name="username"]', '');
+  await this.page.fill('input[name="email"]', '');
+  await this.page.fill('input[name="password"]', '');
   
-  await page.fill('input[name="username"]', '');
-  await page.fill('input[name="email"]', '');
-  await page.fill('input[name="password"]', '');
-  
-  const registerButton = page.locator('button[type="submit"]').first();
+  const registerButton = this.page.locator('button[type="submit"]').first();
   await registerButton.click();
 });
 
 Then('I should see validation error messages', async function (this: ICustomWorld) {
-  const page = this.page!;
-  const validationErrors = await page.locator('input:invalid, .error, [aria-invalid="true"]').count();
+  const validationErrors = await this.page.locator('input:invalid, .error, [aria-invalid="true"]').count();
   expect(validationErrors).toBeGreaterThan(0);
 });
 
 Then('the form should not be submitted', async function (this: ICustomWorld) {
-  const page = this.page!;
-  await expect(page).toHaveURL(/\/register|\/auth/);
+  await expect(this.page).toHaveURL(/\/register|\/auth/);
 });
 
 When('I enter invalid email format {string}', async function (this: ICustomWorld, email: string) {
-  const page = this.page!;
-  await page.fill('input[name="email"]', email);
+  await this.page.fill('input[name="email"]', email);
 });
 
 When('I fill other required fields', async function (this: ICustomWorld) {
-  const page = this.page!;
-  await page.fill('input[name="username"]', 'testuser');
-  await page.fill('input[name="password"]', 'password123');
+  await this.page.fill('input[name="username"]', 'testuser');
+  await this.page.fill('input[name="password"]', 'password123');
 });
 
 Then('I should see an email validation error', async function (this: ICustomWorld) {
-  const page = this.page!;
-  const emailError = await page.locator('input[name="email"]:invalid').count();
+  const emailError = await this.page.locator('input[name="email"]:invalid').count();
   expect(emailError).toBeGreaterThan(0);
 });
 
 Then('registration should not proceed', async function (this: ICustomWorld) {
-  const page = this.page!;
-  await expect(page).toHaveURL(/\/register|\/auth/);
+  await expect(this.page).toHaveURL(/\/register|\/auth/);
 });
 
 When('I refresh the browser page', async function () {
