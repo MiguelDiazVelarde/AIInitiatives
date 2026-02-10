@@ -1081,7 +1081,7 @@ Then('I should see validation error messages', async function (this: ICustomWorl
   expect(validationErrors).toBeGreaterThan(0);
 });
 
-Then('the form should not be submitted', async function (this: ICustomWorld) {
+Then('the registration form should not be submitted', async function (this: ICustomWorld) {
   await expect(this.page).toHaveURL(/\/register|\/auth/);
 });
 
@@ -1103,7 +1103,7 @@ Then('registration should not proceed', async function (this: ICustomWorld) {
   await expect(this.page).toHaveURL(/\/register|\/auth/);
 });
 
-When('I refresh the browser page', async function () {
+When('I refresh the page', async function () {
   await this.page.reload({ waitUntil: 'domcontentloaded', timeout: 15000 });
   await this.page.waitForTimeout(2000);
 });

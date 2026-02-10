@@ -804,7 +804,7 @@ When('I try to visit the login page', async function () {
   await this.page.waitForTimeout(1000);
 });
 
-Then('I should be automatically redirected to the dashboard', async function () {
+Then('I should be redirected automatically to dashboard', async function () {
   await expect(this.page).toHaveURL(/.*dashboard/, { timeout: 5000 });
 });
 

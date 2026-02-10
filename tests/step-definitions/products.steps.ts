@@ -660,7 +660,7 @@ Given('I add a product with specific details', async function () {
   });
 });
 
-When('I refresh the page', async function () {
+When('I refresh the product page', async function () {
   await this.page.reload();
   await this.page.waitForLoadState('domcontentloaded', { timeout: 10000 });
 });

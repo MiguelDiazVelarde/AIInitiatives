@@ -54,5 +54,5 @@ Feature: Security Requirements
       | /api/products/123  |
       | /dashboard         |
     Then each request should be rejected
-    And I should receive unauthorized error responses
+    And I should get unauthorized error responses
     And be redirected to login when appropriate

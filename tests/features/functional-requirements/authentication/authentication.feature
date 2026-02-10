@@ -23,7 +23,7 @@ Feature: User Authentication
     Given I am on the registration page
     When I submit the registration form with empty fields
     Then I should see validation error messages
-    And the form should not be submitted
+    And the registration form should not be submitted
 
   # REQ-AUTH-004: Email format validation
   Scenario: Registration with invalid email format
@@ -36,7 +36,7 @@ Feature: User Authentication
   # REQ-AUTH-008: Session maintenance across refreshes
   Scenario: Session persistence after page refresh
     Given I am authenticated as "admin"
-    When I refresh the browser page
+    When I refresh the page
     Then I should remain logged in
     And still have access to the dashboard
 
@@ -73,7 +73,7 @@ Feature: User Authentication
     Given I am not authenticated
     When I try to access protected API endpoints
     Then access should be denied
-    And I should receive unauthorized error responses
+    And I should get unauthorized error responses
 
   # REQ-AUTH-005: Automatic login after successful registration
   Scenario: Auto-login after registration

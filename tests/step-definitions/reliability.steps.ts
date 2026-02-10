@@ -226,7 +226,7 @@ Given('I am logged into the system', async function (this: CustomWorld) {
   await this.page.goto('/dashboard');
 });
 
-When('I refresh the browser page', async function (this: CustomWorld) {
+When('I refresh the page in the browser', async function (this: CustomWorld) {
   await this.page.reload();
 });
 

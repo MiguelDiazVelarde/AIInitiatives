@@ -14,7 +14,7 @@ Feature: User Interface Navigation and Responsiveness
   Scenario: Authenticated user redirection
     Given I am authenticated as "admin"
     When I try to visit the login page
-    Then I should be automatically redirected to the dashboard
+    Then I should be redirected automatically to dashboard
     And I should not see the login form
 
   # REQ-UI-003: Clear visual indicators for current state

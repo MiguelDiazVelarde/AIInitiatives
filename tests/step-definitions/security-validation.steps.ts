@@ -372,7 +372,7 @@ Then('each request should be rejected', async function (this: CustomWorld) {
   expect(true).toBe(true);
 });
 
-Then('I should receive unauthorized error responses', async function (this: CustomWorld) {
+Then('I should get unauthorized error responses', async function (this: CustomWorld) {
   // This is verified in the previous step for API calls
   expect(true).toBe(true);
 });

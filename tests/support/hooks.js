@@ -8,6 +8,25 @@ Before(async function () {
   try {
     console.log('🚀 Starting browser for test...');
     
+    // Clean up any existing browser/context/page from previous attempts
+    if (this.context) {
+      try {
+        await this.context.close();
+      } catch (e) {
+        // Ignore errors when closing old context
+      }
+      this.context = null;
+    }
+    if (this.browser) {
+      try {
+        await this.browser.close();
+      } catch (e) {
+        // Ignore errors when closing old browser
+      }
+      this.browser = null;
+    }
+    this.page = null;
+    
     // Browser launch options optimized for CI
     const launchOptions = {
       headless: process.env.HEADLESS !== 'false',
@@ -126,14 +145,35 @@ After(async function () {
   try {
     console.log('🧹 Cleaning up test resources...');
     
+    if (this.page) {
+      try {
+        if (!this.page.isClosed()) {
+          await this.page.close();
+        }
+      } catch (error) {
+        console.error('⚠️ Error closing page:', error.message);
+      }
+      this.page = null;
+    }
+    
     if (this.context) {
       console.log('📱 Closing browser context...');
-      await this.context.close();
+      try {
+        await this.context.close();
+      } catch (error) {
+        console.error('⚠️ Error closing context:', error.message);
+      }
+      this.context = null;
     }
     
     if (this.browser) {
       console.log('🎭 Closing browser...');
-      await this.browser.close();
+      try {
+        await this.browser.close();
+      } catch (error) {
+        console.error('⚠️ Error closing browser:', error.message);
+      }
+      this.browser = null;
     }
     
     console.log('✅ Test cleanup completed');
