@@ -32,18 +32,21 @@ A modern web application built with **React**, **TypeScript**, **Express.js** an
 The project has been recently **cleaned and optimized** to maintain only essential files and improve maintainability:
 
 **🗑️ Removed Items:**
+
 - **27+ obsolete files** - Temporary scripts, outdated documentation, and redundant configurations
 - **2 empty directories** - `public/` and `views/` folders that were no longer needed
 - **Plan files** - Obsolete optimization plan files moved to proper storage locations
 - **Test structure** - Removed empty `data-management/` feature folder for cleaner organization
 
 **📁 Organized Structure:**
+
 - ✅ **Essential Scripts Only** - Kept only actively used PowerShell scripts for CI/CD
 - ✅ **Clean Test Organization** - Streamlined test features into logical functional categories
 - ✅ **Optimized Data Storage** - AI optimizer data properly organized in dedicated directories
 - ✅ **Documentation Clarity** - Maintained only relevant and up-to-date documentation files
 
 **🎯 Benefits:**
+
 - **🚀 Faster Navigation** - Cleaner directory structure for better developer experience
 - **📦 Reduced Repository Size** - Elimination of unnecessary files and duplicates
 - **🔍 Improved Maintainability** - Clear separation of concerns and logical organization
@@ -74,6 +77,7 @@ The project has been recently **cleaned and optimized** to maintain only essenti
 Our authentication system now includes a **comprehensive test suite with 100% reliability** featuring:
 
 **🎯 Complete Test Coverage (23 Scenarios):**
+
 - ✅ User registration with validation (including duplicate detection)
 - ✅ Login/logout functionality with session management
 - ✅ Session persistence across page refreshes and navigation
@@ -87,6 +91,7 @@ Our authentication system now includes a **comprehensive test suite with 100% re
 - ✅ Navigation session maintenance and state persistence
 
 **🛠️ Enhanced Test Infrastructure:**
+
 - ✅ **20+ Step Definitions** - Complete Gherkin/BDD coverage with comprehensive error handling
 - ✅ **Enhanced Error Detection** - Multiple fallback patterns for duplicate user detection
 - ✅ **Improved Timeout Management** - Optimized 60-second timeouts for CI environments
@@ -95,6 +100,7 @@ Our authentication system now includes a **comprehensive test suite with 100% re
 - ✅ **Flexible Validation** - Graceful handling of features in development
 
 **⚡ CI/CD Integration:**
+
 - ✅ **Smart Authentication Testing** - Automatically prioritizes auth tests when auth files change
 - ✅ **Enhanced Browser Installation** - 5-minute timeout with progress monitoring
 - ✅ **Multi-Endpoint Server Verification** - 15-attempt health check with multiple endpoints
@@ -119,14 +125,14 @@ npm run test:full                   # Complete test suite with HTML reports
 ### 📊 **Authentication Test Results**
 
 | Test Category | Scenarios | Status | Coverage |
-|---------------|-----------|---------|----------|
+| ------------- | --------- | ------- | -------- |
 | **User Registration** | 4 scenarios | ✅ **100%** | Duplicate detection, validation, auto-login |
 | **Login/Logout** | 6 scenarios | ✅ **100%** | Session management, error handling |
 | **Session Persistence** | 5 scenarios | ✅ **100%** | Browser refresh, navigation, cleanup |
 | **API Protection** | 4 scenarios | ✅ **100%** | Endpoint security, unauthorized access |
 | **Form Validation** | 4 scenarios | ✅ **100%** | Email format, empty fields, error messages |
 
-**🏆 Total: 23/23 scenarios passing with enhanced reliability**
+### 🏆 Total: 23/23 scenarios passing with enhanced reliability
 
 ## 🤖 AI Test Optimizer - LIVE IN PRODUCTION
 
@@ -141,7 +147,7 @@ npm run test:full                   # Complete test suite with HTML reports
 ### 📊 Real-Time Optimization Results
 
 | Strategy | Tests Selected | Duration | Time Reduction | Success Rate | Status |
-|----------|----------------|----------|----------------|--------------|---------|
+| -------- | -------------- | -------- | -------------- | ------------ | ------- |
 | **Smoke** | 15 | 1.3 min | 75.8% | 100% | 🟢 **LIVE** |
 | **Quick** | 60 | 5.0 min | 3.2% | 100% | 🟢 **LIVE** |
 | **Balanced** | 50 | 5.0 sec | 19.4% | 100% | 🟢 **LIVE** |
@@ -152,17 +158,20 @@ npm run test:full                   # Complete test suite with HTML reports
 The AI Test Optimizer is **currently running** in all GitHub workflows:
 
 #### ✅ **CI Pipeline (`ci.yml`)**
+
 - 🤖 **AI Analysis:** Automatic analysis of changed files in every commit
 - 🎯 **Smart Recommendations:** AI generates targeted test recommendations  
 - 🚀 **Live Execution:** AI-optimized tests run with real server in background
 - 📊 **Report Generation:** Optimization metrics and artifacts uploaded automatically
 
-#### ✅ **PR Validation (`pr-validation.yml`)**  
+#### ✅ **PR Validation (`pr-validation.yml`)**
+
 - 🔍 **PR Impact Analysis:** AI analyzes which tests are needed for PR changes
 - 📋 **Targeted Testing:** Only relevant tests executed based on file changes
 - ⚡ **Fast Feedback:** Reduced validation time for developers
 
 #### ✅ **Dedicated AI Workflow (`ai-test-optimizer.yml`)**
+
 - 🕐 **Scheduled Analysis:** Daily comprehensive optimization at 2 AM UTC
 - 🎛️ **Manual Triggers:** On-demand optimization with configurable strategies
 - 📈 **Performance Tracking:** Historical data collection and trend analysis
@@ -214,6 +223,7 @@ npx ts-node src/test-optimizer/index.ts server 3001
 Complete debugging system for all application components with VS Code integration and terminal support:
 
 **📚 Debug Guides Available:**
+
 - 🔧 **[TEST-OPTIMIZER-DEBUG-GUIDE.md](TEST-OPTIMIZER-DEBUG-GUIDE.md)** - AI Test Optimizer debugging
 - 🖥️ **[SERVER-DEBUG-GUIDE.md](SERVER-DEBUG-GUIDE.md)** - Express.js backend debugging  
 - ⚡ **[CLIENT-DEBUG-GUIDE.md](CLIENT-DEBUG-GUIDE.md)** - React frontend debugging
@@ -245,17 +255,20 @@ npm run fullstack:debug              # Server + Client together
 Pre-configured debug setups available in **Run and Debug (Ctrl+Shift+D)**:
 
 **AI Test Optimizer:**
+
 - 🆘 Debug Test Optimizer - Help
 - ⚡ Debug Test Optimizer - Quick Strategy
 - 📊 Debug Test Optimizer - Stats  
 - 🌐 Debug Test Optimizer - API Server
 
 **Express Server:**
+
 - 🖥️ Debug Express Server - Main
 - 🔐 Debug Express Server - Authentication
 - 📡 Debug Express Server - API Routes
 
 **React Client:**
+
 - ⚡ Debug React Client - Development Server
 - 🏗️ Debug React Client - Build Process
 - 🔄 Debug Full Stack - Server + Client
@@ -272,18 +285,21 @@ The AI Test Optimizer provides live metrics and can be monitored through:
 ## 🛠️ Technologies Used
 
 ### **Core Stack**
+
 - **Backend**: Node.js 20.x + Express.js + TypeScript (REST API)
 - **Frontend**: React 18 + TypeScript + Vite 5
 - **Build Tools**: TypeScript 5.x compiler + Vite bundler
 - **Package Manager**: npm with package-lock for consistency
 
 ### **Authentication & Security**
+
 - **Session Management**: express-session with secure cookies
 - **Password Hashing**: bcryptjs (10 salt rounds)
 - **Authentication Middleware**: Custom JWT-ready middleware
 - **CORS**: Configured for secure cross-origin requests
 
 ### **Testing & Quality**
+
 - **BDD Framework**: Cucumber.js with Gherkin syntax
 - **Browser Automation**: Playwright (Chromium, Firefox, WebKit)
 - **Test Runner**: Cucumber.js + ts-node
@@ -291,6 +307,7 @@ The AI Test Optimizer provides live metrics and can be monitored through:
 - **Report Generation**: Custom HTML/JSON reports
 
 ### **AI & Machine Learning**
+
 - **AI Test Optimizer**: Custom ML algorithms + TypeScript
 - **ML Predictor**: Logistic regression for test failure prediction ([learn more](#-ml-predictor-how-it-works))
 - **Test Analysis**: Historical data analysis + predictive modeling
@@ -298,24 +315,28 @@ The AI Test Optimizer provides live metrics and can be monitored through:
 - **API Integration**: RESTful test optimizer service on port 3001
 
 ### **UI Testing AI (ISTQB CT-AI 11.6)**
+
 - **Self-Healing Tests**: Selenium + adaptive locators
 - **Visual Regression**: OpenCV + SSIM algorithms
 - **GUI Validation**: Computer vision + heuristics
 - **Image Processing**: PIL + matplotlib for diff visualization
 
 ### **Frontend State & Routing**
+
 - **State Management**: React Context API
 - **Routing**: React Router v6
 - **HTTP Client**: Fetch API with custom wrappers
 - **Styling**: CSS with modern features
 
 ### **DevOps & CI/CD**
+
 - **CI/CD**: GitHub Actions (10 automated workflows)
 - **Version Control**: Git with conventional commits
 - **Linting**: ESLint with TypeScript support
 - **Monitoring**: Real-time test analytics and reporting
 
 ### **Development Tools**
+
 - **Hot Reload**: Vite HMR for frontend, nodemon for backend
 - **Debugging**: VS Code launch configurations included
 - **Task Automation**: npm scripts + PowerShell scripts
@@ -324,19 +345,22 @@ The AI Test Optimizer provides live metrics and can be monitored through:
 ## 📋 Prerequisites
 
 ### **Required Software**
+
 - **Node.js**: v20.x or higher (LTS recommended)
-  - Download: https://nodejs.org/
+  - Download: <https://nodejs.org/>
   - Verify: `node --version`
 - **npm**: v10.x or higher (comes with Node.js)
   - Verify: `npm --version`
 
 ### **Optional (for development)**
+
 - **Git**: Latest version for version control
 - **VS Code**: Recommended IDE with included debug configs
 - **Python 3.8+**: For UI Testing AI module (optional)
 - **Docker**: For containerized deployment (future)
 
 ### **System Requirements**
+
 - **OS**: Windows 10/11, macOS 11+, or Linux (Ubuntu 20.04+)
 - **RAM**: 4GB minimum, 8GB recommended
 - **Disk Space**: 500MB for dependencies
@@ -347,27 +371,31 @@ For detailed system requirements, see [SYSTEM-REQUIREMENTS.md](SYSTEM-REQUIREMEN
 ## 🔧 Installation and Setup
 
 1. **Clone the repository**:
-```bash
-git clone https://github.com/MiguelDiazVelarde/AIInitiatives.git
-cd AIInitiatives
-```
 
-2. **Install dependencies**:
-```bash
-npm install
-```
+   ```bash
+   git clone https://github.com/MiguelDiazVelarde/AIInitiatives.git
+   cd AIInitiatives
+   ```
 
-3. **Compile TypeScript**:
-```bash
-npm run build
-```
+1. **Install dependencies**:
 
-4. **Start the application**:
-```bash
-npm start
-```
+   ```bash
+   npm install
+   ```
 
-5. **Open in browser**:
+1. **Compile TypeScript**:
+
+   ```bash
+   npm run build
+   ```
+
+1. **Start the application**:
+
+   ```bash
+   npm start
+   ```
+
+1. **Open in browser**:
    - **React App**: <http://localhost:5173> (Development with `npm run dev`)
    - **API Server**: <http://localhost:3000> (Backend with `npm start`)
 
@@ -376,33 +404,38 @@ npm start
 ### **Quick Start (Development Mode)**
 
 1. **Start the application**:
+
    ```bash
    npm run dev
    ```
+
    This starts both the backend server and frontend React app concurrently.
 
-2. **Access the application**:
-   - **Frontend**: http://localhost:5173 (React app with Vite HMR)
-   - **Backend API**: http://localhost:3000 (Express.js REST API)
-   - **AI Test Optimizer API**: http://localhost:3001 (when started separately)
+1. **Access the application**:
+   - **Frontend**: <http://localhost:5173> (React app with Vite HMR)
+   - **Backend API**: <http://localhost:3000> (Express.js REST API)
+   - **AI Test Optimizer API**: <http://localhost:3001> (when started separately)
 
 ### **Production Mode**
 
 1. **Build the application**:
+
    ```bash
    npm run build
    ```
 
-2. **Start production server**:
+1. **Start production server**:
+
    ```bash
    npm start
    ```
-   
-3. **Access**: Backend API at http://localhost:3000 (serve built React app from `/dist`)
+
+1. **Access**: Backend API at <http://localhost:3000> (serve built React app from `/dist`)
 
 ### **Test Credentials**
 
 For quick testing, use the default test account:
+
 - **Username**: `admin`
 - **Email**: `admin@example.com`
 - **Password**: `password`
@@ -412,6 +445,7 @@ Or register a new user through the registration form.
 ### **Available Features**
 
 #### **1. Authentication System** 🔐
+
 - **User Registration**
   - Email validation (proper format required)
   - Password encryption with bcrypt
@@ -431,6 +465,7 @@ Or register a new user through the registration form.
   - Protected route access control
 
 #### **2. Product Management** 📦
+
 - **View Products**
   - List all products with details
   - Real-time updates
@@ -449,6 +484,7 @@ Or register a new user through the registration form.
   - Price range filtering
 
 #### **3. User Interface** 🎨
+
 - **Dashboard**
   - User information display
   - Quick access to features
@@ -465,13 +501,11 @@ Or register a new user through the registration form.
 
 ### **API Endpoints**
 
-### **API Endpoints**
-
 The application exposes RESTful APIs documented in the [API Endpoints](#-api-endpoints) section below.
 
 ## 📁 Project Structure
 
-```
+```text
 client/                   # React Frontend
 ├── src/
 │   ├── components/       # React components
@@ -681,13 +715,14 @@ npm run ci:check        # All CI steps in sequence
 ### **AI Test Optimizer Benefits** (✅ LIVE IN PRODUCTION)
 
 | Strategy | Execution Time | Time Saved | Success Rate | Use Case |
-|----------|----------------|------------|--------------|----------|
+| -------- | -------------- | ---------- | ------------ | -------- |
 | **Smoke** | 1.3 min | 75.8% | 100% | Critical path validation |
 | **Quick** | 5.0 min | 3.2% | 100% | Fast PR feedback |
 | **Balanced** | 5.0 sec | 19.4% | 100% | Standard CI builds |
 | **Comprehensive** | Variable | N/A | 100% | Pre-release validation |
 
 **Real Benefits:**
+
 - ⚡ **30-50% faster execution** - Intelligent test selection reduces runtime
 - 🎯 **Higher defect detection** - ML predictions identify likely failures first
 - 📊 **Data-driven insights** - Historical analysis guides optimization
@@ -725,14 +760,14 @@ This project includes a **complete CI/CD pipeline** using **GitHub Actions** wit
 All GitHub Actions workflows now use intelligent test optimization:
 
 - **🚀 Pull Request Validation** → Smart smoke tests (~10 min)
-- **🔄 CI/CD Pipeline** → Quick/balanced optimization (~5-30 min) 
+- **🔄 CI/CD Pipeline** → Quick/balanced optimization (~5-30 min)
 - **📦 Release Workflow** → Comprehensive validation (~60 min)
 - **📊 Analytics Workflow** → Daily optimization insights
 
 #### Performance Improvements (Real Project Data)
 
 | Workflow | Before | After | Improvement |
-|----------|--------|-------|-------------|
+| -------- | ------ | ----- | ----------- |
 | PR Checks | 45 min | 10 min | **78% faster** |
 | CI Builds | 30 min | 5 min | **83% faster** |
 | Releases | 60 min | 25 min | **58% faster** |
@@ -742,14 +777,17 @@ All GitHub Actions workflows now use intelligent test optimization:
 #### 🔥 **Production Workflows** (Main CI/CD)
 
 ##### 1️⃣ **Simplified CI/CD Pipeline** (`ci.yml`)
+
 Main integration and testing workflow for continuous delivery.
 
 **Triggers:**
+
 - Pull requests to `main`
 - Pushes to `main`
 - Manual dispatch
 
 **What it does:**
+
 - ✅ Builds application (server + client)
 - ✅ Installs Playwright browsers with optimized timeouts
 - ✅ Runs AI-optimized test selection
@@ -761,12 +799,15 @@ Main integration and testing workflow for continuous delivery.
 **Timeout:** 25 minutes | **Node Version:** 20.x
 
 ##### 2️⃣ **🔍 Simple PR Validation** (`pr-validation.yml`)
+
 Lightweight validation for every pull request with intelligent test selection.
 
 **Triggers:**
+
 - Pull request opened/synchronized/reopened on `main`
 
 **What it does:**
+
 - ✅ Basic validation (Git references, Node.js setup)
 - ✅ Install dependencies (root + client)
 - ✅ Playwright browser installation with progress monitoring
@@ -780,20 +821,24 @@ Lightweight validation for every pull request with intelligent test selection.
 **Timeout:** 30 minutes | **Node Version:** 18
 
 ##### 3️⃣ **🤖 AI Test Optimizer - Full Analysis** (`ai-test-optimizer.yml`)
+
 Dedicated workflow for comprehensive AI-powered test optimization.
 
 **Triggers:**
+
 - Manual dispatch with analysis type selection
 - Daily schedule (2 AM UTC)
 - Pushes to `main` affecting `src/`, `tests/`, or `client/src/`
 
 **Analysis Types:**
+
 - `full` - Complete codebase analysis
 - `smart` - Targeted optimization based on changes
 - `recommendations` - Test suggestions for specific files
 - `performance` - Performance metrics and trends
 
 **What it does:**
+
 - ✅ Full historical analysis with Git history
 - ✅ AI-powered test selection strategies
 - ✅ ML-based failure prediction
@@ -804,14 +849,17 @@ Dedicated workflow for comprehensive AI-powered test optimization.
 **Timeout:** 30 minutes | **Node Version:** 18
 
 ##### 4️⃣ **Simple Test Suite** (`comprehensive-tests.yml`)
+
 Comprehensive test execution with configurable test types.
 
 **Triggers:**
+
 - Pushes to `main` or `develop`
 - Pull requests to `main` or `develop`
 - Manual dispatch with test type selection (`smoke`, `auth`, `all`)
 
 **What it does:**
+
 - ✅ Complete build and dependency installation
 - ✅ Playwright browser setup with dependencies
 - ✅ Server startup with health verification
@@ -821,13 +869,16 @@ Comprehensive test execution with configurable test types.
 **Timeout:** 25 minutes | **Node Version:** 20.x
 
 ##### 5️⃣ **Release** (`release.yml`)
+
 Automated release process with comprehensive validation.
 
 **Triggers:**
+
 - Version tags (`v*` like `v1.0.0`)
 - Manual dispatch with version input
 
 **What it does:**
+
 - ✅ Full dependency installation (root + client)
 - ✅ Complete application build
 - ✅ AI-optimized comprehensive test suite
@@ -840,14 +891,17 @@ Automated release process with comprehensive validation.
 #### 📊 **Analytics & Monitoring Workflows**
 
 ##### 6️⃣ **Test Optimizer Analytics** (`test-optimizer-analytics.yml`)
+
 Post-CI analytics and performance tracking.
 
 **Triggers:**
+
 - After CI/CD Pipeline completes successfully
 - Daily schedule (6 AM UTC)
 - Manual dispatch
 
 **What it does:**
+
 - ✅ Comprehensive test optimization analytics
 - ✅ Performance trend analysis
 - ✅ Historical data aggregation
@@ -857,13 +911,16 @@ Post-CI analytics and performance tracking.
 **Timeout:** 20 minutes | **Node Version:** 20.x
 
 ##### 7️⃣ **Simple Health Check** (`health-check.yml`)
+
 Quick application health verification.
 
 **Triggers:**
+
 - Manual dispatch
 - Pushes to `main`
 
 **What it does:**
+
 - ✅ Fast dependency installation
 - ✅ Application build verification
 - ✅ Server startup and health endpoint check
@@ -874,13 +931,16 @@ Quick application health verification.
 #### 🔧 **Debug & Development Workflows**
 
 ##### 8️⃣ **Debug Test Workflow** (`debug-test.yml`)
+
 Diagnostic workflow for troubleshooting test issues.
 
 **Triggers:**
+
 - Manual dispatch
 - Pushes to `main`
 
 **What it does:**
+
 - ✅ Project structure verification
 - ✅ PowerShell script validation
 - ✅ Package.json script listing
@@ -890,13 +950,16 @@ Diagnostic workflow for troubleshooting test issues.
 **Timeout:** 8 minutes | **Node Version:** 20.x
 
 ##### 9️⃣ **🔧 Debug - Ultra Simple Test** (`debug-ultra-simple.yml`)
+
 Minimal workflow for basic CI/CD testing.
 
 **Triggers:**
+
 - Manual dispatch
 - Pushes to `main`
 
 **What it does:**
+
 - ✅ Code checkout
 - ✅ Node.js setup
 - ✅ Dependency installation
@@ -906,12 +969,15 @@ Minimal workflow for basic CI/CD testing.
 **Timeout:** 5 minutes | **Node Version:** 18
 
 ##### 🔟 **Debug Workflow Issues** (`debug-comprehensive.yml`)
+
 Advanced debugging with multiple levels.
 
 **Triggers:**
+
 - Manual dispatch with debug level selection (`basic`, `detailed`, `verbose`)
 
 **What it does:**
+
 - ✅ Comprehensive environment checks
 - ✅ Build process validation
 - ✅ Node version verification
@@ -923,7 +989,7 @@ Advanced debugging with multiple levels.
 ### 🎯 Workflow Usage Recommendations
 
 | Scenario | Recommended Workflow | Reason |
-|----------|---------------------|---------|
+| -------- | -------------------- | ------- |
 | **Regular Development** | CI/CD Pipeline | Comprehensive validation |
 | **Pull Request Review** | PR Validation | Fast feedback, targeted tests |
 | **Daily Code Quality** | AI Test Optimizer | Proactive optimization |
@@ -944,12 +1010,14 @@ The workflows are automatically configured when you push to GitHub. To get the m
 ### 🔐 GitHub Actions Secrets & Permissions
 
 **Required Permissions:**
+
 - `contents: read/write` - Code checkout and releases
 - `pull-requests: write` - PR comments and summaries
 - `issues: write` - Issue creation and updates
 - `checks: write` - Check runs and status
 
 **Secrets:**
+
 - `GITHUB_TOKEN` - Automatically provided by GitHub Actions
 - No additional secrets required for basic operation
 
@@ -958,6 +1026,7 @@ The workflows are automatically configured when you push to GitHub. To get the m
 Check the status of workflows in the [Actions tab](../../actions) of your repository.
 
 **Current Pipeline Includes:**
+
 - ✅ 10 automated workflows (5 production + 2 analytics + 3 debug)
 - ✅ Intelligent test optimization with AI
 - ✅ Multi-version Node.js testing (18, 20.x)
@@ -999,7 +1068,8 @@ npm run optimizer:stats
 
 #### **Comprehensive Testing** (Optional)
 
-**Option 1: With separate server (recommended for full testing)**
+**With separate server (recommended for full testing):**
+
 ```bash
 # Terminal 1: Start server
 npm start
@@ -1011,7 +1081,8 @@ npm run test:navigation  # UI navigation tests
 npm run test:full        # All tests with HTML report
 ```
 
-**Option 2: Complete CI simulation**
+**Complete CI simulation:**
+
 ```bash
 # Run full CI pipeline locally
 npm run ci:full          # Build + test + security
@@ -1094,7 +1165,7 @@ pytest -m gui_validation      # GUI validation only
 ### 📊 UI Testing Features
 
 | Feature | Technology | ISTQB Section |
-|---------|-----------|---------------|
+| ------- | ---------- | ------------- |
 | **Self-Healing Tests** | Selenium + ML | 11.6.1 |
 | **Visual Regression** | OpenCV + SSIM | 11.6.2 |
 | **GUI Validation** | Heuristics + CV | 11.6.2 |
@@ -1134,6 +1205,7 @@ Complete documentation available in `ui-testing-ai/`:
 ## 🌟 Future Improvements
 
 ### ✅ **Completed Features**
+
 - [x] Complete REST API for products and authentication
 - [x] AI-powered test optimization with ML predictor
 - [x] Real-time test failure prediction with logistic regression
@@ -1148,13 +1220,15 @@ Complete documentation available in `ui-testing-ai/`:
 ### 🚀 **Planned Enhancements**
 
 #### **Infrastructure & Deployment**
+
 - [ ] Docker containerization with multi-stage builds
 - [ ] Kubernetes deployment configurations
 - [ ] Persistent database (MongoDB/PostgreSQL) migration
 - [ ] Redis caching layer for performance
 - [ ] CDN integration for static assets
 
-#### **Authentication & Security**
+#### **Security & Authentication**
+
 - [ ] JWT token-based authentication
 - [ ] OAuth2 integration (Google, GitHub)
 - [ ] Two-factor authentication (2FA)
@@ -1162,6 +1236,7 @@ Complete documentation available in `ui-testing-ai/`:
 - [ ] API rate limiting and throttling
 
 #### **Features**
+
 - [ ] Image upload with AWS S3 or Azure Blob Storage
 - [ ] Advanced search with Elasticsearch
 - [ ] Real-time notifications with WebSockets
@@ -1170,6 +1245,7 @@ Complete documentation available in `ui-testing-ai/`:
 - [ ] User profile management
 
 #### **AI & Testing**
+
 - [ ] Advanced ML models (neural networks, deep learning)
 - [ ] Integration with Jest, Mocha, Cypress frameworks
 - [ ] Distributed test execution across cloud environments
@@ -1181,6 +1257,7 @@ Complete documentation available in `ui-testing-ai/`:
 - [ ] Predictive analytics for release quality
 
 #### **Developer Experience**
+
 - [ ] GraphQL API layer
 - [ ] OpenAPI/Swagger documentation
 - [ ] Developer portal with interactive docs
@@ -1231,13 +1308,15 @@ curl -X POST http://localhost:3001/api/optimize \
 ## 🏆 PROJECT SUCCESS METRICS
 
 ### 🎯 **AI Test Optimizer Performance**
+
 - ✅ **45+ Successful Executions** with 0% failure rate
 - ✅ **100% Stability Score** across all test runs  
 - ✅ **75.8% Time Reduction** on critical path tests
 - ✅ **19.4% Optimization** on balanced test suites
 - ✅ **Live Integration** in all CI/CD workflows
 
-### 🔐 **Authentication Testing Excellence** 
+### 🔐 **Authentication Testing Excellence**
+
 - ✅ **23/23 Scenarios Passing** with 100% reliability
 - ✅ **20+ Step Definitions** implemented with comprehensive error handling
 - ✅ **Enhanced Error Detection** for duplicate users and validation
@@ -1246,6 +1325,7 @@ curl -X POST http://localhost:3001/api/optimize \
 - ✅ **Session Management Testing** across page refreshes and navigation
 
 ### 📊 **Development Productivity**
+
 - ⚡ **Faster Feedback Loops** - Smoke tests in 1.3 minutes vs 5+ minutes
 - 🎯 **Smarter Test Selection** - AI picks relevant tests based on code changes
 - 🤖 **Automated Optimization** - No manual test selection required
@@ -1253,6 +1333,7 @@ curl -X POST http://localhost:3001/api/optimize \
 - 🔐 **Authentication Priority** - Auto-detects auth changes and prioritizes relevant tests
 
 ### 🔄 **CI/CD Pipeline Excellence**
+
 - 🟢 **100% Workflow Success Rate** - All GitHub Actions workflows stable
 - 🔧 **Zero Port Conflicts** - Standardized configuration across all environments  
 - 📋 **Comprehensive Coverage** - AI ensures critical paths always tested
@@ -1316,13 +1397,15 @@ The system converts each test into a numerical feature vector:
 
 ### 🤖 Prediction Models
 
-**Primary Model: Logistic Regression**
+#### Primary Model: Logistic Regression
+
 - Uses gradient descent training over 100 epochs
 - Learns optimal feature weights from execution history
 - Automatically retrains with every 50 new test results
 - Maintains rolling window of 1000 most recent samples
 
-**Fallback Model: Weighted Average**
+#### Fallback Model: Weighted Average
+
 - Activates when insufficient training data exists
 - Uses expert-defined weights based on domain knowledge
 - Ensures predictions even for new test suites
@@ -1330,12 +1413,14 @@ The system converts each test into a numerical feature vector:
 ### 📊 Prediction Output
 
 Each test receives:
+
 - **Failure Probability** (0-1): Likelihood of test failing
 - **Confidence Score** (0-1): Reliability of prediction based on historical data
 - **Factor Analysis**: Breakdown of contributing risk factors
 - **Human-Readable Reasoning**: Explanation of risk assessment
 
 **Example High-Risk Prediction:**
+
 ```json
 {
   "testId": "auth-login-session-persistence",
@@ -1358,6 +1443,7 @@ Each test receives:
 ### 🎓 Continuous Learning
 
 The model automatically improves over time:
+
 1. **Data Collection**: Each test execution result is captured
 2. **Feature Extraction**: Results converted to training samples
 3. **Model Update**: When 50+ new samples collected, model retrains
@@ -1408,28 +1494,32 @@ We welcome contributions from the community! This project follows a structured C
 ### **Quick Start for Contributors**
 
 1. **Fork and Clone**
+
    ```bash
    git clone https://github.com/YOUR_USERNAME/AIInitiatives.git
    cd AIInitiatives
    npm install
    ```
 
-2. **Create Feature Branch**
+1. **Create Feature Branch**
+
    ```bash
    git checkout -b feature/AmazingFeature
    ```
 
-3. **Develop and Test**
+1. **Develop and Test**
+
    ```bash
    npm run pre-commit    # Build + smoke tests
    npm run test:full     # Optional: Full test suite
    ```
 
-4. **Commit Changes**
+1. **Commit Changes**
+
    ```bash
    git commit -m 'feat: Add some AmazingFeature'
    ```
-   
+
    **Commit Message Convention:**
    - `feat:` New feature
    - `fix:` Bug fix
@@ -1438,15 +1528,18 @@ We welcome contributions from the community! This project follows a structured C
    - `refactor:` Code refactoring
    - `ci:` CI/CD changes
 
-5. **Push and Create PR**
+1. **Push and Create PR**
+
    ```bash
    git push origin feature/AmazingFeature
    ```
+
    Then open a Pull Request on GitHub.
 
 ### **PR Requirements**
 
 ✅ **Your PR must include:**
+
 - Descriptive title (minimum 10 characters)
 - Detailed description (minimum 20 characters)
 - All tests passing
@@ -1454,6 +1547,7 @@ We welcome contributions from the community! This project follows a structured C
 - No security vulnerabilities
 
 ✅ **Automatic Validation:**
+
 - PR Validation workflow runs automatically
 - AI Test Optimizer suggests relevant tests
 - Security scans for sensitive data
@@ -1464,6 +1558,7 @@ We welcome contributions from the community! This project follows a structured C
 For detailed contributing guidelines, see [CONTRIBUTING.md](CONTRIBUTING.md)
 
 **Key Points:**
+
 - Write tests for new features
 - Follow TypeScript best practices
 - Update documentation as needed
@@ -1476,7 +1571,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 👨‍💻 Author
 
-**Miguel Diaz Velarde**
+Miguel Diaz Velarde
 
 - GitHub: [@MiguelDiazVelarde](https://github.com/MiguelDiazVelarde)
 - Project: [AIInitiatives](https://github.com/MiguelDiazVelarde/AIInitiatives)
@@ -1509,12 +1604,8 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ---
 
-<div align="center">
-
 ### ⭐ If you like this project, give it a star on GitHub! ⭐
 
 **Built with ❤️ by [Miguel Diaz Velarde](https://github.com/MiguelDiazVelarde)**
 
-*Demonstrating AI-powered testing, intelligent optimization, and modern CI/CD practices*
-
-</div>
+Demonstrating AI-powered testing, intelligent optimization, and modern CI/CD practices
