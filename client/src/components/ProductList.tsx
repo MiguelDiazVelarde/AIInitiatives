@@ -5,9 +5,10 @@ import { apiService } from '../services/api';
 interface ProductListProps {
   products: Product[];
   onProductDeleted: (productId: string) => void;
+  onProductEdit: (product: Product) => void;
 }
 
-const ProductList: React.FC<ProductListProps> = ({ products, onProductDeleted }) => {
+const ProductList: React.FC<ProductListProps> = ({ products, onProductDeleted, onProductEdit }) => {
   const handleDelete = async (productId: string) => {
     if (window.confirm('Are you sure you want to delete this product?')) {
       try {
@@ -41,12 +42,20 @@ const ProductList: React.FC<ProductListProps> = ({ products, onProductDeleted })
               <span className="product-category">{product.category}</span>
               <span className="product-stock">Stock: {product.stock}</span>
             </div>
-            <button 
-              onClick={() => handleDelete(product.id)}
-              className="delete-btn"
-            >
-              Eliminar
-            </button>
+            <div className="product-actions">
+              <button
+                onClick={() => onProductEdit(product)}
+                className="edit-btn"
+              >
+                Editar
+              </button>
+              <button 
+                onClick={() => handleDelete(product.id)}
+                className="delete-btn"
+              >
+                Eliminar
+              </button>
+            </div>
           </div>
         ))}
       </div>

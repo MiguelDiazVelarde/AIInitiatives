@@ -10,6 +10,7 @@ const Dashboard: React.FC = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
+  const [editingProduct, setEditingProduct] = useState<Product | null>(null);
   const [error, setError] = useState('');
 
   useEffect(() => {
@@ -43,6 +44,17 @@ const Dashboard: React.FC = () => {
     setShowForm(false);
   };
 
+  const handleProductUpdated = (updatedProduct: Product) => {
+    setProducts(products.map(p => p.id === updatedProduct.id ? updatedProduct : p));
+    setEditingProduct(null);
+    setShowForm(false);
+  };
+
+  const handleProductEdit = (product: Product) => {
+    setEditingProduct(product);
+    setShowForm(true);
+  };
+
   const handleProductDeleted = (productId: string) => {
     setProducts(products.filter(p => p.id !== productId));
   };
@@ -68,7 +80,10 @@ const Dashboard: React.FC = () => {
           <div className="products-header">
             <h2>Products</h2>
             <button 
-              onClick={() => setShowForm(!showForm)} 
+              onClick={() => {
+                setShowForm(!showForm);
+                setEditingProduct(null);
+              }} 
               className="add-product-btn"
             >
               {showForm ? 'Cancel' : 'Add Product'}
@@ -80,13 +95,16 @@ const Dashboard: React.FC = () => {
           {showForm && (
             <ProductForm 
               onProductAdded={handleProductAdded}
-              onCancel={() => setShowForm(false)}
+              onProductUpdated={handleProductUpdated}
+              onCancel={() => { setShowForm(false); setEditingProduct(null); }}
+              editingProduct={editingProduct}
             />
           )}
 
           <ProductList 
             products={products}
             onProductDeleted={handleProductDeleted}
+            onProductEdit={handleProductEdit}
           />
         </div>
       </main>

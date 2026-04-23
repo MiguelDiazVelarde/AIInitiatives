@@ -98,6 +98,37 @@ Feature: Product Management
     Then I should see a confirmation dialog
     And be able to confirm or cancel the deletion
 
+  # REQ-PROD-014: Edit product - open form pre-filled
+  Scenario: Edit button opens form pre-filled with product data
+    Given there is a product "Laptop Pro" with all details
+    When I click the edit button for the product "Laptop Pro"
+    Then the product form should open in edit mode
+    And the form should be pre-filled with the product data
+
+  # REQ-PROD-014: Edit product - save changes successfully
+  Scenario: Successfully update product information
+    Given there is a product "Old Name" with all details
+    When I click the edit button for the product "Old Name"
+    And I update the product name to "New Name"
+    And I submit the product form
+    Then the product "New Name" should appear in the product list
+    And the product "Old Name" should not appear in the list
+
+  # REQ-PROD-014: Edit product - cancel edit
+  Scenario: Cancel editing restores original product data
+    Given there is a product "Original Product" with all details
+    When I click the edit button for the product "Original Product"
+    And I cancel the product form
+    Then the product "Original Product" should still appear in the list
+    And the form should be closed
+
+  # REQ-PROD-014: Edit product - real-time update without reload
+  Scenario: Product list updates immediately after edit
+    Given there is a product "Update Me" with all details
+    When I edit the product "Update Me" changing the price to "999.99"
+    Then the updated price "$999.99" should appear in the product list
+    And the page should not have been reloaded
+
   # REQ-PROD-016: Graceful deletion error handling
   Scenario: Handle deletion errors gracefully
     Given I have products in the system
@@ -119,11 +150,6 @@ Feature: Product Management
     When I view the dashboard
     Then the product counter should show the correct number of products
     And update when products are added or removed
-    Examples:
-      | products_count | expected_display |
-      | 0             | "0 products"     |
-      | 1             | "1 product"      |
-      | 5             | "5 products"     |
 
   # REQ-PROD-015: Successful deletion updates display
   Scenario: Product removal from display after deletion

@@ -55,7 +55,7 @@ router.post('/products', requireAuth, (req: Request, res: Response) => {
     }
 
     // Validate price and stock are numbers
-    if (isNaN(Number(price)) || isNaN(Number(stock))) {
+    if (Number.isNaN(Number(price)) || Number.isNaN(Number(stock))) {
       return res.status(400).json({ 
         success: false, 
         message: 'Precio y stock deben ser números válidos' 
@@ -77,6 +77,52 @@ router.post('/products', requireAuth, (req: Request, res: Response) => {
     res.status(500).json({ 
       success: false, 
       message: 'Error al crear producto' 
+    });
+  }
+});
+
+// Update product
+router.put('/products/:id', requireAuth, (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+    const { name, description, price, category, stock } = req.body;
+
+    if (!name || !description || price === undefined || !category || stock === undefined) {
+      return res.status(400).json({
+        success: false,
+        message: 'Todos los campos son requeridos'
+      });
+    }
+
+    if (Number.isNaN(Number(price)) || Number.isNaN(Number(stock))) {
+      return res.status(400).json({
+        success: false,
+        message: 'Precio y stock deben ser números válidos'
+      });
+    }
+
+    const updateData = {
+      name: name.trim(),
+      description: description.trim(),
+      price: Number(price),
+      category: category.trim(),
+      stock: Number(stock)
+    };
+
+    const updatedProduct = ProductService.updateProduct(id, updateData);
+    if (!updatedProduct) {
+      return res.status(404).json({
+        success: false,
+        message: 'Producto no encontrado'
+      });
+    }
+
+    res.json(updatedProduct);
+  } catch (error) {
+    console.error('Error updating product:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Error al actualizar producto'
     });
   }
 });

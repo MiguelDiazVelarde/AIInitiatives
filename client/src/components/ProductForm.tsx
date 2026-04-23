@@ -4,19 +4,23 @@ import { Product } from '../types';
 
 interface ProductFormProps {
   onProductAdded: (product: Product) => void;
+  onProductUpdated?: (product: Product) => void;
   onCancel: () => void;
+  editingProduct?: Product | null;
 }
 
-const ProductForm: React.FC<ProductFormProps> = ({ onProductAdded, onCancel }) => {
+const ProductForm: React.FC<ProductFormProps> = ({ onProductAdded, onProductUpdated, onCancel, editingProduct }) => {
   const [formData, setFormData] = useState({
-    name: '',
-    description: '',
-    price: '',
-    category: '',
-    stock: '',
+    name: editingProduct?.name ?? '',
+    description: editingProduct?.description ?? '',
+    price: editingProduct?.price?.toString() ?? '',
+    category: editingProduct?.category ?? '',
+    stock: editingProduct?.stock?.toString() ?? '',
   });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+
+  const isEditing = !!editingProduct;
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData({
@@ -35,24 +39,21 @@ const ProductForm: React.FC<ProductFormProps> = ({ onProductAdded, onCancel }) =
       const productData = {
         name: formData.name,
         description: formData.description,
-        price: parseFloat(formData.price),
+        price: Number.parseFloat(formData.price),
         category: formData.category,
-        stock: parseInt(formData.stock, 10),
+        stock: Number.parseInt(formData.stock, 10),
       };
 
-      const newProduct = await apiService.createProduct(productData);
-      onProductAdded(newProduct);
-      
-      // Reset form
-      setFormData({
-        name: '',
-        description: '',
-        price: '',
-        category: '',
-        stock: '',
-      });
+      if (isEditing && editingProduct) {
+        const updatedProduct = await apiService.updateProduct(editingProduct.id, productData);
+        onProductUpdated?.(updatedProduct);
+      } else {
+        const newProduct = await apiService.createProduct(productData);
+        onProductAdded(newProduct);
+      }
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Error creating product');
+      const fallback = isEditing ? 'Error updating product' : 'Error creating product';
+      setError(err instanceof Error ? err.message : fallback);
     } finally {
       setLoading(false);
     }
@@ -60,7 +61,7 @@ const ProductForm: React.FC<ProductFormProps> = ({ onProductAdded, onCancel }) =
 
   return (
     <div className="product-form-container">
-      <h3>Add New Product</h3>
+      <h3>{isEditing ? 'Edit Product' : 'Add New Product'}</h3>
       <form onSubmit={handleSubmit} className="product-form">
         <div className="form-group">
           <input
@@ -129,7 +130,10 @@ const ProductForm: React.FC<ProductFormProps> = ({ onProductAdded, onCancel }) =
             Cancel
           </button>
           <button type="submit" disabled={loading} className="submit-btn">
-            {loading ? 'Adding...' : 'Add Product'}
+            {(() => {
+              if (loading) return isEditing ? 'Saving...' : 'Adding...';
+              return isEditing ? 'Save Changes' : 'Add Product';
+            })()}
           </button>
         </div>
       </form>

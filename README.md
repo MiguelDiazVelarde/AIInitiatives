@@ -55,7 +55,8 @@ The project has been recently **cleaned and optimized** to maintain only essenti
 ## 🚀 Features
 
 - ✅ **Login/Registration System** - Secure authentication with sessions
-- ✅ **Product Management** - Complete CRUD (Create, Read, Update, Delete)
+- ✅ **Product Management** - Complete CRUD (Create, Read, **Update**, Delete)
+- ✅ **Edit Products** - Inline edit form pre-filled with existing product data
 - ✅ **React Frontend** - Modern Single Page Application (SPA)
 - ✅ **Interactive Forms** - Responsive web interface with React components
 - ✅ **TypeScript** - Static typing for enhanced robustness
@@ -474,6 +475,11 @@ Or register a new user through the registration form.
   - Interactive form with validation
   - Fields: name, description, price, category, stock
   - Instant feedback on submission
+- **Edit Products**
+  - Inline edit button on each product card
+  - Form pre-filled with existing product data
+  - Save or cancel without page reload
+  - Real-time list update after saving
 - **Delete Products**
   - Confirmation dialog
   - Cascade delete handling
@@ -657,7 +663,7 @@ npm run test:headed      # Run tests in visible browser (for debugging)
 # Specific Test Suites
 npm run test:auth        # 🔐 Authentication tests (23 scenarios, 100% passing)
 npm run test:auth:session # Session persistence tests with optimized timeouts
-npm run test:products    # Product management CRUD tests
+npm run test:products    # 📦 Product management tests (20 scenarios, server auto-started)
 npm run test:navigation  # UI navigation and routing tests
 npm run test:smoke       # Quick smoke tests (alias for test:auth)
 
@@ -1207,6 +1213,9 @@ Complete documentation available in `ui-testing-ai/`:
 ### ✅ **Completed Features**
 
 - [x] Complete REST API for products and authentication
+- [x] Edit product feature with inline form (PUT `/api/products/:id`)
+- [x] Functional tests for edit product (4 BDD scenarios)
+- [x] Auto server lifecycle management for `test:products` (`start-server-and-test`)
 - [x] AI-powered test optimization with ML predictor
 - [x] Real-time test failure prediction with logistic regression
 - [x] Integration with CI/CD (10 GitHub Actions workflows)
@@ -1279,6 +1288,7 @@ Complete documentation available in `ui-testing-ai/`:
 - `GET /api/products` - Get all products (JSON)
 - `POST /api/products` - Create product (JSON)
 - `GET /api/products/:id` - Get product by ID (JSON)
+- `PUT /api/products/:id` - Update product (JSON)
 - `DELETE /api/products/:id` - Delete product (JSON)
 
 ### 🤖 Test Optimizer API (Port 3001)
@@ -1323,6 +1333,13 @@ curl -X POST http://localhost:3001/api/optimize \
 - ✅ **Timeout Optimization** (60s) specifically for CI environments
 - ✅ **Browser Context Improvements** with multiple fallback strategies
 - ✅ **Session Management Testing** across page refreshes and navigation
+
+### 📦 **Product Management Testing**
+
+- ✅ **20/20 Scenarios Passing** with full CRUD coverage
+- ✅ **Edit Product Tests** — 4 new scenarios: pre-fill form, save changes, cancel, real-time update
+- ✅ **Auto Server Startup** — `test:products` levanta y apaga el servidor automáticamente
+- ✅ **`start-server-and-test`** — integración robusta para CI/CD sin configuración manual
 
 ### 📊 **Development Productivity**
 

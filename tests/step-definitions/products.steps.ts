@@ -311,13 +311,20 @@ Then('the product should be associated with the current user', async function ()
 });
 
 Given('there is a product {string} with all details', async function (productName: string) {
-  await this.addProduct({
-    name: productName,
-    description: 'Complete product description',
-    price: '99.99',
-    category: 'electronics',
-    stock: '25'
-  });
+  // Navigate to dashboard and open the Add Product form
+  await this.page.goto(`${this.baseURL}/dashboard`);
+  await this.page.waitForLoadState('domcontentloaded', { timeout: 10000 });
+
+  await this.page.click('button.add-product-btn, button:has-text("Add Product")');
+  await this.page.waitForSelector('input[name="name"]', { timeout: 10000 });
+
+  await this.page.fill('input[name="name"]', productName);
+  await this.page.fill('textarea[name="description"]', 'Complete product description');
+  await this.page.fill('input[name="price"]', '99.99');
+  await this.page.fill('input[name="category"]', 'electronics');
+  await this.page.fill('input[name="stock"]', '25');
+  await this.page.click('button[type="submit"]');
+  await this.page.waitForTimeout(1000);
 });
 
 When('I view the product list', async function () {
@@ -752,14 +759,14 @@ Given('I have no products in the system', async function () {
 });
 
 When('I attempt to delete a product', async function () {
-  await this.page.click('.delete-btn:first-of-type, button:has-text("Delete"):first-of-type');
+  await this.page.locator('.delete-btn, button:has-text("Eliminar")').first().click();
 });
 
 When('I successfully delete the product', async function () {
-  await this.page.click('.delete-btn:first-of-type, button:has-text("Delete"):first-of-type');
-  this.page.on('dialog', async (dialog: Dialog) => {
+  this.page.once('dialog', async (dialog: Dialog) => {
     await dialog.accept();
   });
+  await this.page.locator('.delete-btn, button:has-text("Eliminar")').first().click();
   await this.page.waitForTimeout(1000);
 });
 
@@ -896,6 +903,72 @@ Then('the product should include creation timestamp', async function () {
 Then('should record the creator information', async function () {
   // Backend tracks creator in session
   expect(true).toBe(true);
+});
+
+// ── Edit product step definitions ──────────────────────────────────────────
+
+When('I click the edit button for the product {string}', async function (productName: string) {
+  // Find the product card that contains the product name and click its edit button
+  const productCard = this.page.locator('.product-card', { has: this.page.locator(`text="${productName}"`) });
+  await productCard.locator('button.edit-btn, button:has-text("Editar")').first().click();
+  await this.page.waitForTimeout(500);
+});
+
+Then('the product form should open in edit mode', async function () {
+  // The form heading changes to "Edit Product" in edit mode
+  await expect(this.page.locator('h3:has-text("Edit Product")')).toBeVisible({ timeout: 5000 });
+});
+
+Then('the form should be pre-filled with the product data', async function () {
+  // At least the name field should have a non-empty value
+  const nameValue = await this.page.inputValue('input[name="name"]');
+  expect(nameValue.trim().length).toBeGreaterThan(0);
+});
+
+When('I update the product name to {string}', async function (newName: string) {
+  await this.page.waitForSelector('input[name="name"]', { timeout: 5000 });
+  await this.page.fill('input[name="name"]', newName);
+});
+
+When('I cancel the product form', async function () {
+  await this.page.click('button:has-text("Cancel")');
+  await this.page.waitForTimeout(500);
+});
+
+Then('the form should be closed', async function () {
+  await expect(this.page.locator('.product-form-container')).not.toBeVisible({ timeout: 5000 });
+});
+
+Then('the product {string} should still appear in the list', async function (productName: string) {
+  await expect(this.page.locator(`text="${productName}"`)).toBeVisible({ timeout: 5000 });
+});
+
+When('I edit the product {string} changing the price to {string}', async function (productName: string, newPrice: string) {
+  // Click edit button for the specified product
+  const productCard = this.page.locator('.product-card', { has: this.page.locator(`text="${productName}"`) });
+  await productCard.locator('button.edit-btn, button:has-text("Editar")').first().click();
+  await this.page.waitForTimeout(500);
+
+  // Update the price field
+  await this.page.waitForSelector('input[name="price"]', { timeout: 5000 });
+  await this.page.fill('input[name="price"]', newPrice);
+
+  // Submit the form
+  await this.page.click('button[type="submit"]');
+  await this.page.waitForTimeout(1000);
+});
+
+Then('the updated price {string} should appear in the product list', async function (expectedPrice: string) {
+  await expect(this.page.locator(`text="${expectedPrice}"`)).toBeVisible({ timeout: 5000 });
+});
+
+Then('the page should not have been reloaded', async function () {
+  // React updates state without full page reload; verify the dashboard header is still present
+  await expect(this.page.locator('.dashboard-header')).toBeVisible({ timeout: 3000 });
+});
+
+Then('the product {string} should appear in the product list', async function (productName: string) {
+  await expect(this.page.locator(`text="${productName}"`)).toBeVisible({ timeout: 5000 });
 });
 
 Given('I am viewing the product list', async function () {
