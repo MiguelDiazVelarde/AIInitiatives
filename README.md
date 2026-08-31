@@ -8,12 +8,19 @@
 ![Test Coverage](https://img.shields.io/badge/Test%20Coverage-100%25-success)
 ![Authentication Tests](https://img.shields.io/badge/Authentication%20Tests-100%25%20Fixed-success)
 ![10 Workflows](https://img.shields.io/badge/GitHub%20Actions-10%20Workflows-blue)
+![AI Agent Architecture](https://img.shields.io/badge/AI%20Agent%20Architecture-9%20Layers-blueviolet)
+![Foundation Model](https://img.shields.io/badge/Foundation%20Model-OpenAI%20%7C%20Azure-blueviolet)
+![RAG](https://img.shields.io/badge/RAG-Vector%20Retrieval-blueviolet)
+![Guardrails](https://img.shields.io/badge/Guardrails-PII%20%2B%20Safety-blueviolet)
+![Evaluation](https://img.shields.io/badge/Evaluation-7%20Metrics-blueviolet)
+![Human Oversight](https://img.shields.io/badge/Human%20Oversight-HITL-blueviolet)
 
 A modern web application built with **React**, **TypeScript**, **Express.js** and **Node.js** featuring an advanced **AI-powered Test Optimization System** that intelligently manages test execution, reduces CI/CD time, and maximizes defect detection coverage. **Now includes comprehensive authentication testing with 100% reliability.**
 
 ## 🌟 Highlights
 
 - 🤖 **AI Test Optimizer** - **LIVE in CI/CD** - Reduces test time by 75% while maintaining 100% critical coverage
+- 🧠 **AI Agent Architecture** - Full 9-layer pipeline: Foundation Model → RAG → Tools → Guardrails → Evaluation → Human Oversight → Monitoring
 - 🔐 **Complete Authentication Testing** - **100% Fixed** - Comprehensive test suite with enhanced error detection
 - ⚡ **Smart Test Execution** - AI selects optimal tests based on code changes and risk analysis
 - 📊 **Real-time Optimization** - 45+ executions with 0% failure rate and 100% stability score
@@ -70,6 +77,7 @@ The project has been recently **cleaned and optimized** to maintain only essenti
 - 🆕 **Smart Prioritization** - Code-change aware test selection
 - 🆕 **Performance Analytics** - Test execution insights and reporting
 - 🆕 **UI Testing with AI** - ISTQB CT-AI 11.6 implementation with self-healing tests and visual regression
+- 🆕 **AI Agent Architecture** - Production-ready agent pipeline with RAG, tools, guardrails, evaluation and monitoring (`src/agent/`)
 
 ## 🔐 **AUTHENTICATION TESTING - 100% COMPLETE**
 
@@ -206,6 +214,114 @@ npm run optimizer:help         # Show all available commands and options
 ```bash
 # Analyze specific code changes for test recommendations
 npx ts-node src/test-optimizer/index.ts analyze src/server/routes/auth.ts
+```
+
+## 🧠 AI Agent Architecture
+
+A complete, production-ready **9-layer AI agent pipeline** implemented in `src/agent/`.
+
+### Pipeline
+
+```
+Foundation Model → Prompt/Instructions → RAG/Knowledge → Tools →
+Agent/Workflow → Guardrails → Evaluation → Human Oversight → Monitoring
+```
+
+### Layers
+
+| Layer | Module | Description |
+|---|---|---|
+| **Foundation Model** | `foundation/` | OpenAI / Azure OpenAI HTTP client; `ModelRegistry` for multi-model management |
+| **Prompt/Instructions** | `prompts/` | Variable-substitution templates, composable system instructions, built-in prompt library |
+| **RAG/Knowledge** | `knowledge/` | In-process TF-IDF vector index, metadata-filtered retrieval, automatic prompt augmentation |
+| **Tools** | `tools/` | `SearchTool`, `CodeAnalysisTool` (path-traversal safe), `TestRunnerTool`; registry + executor |
+| **Agent/Workflow** | `workflow/` | Short/long-term memory, ReAct-style tool-calling loop, multi-step `WorkflowEngine` |
+| **Guardrails** | `guardrails/` | Input PII detection & topic blocking; output sanitisation & credential redaction |
+| **Evaluation** | `evaluation/` | 7 metrics: relevance, faithfulness, coherence, completeness, safety, latency, tool_accuracy |
+| **Human Oversight** | `oversight/` | Event-driven review queue, timeout escalation policies, HITL approval flow |
+| **Monitoring** | `monitoring/` | Distributed tracing, per-agent counters, alert rules, 24 h dashboard snapshot |
+
+### Quick Start
+
+```typescript
+import { AgentPipeline, CodeAnalysisTool } from './src/agent';
+
+const pipeline = AgentPipeline.create({
+  id: 'my-agent',
+  name: 'Dev Assistant',
+  description: 'TypeScript code analysis agent',
+  model: { provider: 'openai', model: 'gpt-4o', apiKey: process.env.OPENAI_API_KEY },
+  systemPromptId: 'agent-system',
+  tools: ['analyze_code_file'],
+  maxIterations: 5,
+  enableRAG: false,
+  knowledgeBaseIds: [],
+  guardrails: { enableInputFilter: true, enableOutputFilter: true,
+    blockedTopics: [], maxInputLength: 32000, maxOutputLength: 16000,
+    requirePIICheck: true, customRules: [] },
+  oversight: { requireApprovalForTools: [], requireApprovalForHighRiskActions: false,
+    reviewTimeoutMs: 30000, escalationPolicy: 'auto-approve' },
+});
+
+pipeline.tools.register(new CodeAnalysisTool(process.cwd()));
+
+const { session, evaluation } = await pipeline.run('Analyse src/server/index.ts');
+console.log(session.messages.at(-1)?.content);
+console.log('Score:', evaluation?.overallScore);
+console.log(pipeline.monitor.getDashboard());
+```
+
+### File Tree
+
+```
+src/agent/
+├── types.ts                        # Shared types for all layers
+├── index.ts                        # AgentPipeline builder + public exports
+├── foundation/                     # Layer 1 — Foundation Model
+│   ├── ModelClient.ts
+│   ├── OpenAIClient.ts
+│   └── ModelRegistry.ts
+├── prompts/                        # Layer 2 — Prompt / Instructions
+│   ├── PromptTemplate.ts
+│   ├── SystemInstructions.ts
+│   └── PromptLibrary.ts
+├── knowledge/                      # Layer 3 — RAG / Knowledge
+│   ├── DocumentStore.ts
+│   ├── VectorIndex.ts
+│   ├── RAGRetriever.ts
+│   └── KnowledgeBase.ts
+├── tools/                          # Layer 4 — Tools
+│   ├── Tool.ts
+│   ├── ToolRegistry.ts
+│   ├── ToolExecutor.ts
+│   └── built-in/
+│       ├── SearchTool.ts
+│       ├── CodeAnalysisTool.ts
+│       └── TestRunnerTool.ts
+├── workflow/                       # Layer 5 — Agent / Workflow
+│   ├── Memory.ts
+│   ├── Agent.ts
+│   └── WorkflowEngine.ts
+├── guardrails/                     # Layer 6 — Guardrails
+│   ├── InputGuard.ts
+│   ├── OutputGuard.ts
+│   └── GuardrailsEngine.ts
+├── evaluation/                     # Layer 7 — Evaluation
+│   ├── Metrics.ts
+│   ├── Evaluator.ts
+│   └── EvaluationPipeline.ts
+├── oversight/                      # Layer 8 — Human Oversight
+│   ├── ReviewQueue.ts
+│   ├── ApprovalWorkflow.ts
+│   └── OversightManager.ts
+└── monitoring/                     # Layer 9 — Monitoring
+    ├── Tracer.ts
+    ├── MetricsCollector.ts
+    ├── Dashboard.ts
+    └── Monitor.ts
+```
+
+```bash
 
 # Generate recommendations for specific commit
 npx ts-node src/test-optimizer/index.ts recommendations be658d6
@@ -314,6 +430,10 @@ The AI Test Optimizer provides live metrics and can be monitored through:
 - **Test Analysis**: Historical data analysis + predictive modeling
 - **Optimization Strategies**: Multi-strategy execution planning (smoke, quick, balanced, comprehensive)
 - **API Integration**: RESTful test optimizer service on port 3001
+- **AI Agent Architecture**: 9-layer pipeline — Foundation Model, RAG, Tools, Workflow, Guardrails, Evaluation, Human Oversight, Monitoring (`src/agent/`)
+- **Vector Retrieval**: In-process TF-IDF vector index with cosine similarity for RAG
+- **Guardrails**: PII detection, topic blocking, credential redaction on input and output
+- **Evaluation Metrics**: relevance, faithfulness, coherence, completeness, safety, latency, tool_accuracy
 
 ### **UI Testing AI (ISTQB CT-AI 11.6)**
 
