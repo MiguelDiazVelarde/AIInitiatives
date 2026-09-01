@@ -16,12 +16,20 @@ export class ModelRegistry {
   }
 
   static create(config: ModelConfig): ModelClient {
+    // Return a pre-registered client if one exists for this model id
+    if (this.clients.has(config.model)) {
+      return this.clients.get(config.model)!;
+    }
+
     switch (config.provider) {
       case 'openai':
       case 'azure-openai':
         return new OpenAIClient(config);
       default:
-        throw new Error(`Unsupported model provider: ${config.provider}`);
+        throw new Error(
+          `Unsupported model provider: '${config.provider}'. ` +
+          `Register a custom client first with ModelRegistry.register('${config.model}', client).`
+        );
     }
   }
 
