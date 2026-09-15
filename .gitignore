@@ -5,6 +5,9 @@ test-optimizer-reports/
 optimization-*.json
 test-recommendations.json
 
+# Registro de avance de estudiantes (archivo plano generado en tiempo de ejecución)
+data/
+
 # Cucumber test reports
 reports/
 cucumber_report.html

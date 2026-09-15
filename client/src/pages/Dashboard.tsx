@@ -1,29 +1,35 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { apiService } from '../services/api';
-import { Product } from '../types';
-import ProductList from '../components/ProductList';
-import ProductForm from '../components/ProductForm';
+import { Course, ProgressEntry, OverallStats } from '../types';
+import CourseList from '../components/CourseList';
+import ProgressForm from '../components/ProgressForm';
+import ProgressStats from '../components/ProgressStats';
 
 const Dashboard: React.FC = () => {
   const { user, logout } = useAuth();
-  const [products, setProducts] = useState<Product[]>([]);
+  const [courses, setCourses] = useState<Course[]>([]);
+  const [stats, setStats] = useState<OverallStats | null>(null);
   const [loading, setLoading] = useState(true);
-  const [showForm, setShowForm] = useState(false);
-  const [editingProduct, setEditingProduct] = useState<Product | null>(null);
+  const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
   const [error, setError] = useState('');
+  const [view, setView] = useState<'courses' | 'stats'>('courses');
 
   useEffect(() => {
-    loadProducts();
+    loadData();
   }, []);
 
-  const loadProducts = async () => {
+  const loadData = async () => {
     try {
       setLoading(true);
-      const productList = await apiService.getProducts();
-      setProducts(productList);
+      const [courseList, statsData] = await Promise.all([
+        apiService.getCourses(),
+        apiService.getStats(),
+      ]);
+      setCourses(courseList);
+      setStats(statsData);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Error loading products');
+      setError(err instanceof Error ? err.message : 'Error al cargar los cursos');
     } finally {
       setLoading(false);
     }
@@ -39,73 +45,66 @@ const Dashboard: React.FC = () => {
     }
   };
 
-  const handleProductAdded = (newProduct: Product) => {
-    setProducts([...products, newProduct]);
-    setShowForm(false);
-  };
-
-  const handleProductUpdated = (updatedProduct: Product) => {
-    setProducts(products.map(p => p.id === updatedProduct.id ? updatedProduct : p));
-    setEditingProduct(null);
-    setShowForm(false);
-  };
-
-  const handleProductEdit = (product: Product) => {
-    setEditingProduct(product);
-    setShowForm(true);
-  };
-
-  const handleProductDeleted = (productId: string) => {
-    setProducts(products.filter(p => p.id !== productId));
+  const handleProgressAdded = async (_entry: ProgressEntry) => {
+    setSelectedCourse(null);
+    const statsData = await apiService.getStats();
+    setStats(statsData);
+    setView('stats');
   };
 
   if (loading) {
-    return <div className="loading">Loading products...</div>;
+    return <div className="loading">Cargando cursos...</div>;
   }
 
   return (
     <div className="dashboard">
       <header className="dashboard-header">
-        <h1>Dashboard - Products App</h1>
+        <h1>Academia con IA - Aprende con los principios de Barbara Oakley</h1>
         <div className="user-info">
-          <span>Welcome, {user?.username}!</span>
+          <span>Bienvenido, {user?.username}!</span>
           <button onClick={handleLogout} className="logout-btn">
-            Logout
+            Cerrar sesión
           </button>
         </div>
       </header>
 
       <main className="dashboard-main">
-        <div className="products-section">
-          <div className="products-header">
-            <h2>Products</h2>
-            <button 
-              onClick={() => {
-                setShowForm(!showForm);
-                setEditingProduct(null);
-              }} 
-              className="add-product-btn"
-            >
-              {showForm ? 'Cancel' : 'Add Product'}
-            </button>
+        <div className="courses-section">
+          <div className="courses-header">
+            <h2>{view === 'courses' ? 'Mis cursos' : 'Mis estadísticas'}</h2>
+            <div className="view-toggle">
+              <button
+                className={view === 'courses' ? 'toggle-btn active' : 'toggle-btn'}
+                onClick={() => setView('courses')}
+              >
+                Cursos
+              </button>
+              <button
+                className={view === 'stats' ? 'toggle-btn active' : 'toggle-btn'}
+                onClick={() => setView('stats')}
+              >
+                Estadísticas
+              </button>
+            </div>
           </div>
 
           {error && <div className="error">{error}</div>}
 
-          {showForm && (
-            <ProductForm 
-              onProductAdded={handleProductAdded}
-              onProductUpdated={handleProductUpdated}
-              onCancel={() => { setShowForm(false); setEditingProduct(null); }}
-              editingProduct={editingProduct}
+          {selectedCourse && (
+            <ProgressForm
+              course={selectedCourse}
+              onProgressAdded={handleProgressAdded}
+              onCancel={() => setSelectedCourse(null)}
             />
           )}
 
-          <ProductList 
-            products={products}
-            onProductDeleted={handleProductDeleted}
-            onProductEdit={handleProductEdit}
-          />
+          {!selectedCourse && view === 'courses' && (
+            <CourseList courses={courses} onRegisterProgress={setSelectedCourse} />
+          )}
+
+          {!selectedCourse && view === 'stats' && (
+            <ProgressStats stats={stats} />
+          )}
         </div>
       </main>
     </div>

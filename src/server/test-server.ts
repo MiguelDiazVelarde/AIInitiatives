@@ -3,7 +3,8 @@ import session from 'express-session';
 import cors from 'cors';
 import path from 'path';
 import authRoutes from './routes/auth';
-import productRoutes from './routes/products';
+import courseRoutes from './routes/courses';
+import progressRoutes from './routes/progress';
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -31,7 +32,8 @@ app.use(session({
 
 // Rutas API
 app.use('/api/auth', authRoutes);
-app.use('/api', productRoutes);
+app.use('/api', courseRoutes);
+app.use('/api', progressRoutes);
 
 // Ruta para verificar estado del servidor
 app.get('/api/health', (req, res) => {

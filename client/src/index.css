@@ -165,53 +165,63 @@ body {
   margin: 0 auto;
 }
 
-.products-section {
+.courses-section {
   background: white;
   padding: 30px;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.products-header {
+.courses-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 30px;
 }
 
-.products-header h2 {
+.courses-header h2 {
   margin: 0;
   color: #333;
 }
 
-.add-product-btn {
-  padding: 10px 20px;
-  background: #28a745;
-  color: white;
+.view-toggle {
+  display: flex;
+  gap: 8px;
+}
+
+.toggle-btn {
+  padding: 8px 16px;
+  background: #e9ecef;
+  color: #333;
   border: none;
   border-radius: 4px;
   cursor: pointer;
   transition: background-color 0.3s;
 }
 
-.add-product-btn:hover {
-  background: #218838;
+.toggle-btn.active {
+  background: #007bff;
+  color: white;
 }
 
-/* Product Form Styles */
-.product-form-container {
+.toggle-btn:hover:not(.active) {
+  background: #dde1e5;
+}
+
+/* Progress Form Styles */
+.progress-form-container {
   background: #f8f9fa;
   padding: 20px;
   border-radius: 8px;
   margin-bottom: 30px;
 }
 
-.product-form-container h3 {
+.progress-form-container h3 {
   margin-bottom: 20px;
   color: #333;
 }
 
-.product-form {
+.progress-form {
   display: flex;
   flex-direction: column;
   gap: 15px;
@@ -220,10 +230,18 @@ body {
 .form-group {
   display: flex;
   flex-direction: column;
+  gap: 6px;
+}
+
+.form-group label {
+  font-size: 13px;
+  color: #555;
+  font-weight: 500;
 }
 
 .form-group input,
-.form-group textarea {
+.form-group textarea,
+.form-group select {
   padding: 10px;
   border: 1px solid #ddd;
   border-radius: 4px;
@@ -232,14 +250,15 @@ body {
 }
 
 .form-group input:focus,
-.form-group textarea:focus {
+.form-group textarea:focus,
+.form-group select:focus {
   outline: none;
   border-color: #007bff;
 }
 
 .form-row {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-columns: 1fr 1fr;
   gap: 15px;
 }
 
@@ -283,80 +302,92 @@ body {
   cursor: not-allowed;
 }
 
-/* Product List Styles */
-.no-products {
+/* Course List Styles */
+.no-courses,
+.no-stats {
   text-align: center;
   padding: 60px 20px;
   color: #666;
 }
 
-.no-products p {
-  margin: 10px 0;
-  font-size: 18px;
-}
-
-.products-grid {
+.courses-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
   gap: 20px;
 }
 
-.product-card {
+.course-card {
   background: white;
   border: 1px solid #ddd;
   border-radius: 8px;
   padding: 20px;
   transition: box-shadow 0.3s;
+  display: flex;
+  flex-direction: column;
 }
 
-.product-card:hover {
+.course-card:hover {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
-.product-card h3 {
-  margin: 0 0 10px 0;
+.course-card h3 {
+  margin: 8px 0 10px 0;
   color: #333;
   font-size: 18px;
 }
 
-.product-description {
+.course-description {
   color: #666;
-  margin-bottom: 15px;
+  margin-bottom: 10px;
   line-height: 1.4;
 }
 
-.product-details {
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-  margin-bottom: 15px;
+.course-level {
+  color: #666;
+  font-size: 13px;
+  margin-bottom: 10px;
 }
 
-.product-price {
-  font-size: 20px;
-  font-weight: bold;
-  color: #28a745;
-}
-
-.product-category {
+.course-category {
+  align-self: flex-start;
+  background: #e7f1ff;
   color: #007bff;
   font-weight: 500;
+  font-size: 12px;
+  padding: 4px 10px;
+  border-radius: 12px;
 }
 
-.product-stock {
-  color: #666;
-  font-size: 14px;
-}
-
-.product-actions {
+.course-techniques {
   display: flex;
-  gap: 8px;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 12px;
 }
 
-.edit-btn {
-  flex: 1;
-  padding: 8px;
-  background: #007bff;
+.technique-badge {
+  background: #fff3cd;
+  color: #856404;
+  font-size: 12px;
+  padding: 3px 8px;
+  border-radius: 10px;
+}
+
+.course-modules {
+  color: #666;
+  font-size: 13px;
+  margin: 0 0 15px 18px;
+  line-height: 1.6;
+}
+
+.course-actions {
+  margin-top: auto;
+}
+
+.register-progress-btn {
+  width: 100%;
+  padding: 10px;
+  background: #28a745;
   color: white;
   border: none;
   border-radius: 4px;
@@ -364,23 +395,85 @@ body {
   transition: background-color 0.3s;
 }
 
-.edit-btn:hover {
-  background: #0069d9;
+.register-progress-btn:hover {
+  background: #218838;
 }
 
-.delete-btn {
-  flex: 1;
-  padding: 8px;
-  background: #dc3545;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background-color 0.3s;
+/* Progress Stats Styles */
+.stats-summary {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 15px;
+  margin-bottom: 20px;
 }
 
-.delete-btn:hover {
-  background: #c82333;
+.stat-box {
+  background: #f8f9fa;
+  border-radius: 8px;
+  padding: 20px;
+  text-align: center;
+}
+
+.stat-value {
+  display: block;
+  font-size: 28px;
+  font-weight: bold;
+  color: #007bff;
+}
+
+.stat-label {
+  color: #666;
+  font-size: 13px;
+}
+
+.favorite-technique {
+  text-align: center;
+  color: #555;
+  margin-bottom: 20px;
+}
+
+.course-stats-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 15px;
+}
+
+.course-stat-card {
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 18px;
+}
+
+.course-stat-card h4 {
+  margin: 0 0 10px 0;
+  color: #333;
+}
+
+.progress-bar {
+  background: #e9ecef;
+  border-radius: 6px;
+  height: 10px;
+  overflow: hidden;
+  margin-bottom: 8px;
+}
+
+.progress-bar-fill {
+  background: #28a745;
+  height: 100%;
+  transition: width 0.3s;
+}
+
+.last-studied {
+  color: #888;
+  font-size: 12px;
+}
+
+.auth-subtitle {
+  text-align: center;
+  color: #666;
+  margin-bottom: 25px;
+  margin-top: -20px;
 }
 
 /* Responsive Design */
@@ -395,7 +488,7 @@ body {
     padding: 15px;
   }
 
-  .products-header {
+  .courses-header {
     flex-direction: column;
     gap: 15px;
     align-items: stretch;
@@ -405,7 +498,7 @@ body {
     grid-template-columns: 1fr;
   }
 
-  .products-grid {
+  .courses-grid {
     grid-template-columns: 1fr;
   }
 

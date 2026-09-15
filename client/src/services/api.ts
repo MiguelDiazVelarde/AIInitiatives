@@ -1,4 +1,4 @@
-import { AuthResponse, LoginData, RegisterData, Product } from '../types';
+import { AuthResponse, LoginData, RegisterData, Course, ProgressEntry, CreateProgressData, OverallStats } from '../types';
 
 const API_BASE_URL = 'http://localhost:3000/api';
 
@@ -52,29 +52,29 @@ class ApiService {
     return this.request<AuthResponse>('/auth/me');
   }
 
-  // Product endpoints
-  async getProducts(): Promise<Product[]> {
-    return this.request<Product[]>('/products');
+  // Course endpoints
+  async getCourses(): Promise<Course[]> {
+    return this.request<Course[]>('/courses');
   }
 
-  async createProduct(productData: Omit<Product, 'id' | 'createdAt'>): Promise<Product> {
-    return this.request<Product>('/products', {
+  async getCourse(id: string): Promise<Course> {
+    return this.request<Course>(`/courses/${id}`);
+  }
+
+  // Progress endpoints
+  async registerProgress(data: CreateProgressData): Promise<ProgressEntry> {
+    return this.request<ProgressEntry>('/progress', {
       method: 'POST',
-      body: JSON.stringify(productData),
+      body: JSON.stringify(data),
     });
   }
 
-  async updateProduct(id: string, productData: Partial<Product>): Promise<Product> {
-    return this.request<Product>(`/products/${id}`, {
-      method: 'PUT',
-      body: JSON.stringify(productData),
-    });
+  async getMyProgress(): Promise<ProgressEntry[]> {
+    return this.request<ProgressEntry[]>('/progress');
   }
 
-  async deleteProduct(id: string): Promise<void> {
-    return this.request<void>(`/products/${id}`, {
-      method: 'DELETE',
-    });
+  async getStats(): Promise<OverallStats> {
+    return this.request<OverallStats>('/progress/stats');
   }
 }
 

@@ -6,14 +6,71 @@ export interface User {
   createdAt?: Date;
 }
 
-export interface Product {
+export const OAKLEY_TECHNIQUES = [
+  'Modo enfocado y difuso',
+  'Recuerdo activo',
+  'Repetición espaciada',
+  'Fragmentación (chunking)',
+  'Intercalado (interleaving)',
+  'Técnica Pomodoro',
+  'Analogías y metáforas',
+  'Enseñar lo aprendido (técnica Feynman)',
+] as const;
+
+export interface Course {
   id: string;
   name: string;
   description: string;
-  price: number;
   category: string;
-  stock: number;
-  createdAt?: Date;
+  level: string;
+  modules: string[];
+  recommendedTechniques: string[];
+}
+
+export type ProgressStatus = 'iniciado' | 'en-progreso' | 'completado';
+
+export interface ProgressEntry {
+  id: string;
+  userId: string;
+  username: string;
+  courseId: string;
+  courseName: string;
+  module: string;
+  technique: string;
+  minutesStudied: number;
+  status: ProgressStatus;
+  notes: string;
+  timestamp: string;
+}
+
+export interface CreateProgressData {
+  courseId: string;
+  module: string;
+  technique: string;
+  minutesStudied: number;
+  status: ProgressStatus;
+  notes?: string;
+}
+
+export interface CourseStats {
+  courseId: string;
+  courseName: string;
+  sessions: number;
+  totalMinutes: number;
+  modulesCompleted: number;
+  totalModules: number;
+  completionPercentage: number;
+  lastStudied: string | null;
+  techniqueBreakdown: Record<string, number>;
+}
+
+export interface OverallStats {
+  totalSessions: number;
+  totalMinutes: number;
+  coursesStarted: number;
+  studyStreakDays: number;
+  favoriteTechnique: string | null;
+  byCourse: CourseStats[];
 }
 
 export interface AuthResponse {

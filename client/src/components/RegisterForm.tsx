@@ -45,12 +45,13 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ onSwitchToLogin }) => {
 
   return (
     <div className="auth-container">
-      <h2>Register</h2>
+      <h2>Crear cuenta</h2>
+      <p className="auth-subtitle">Únete a la Academia con IA</p>
       <form onSubmit={handleSubmit} className="auth-form">
         <input
           type="text"
           name="username"
-          placeholder="Username"
+          placeholder="Usuario"
           value={formData.username}
           onChange={handleChange}
           required
@@ -58,7 +59,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ onSwitchToLogin }) => {
         <input
           type="email"
           name="email"
-          placeholder="Email"
+          placeholder="Correo electrónico"
           value={formData.email}
           onChange={handleChange}
           required
@@ -66,20 +67,20 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ onSwitchToLogin }) => {
         <input
           type="password"
           name="password"
-          placeholder="Password"
+          placeholder="Contraseña"
           value={formData.password}
           onChange={handleChange}
           required
         />
         {error && <div className="error">{error}</div>}
         <button type="submit" disabled={loading}>
-          {loading ? 'Registering...' : 'Register'}
+          {loading ? 'Registrando...' : 'Registrarse'}
         </button>
       </form>
       <p>
-        Already have an account?{' '}
+        ¿Ya tienes una cuenta?{' '}
         <button type="button" onClick={onSwitchToLogin} className="link-button">
-          Login
+          Inicia sesión
         </button>
       </p>
     </div>

@@ -3,7 +3,8 @@ import session from 'express-session';
 import cors from 'cors';
 import path from 'node:path';
 import authRoutes from './routes/auth';
-import productRoutes from './routes/products';
+import courseRoutes from './routes/courses';
+import progressRoutes from './routes/progress';
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -31,7 +32,8 @@ app.use(session({
 
 // Rutas API
 app.use('/api/auth', authRoutes);
-app.use('/api', productRoutes);
+app.use('/api', courseRoutes);
+app.use('/api', progressRoutes);
 
 // Route to verify server status
 app.get('/api/health', (req, res) => {
@@ -69,15 +71,17 @@ if (process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'test') {
         if (!req.path.startsWith('/api')) {
           res.send(`
             <html>
-              <head><title>Products App</title></head>
+              <head><title>Academia con IA</title></head>
               <body>
-                <h1>Products App Server</h1>
+                <h1>Academia con IA - Server</h1>
                 <p>API is running but client not built.</p>
                 <p>Available endpoints:</p>
                 <ul>
                   <li><a href="/api/health">/api/health</a></li>
                   <li>/api/auth/* (POST)</li>
-                  <li>/api/products/* (GET/POST)</li>
+                  <li>/api/courses (GET)</li>
+                  <li>/api/progress (GET/POST)</li>
+                  <li>/api/progress/stats (GET)</li>
                 </ul>
               </body>
             </html>
