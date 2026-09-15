@@ -10,8 +10,8 @@ interface ProgressFormProps {
 
 const ProgressForm: React.FC<ProgressFormProps> = ({ course, onProgressAdded, onCancel }) => {
   const [formData, setFormData] = useState({
-    module: course.modules[0],
-    technique: OAKLEY_TECHNIQUES[0] as string,
+    module: course.modules[0].title,
+    technique: course.modules[0].technique as string,
     minutesStudied: '',
     status: 'en-progreso' as ProgressStatus,
     notes: '',
@@ -20,10 +20,21 @@ const ProgressForm: React.FC<ProgressFormProps> = ({ course, onProgressAdded, on
   const [loading, setLoading] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
+    const { name, value } = e.target;
+
+    if (name === 'module') {
+      const selectedModule = course.modules.find((m) => m.title === value);
+      setFormData({
+        ...formData,
+        module: value,
+        technique: selectedModule?.technique ?? formData.technique,
+      });
+    } else {
+      setFormData({
+        ...formData,
+        [name]: value,
+      });
+    }
     setError('');
   };
 
@@ -57,7 +68,7 @@ const ProgressForm: React.FC<ProgressFormProps> = ({ course, onProgressAdded, on
           <label htmlFor="module">Módulo</label>
           <select id="module" name="module" value={formData.module} onChange={handleChange}>
             {course.modules.map((module) => (
-              <option key={module} value={module}>{module}</option>
+              <option key={module.id} value={module.title}>{module.title}</option>
             ))}
           </select>
         </div>

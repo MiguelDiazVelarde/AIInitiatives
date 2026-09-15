@@ -17,13 +17,22 @@ export const OAKLEY_TECHNIQUES = [
   'Enseñar lo aprendido (técnica Feynman)',
 ] as const;
 
+export interface CourseModule {
+  id: string;
+  title: string;
+  objectives: string[];
+  content: string[];
+  technique: string;
+  estimatedMinutes: number;
+}
+
 export interface Course {
   id: string;
   name: string;
   description: string;
   category: string;
   level: string;
-  modules: string[];
+  modules: CourseModule[];
   recommendedTechniques: string[];
 }
 

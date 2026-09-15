@@ -380,6 +380,67 @@ body {
   line-height: 1.6;
 }
 
+.toggle-syllabus-btn {
+  align-self: flex-start;
+  background: none;
+  border: 1px solid #007bff;
+  color: #007bff;
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-size: 13px;
+  cursor: pointer;
+  margin-bottom: 12px;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.toggle-syllabus-btn:hover {
+  background: #007bff;
+  color: white;
+}
+
+.course-module-item {
+  background: #f8f9fa;
+  border-radius: 6px;
+  padding: 12px 14px;
+  margin-bottom: 10px;
+}
+
+.course-module-item ul {
+  margin: 4px 0 8px 18px;
+  padding: 0;
+}
+
+.module-title-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.module-title {
+  font-weight: 600;
+  color: #333;
+}
+
+.module-duration {
+  font-size: 12px;
+  color: #888;
+  white-space: nowrap;
+}
+
+.module-technique {
+  display: inline-block;
+  margin: 6px 0;
+}
+
+.module-subheading {
+  font-size: 12px;
+  font-weight: 600;
+  color: #555;
+  text-transform: uppercase;
+  margin: 8px 0 2px 0;
+}
+
 .course-actions {
   margin-top: auto;
 }
