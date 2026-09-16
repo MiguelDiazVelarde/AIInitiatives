@@ -1,4 +1,4 @@
-# Academia con IA - AI-Powered Testing & Smart Development Platform
+# AI Academy - AI-Powered Testing & Smart Development Platform
 
 ![Simplified CI/CD Pipeline](https://github.com/MiguelDiazVelarde/AIInitiatives/workflows/Simplified%20CI/CD%20Pipeline/badge.svg)
 ![Simple PR Validation](https://github.com/MiguelDiazVelarde/AIInitiatives/workflows/%F0%9F%94%8D%20Simple%20PR%20Validation/badge.svg)
@@ -15,7 +15,7 @@
 ![Evaluation](https://img.shields.io/badge/Evaluation-7%20Metrics-blueviolet)
 ![Human Oversight](https://img.shields.io/badge/Human%20Oversight-HITL-blueviolet)
 
-A modern web application built with **React**, **TypeScript**, **Express.js** and **Node.js**. The sample app, **Academia con IA**, is a courses platform to learn *Inglés con IA*, *Portugués con IA*, *Desarrollo con TypeScript y Playwright* and *Ingeniería de IA* applying **Barbara Oakley's learning principles** (active recall, spaced repetition, interleaving, chunking, focused/diffuse mode, Pomodoro and the Feynman technique). Student progress is logged to a plain CSV file to generate statistics. The repository also features an advanced **AI-powered Test Optimization System** that intelligently manages test execution, reduces CI/CD time, and maximizes defect detection coverage. **Now includes comprehensive authentication testing with 100% reliability.**
+A modern web application built with **React**, **TypeScript**, **Express.js** and **Node.js**. The sample app, **AI Academy**, is a courses platform to learn *English with AI*, *Portuguese with AI*, *TypeScript and Playwright Development* and *AI Engineering* applying **Barbara Oakley's learning principles** (active recall, spaced repetition, interleaving, chunking, focused/diffuse mode, Pomodoro and the Feynman technique). Student progress is logged to a plain CSV file to generate statistics. The repository also features an advanced **AI-powered Test Optimization System** that intelligently manages test execution, reduces CI/CD time, and maximizes defect detection coverage. **Now includes comprehensive authentication testing with 100% reliability.**
 
 ## 🌟 Highlights
 
@@ -62,7 +62,7 @@ The project has been recently **cleaned and optimized** to maintain only essenti
 ## 🚀 Features
 
 - ✅ **Login/Registration System** - Secure authentication with sessions
-- ✅ **Course Catalog** - 4 courses (Inglés con IA, Portugués con IA, TypeScript y Playwright, Ingeniería de IA) with modules, objectives and recommended Oakley techniques
+- ✅ **Course Catalog** - 4 courses (English with AI, Portuguese with AI, TypeScript and Playwright Development, AI Engineering) with modules, objectives and recommended Oakley techniques
 - ✅ **Progress Tracking** - Students log study sessions (module, technique, minutes, status) appended to a plain CSV file
 - ✅ **Statistics Dashboard** - Sessions, total minutes, completion %, study streak and favorite technique computed from the CSV log
 - ✅ **React Frontend** - Modern Single Page Application (SPA)
@@ -589,7 +589,7 @@ Or register a new user through the registration form.
 #### **2. Course Catalog & Progress Tracking** 📚
 
 - **Browse Courses**
-  - 4 courses: Inglés con IA, Portugués con IA, Desarrollo con TypeScript y Playwright, Ingeniería de IA
+  - 4 courses: English with AI, Portuguese with AI, TypeScript and Playwright Development, AI Engineering
   - Each course lists modules, objectives, content and recommended Barbara Oakley learning technique
   - Expandable syllabus view per course card
 - **Register Study Progress**
@@ -1455,13 +1455,13 @@ curl -X POST http://localhost:3001/api/optimize \
 - ✅ **Browser Context Improvements** with multiple fallback strategies
 - ✅ **Session Management Testing** across page refreshes and navigation
 
-### � **Course & Progress Testing**
+### 📦 **Course & Progress Testing**
 
 - ✅ **Migrated** from the legacy product-management suite to `tests/features/functional-requirements/course-progress/`
 - ✅ **Course Catalog Tests** — catalog display, syllabus expansion
 - ✅ **Progress Tracking Tests** — register study session, statistics view, required-field validation
-- ✅ **Auto Server Startup** — `test:courses` levanta y apaga el servidor automáticamente
-- ✅ **`start-server-and-test`** — integración robusta para CI/CD sin configuración manual
+- ✅ **Auto Server Startup** — `test:courses` starts and stops the server automatically
+- ✅ **`start-server-and-test`** — robust CI/CD integration with no manual configuration
 
 ### 📊 **Development Productivity**
 
