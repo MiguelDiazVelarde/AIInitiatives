@@ -7,14 +7,14 @@ export interface User {
 }
 
 export const OAKLEY_TECHNIQUES = [
-  'Modo enfocado y difuso',
-  'Recuerdo activo',
-  'Repetición espaciada',
-  'Fragmentación (chunking)',
-  'Intercalado (interleaving)',
-  'Técnica Pomodoro',
-  'Analogías y metáforas',
-  'Enseñar lo aprendido (técnica Feynman)',
+  'Focused and diffuse mode',
+  'Active recall',
+  'Spaced repetition',
+  'Chunking',
+  'Interleaving',
+  'Pomodoro technique',
+  'Analogies and metaphors',
+  'Teach what you learned (Feynman technique)',
 ] as const;
 
 export interface CourseModule {
@@ -36,7 +36,7 @@ export interface Course {
   recommendedTechniques: string[];
 }
 
-export type ProgressStatus = 'iniciado' | 'en-progreso' | 'completado';
+export type ProgressStatus = 'started' | 'in-progress' | 'completed';
 
 export interface ProgressEntry {
   id: string;

@@ -284,7 +284,8 @@ Given('I am on the registration page', async function (this: ICustomWorld) {
         const text = await element.textContent();
         console.log(`📝 Found element with text: "${text}"`);
         
-        if (text && text.toLowerCase().includes('register')) {
+        const normalizedText = text?.toLowerCase() ?? '';
+        if (normalizedText.includes('register')) {
           await element.click();
           console.log(`✅ Clicked register button with selector: ${selector}`);
           clicked = true;
@@ -497,7 +498,7 @@ Then('I should be redirected to the login page', async function () {
 Then('I should be on the login page', async function () {
   await expect(this.page).toHaveURL(/.*auth/, { timeout: 10000 });
   // Verify login form is visible
-  await expect(this.page.locator('h2:has-text("Iniciar Sesión")')).toBeVisible({ timeout: 5000 });
+  await expect(this.page.locator('input[name="username"]')).toBeVisible({ timeout: 5000 });
 });
 
 Then('I should be on the registration page', async function () {
@@ -792,7 +793,7 @@ Then('I should remain authenticated', async function () {
     // Look for dashboard content with multiple selectors as fallback
     const authChecks = await Promise.race([
       // Check for dashboard heading
-      this.page.locator('h1:has-text("Dashboard")').isVisible().then((visible: boolean) => ({ type: 'dashboard-heading', visible })),
+      this.page.locator('.dashboard-header').isVisible().then((visible: boolean) => ({ type: 'dashboard-heading', visible })),
       // Check for any dashboard content
       this.page.locator('[data-testid="dashboard"], .dashboard, #dashboard').first().isVisible().then((visible: boolean) => ({ type: 'dashboard-element', visible })),
       // Check for user menu or logout button (indicates authenticated state)
@@ -953,7 +954,7 @@ Then('I should be automatically logged in', async function () {
   // Check if we're on the dashboard (auto-login successful)
   if (currentUrl.includes('/dashboard')) {
     console.log('✅ Auto-login successful - redirected to dashboard');
-    const dashboardVisible = await this.page.locator('h1:has-text("Dashboard")').isVisible({ timeout: 5000 });
+    const dashboardVisible = await this.page.locator('.dashboard-header').isVisible({ timeout: 5000 });
     expect(dashboardVisible).toBe(true);
   } else {
     // Auto-login might not be implemented - check if we're still on auth page
@@ -1163,7 +1164,7 @@ Then('I should be automatically redirected to the dashboard', async function () 
 });
 
 Then('see the dashboard content immediately', async function () {
-  const dashboardVisible = await this.page.locator('h1:has-text("Dashboard")').isVisible();
+  const dashboardVisible = await this.page.locator('.dashboard-header').isVisible();
   expect(dashboardVisible).toBe(true);
 });
 
@@ -1220,7 +1221,7 @@ Then('I should not be asked to login again', async function () {
 });
 
 When('I initiate logout', async function () {
-  await this.page.click('button:has-text("Logout")');
+  await this.page.click('.logout-btn, button:has-text("Logout")');
   await this.page.waitForTimeout(1000);
 });
 

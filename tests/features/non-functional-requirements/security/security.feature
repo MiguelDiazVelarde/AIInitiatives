@@ -50,8 +50,8 @@ Feature: Security Requirements
     Given I am not authenticated
     When I try to access any protected resource:
       | endpoint           |
-      | /api/products      |
-      | /api/products/123  |
+      | /api/courses       |
+      | /api/progress      |
       | /dashboard         |
     Then each request should be rejected
     And I should get unauthorized error responses

@@ -9,24 +9,24 @@ import progressRoutes from './routes/progress';
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Configuración de CORS más permisiva para tests
+// More permissive CORS configuration for tests
 app.use(cors({
   origin: true,
   credentials: true
 }));
 
-// Configuración de middleware
+// Middleware configuration
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Configuración de sesiones
+// Session configuration
 app.use(session({
-  secret: 'tu-secreto-super-seguro-aqui',
+  secret: 'your-super-secure-secret-here',
   resave: false,
   saveUninitialized: false,
   cookie: {
     secure: false,
-    maxAge: 24 * 60 * 60 * 1000 // 24 horas
+    maxAge: 24 * 60 * 60 * 1000 // 24 hours
   }
 }));
 
@@ -40,7 +40,7 @@ app.get('/api/health', (req, res) => {
   res.json({ status: 'OK', message: 'Server is running in test mode' });
 });
 
-// Servir archivos estáticos de React para tests
+// Serve React static files for tests
 const clientDistPath = path.join(__dirname, '../../client/dist');
 app.use(express.static(clientDistPath));
 

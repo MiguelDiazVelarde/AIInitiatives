@@ -9,7 +9,7 @@ const ProgressStats: React.FC<ProgressStatsProps> = ({ stats }) => {
   if (!stats || stats.totalSessions === 0) {
     return (
       <div className="no-stats">
-        <p>Todavía no hay avance registrado. ¡Registra tu primera sesión de estudio!</p>
+        <p>No progress registered yet. Log your first study session!</p>
       </div>
     );
   }
@@ -19,25 +19,25 @@ const ProgressStats: React.FC<ProgressStatsProps> = ({ stats }) => {
       <div className="stats-summary">
         <div className="stat-box">
           <span className="stat-value">{stats.totalSessions}</span>
-          <span className="stat-label">Sesiones</span>
+          <span className="stat-label">Sessions</span>
         </div>
         <div className="stat-box">
           <span className="stat-value">{stats.totalMinutes}</span>
-          <span className="stat-label">Minutos estudiados</span>
+          <span className="stat-label">Minutes studied</span>
         </div>
         <div className="stat-box">
           <span className="stat-value">{stats.coursesStarted}</span>
-          <span className="stat-label">Cursos iniciados</span>
+          <span className="stat-label">Courses started</span>
         </div>
         <div className="stat-box">
           <span className="stat-value">{stats.studyStreakDays}</span>
-          <span className="stat-label">Días seguidos</span>
+          <span className="stat-label">Day streak</span>
         </div>
       </div>
 
       {stats.favoriteTechnique && (
         <p className="favorite-technique">
-          Técnica más usada: <strong>{stats.favoriteTechnique}</strong>
+          Most used technique: <strong>{stats.favoriteTechnique}</strong>
         </p>
       )}
 
@@ -51,11 +51,11 @@ const ProgressStats: React.FC<ProgressStatsProps> = ({ stats }) => {
                 style={{ width: `${courseStat.completionPercentage}%` }}
               />
             </div>
-            <p>{courseStat.completionPercentage}% completado ({courseStat.modulesCompleted}/{courseStat.totalModules} módulos)</p>
-            <p>{courseStat.sessions} sesiones · {courseStat.totalMinutes} minutos</p>
+            <p>{courseStat.completionPercentage}% completed ({courseStat.modulesCompleted}/{courseStat.totalModules} modules)</p>
+            <p>{courseStat.sessions} sessions · {courseStat.totalMinutes} minutes</p>
             {courseStat.lastStudied && (
               <p className="last-studied">
-                Última sesión: {new Date(courseStat.lastStudied).toLocaleString()}
+                Last session: {new Date(courseStat.lastStudied).toLocaleString()}
               </p>
             )}
           </div>

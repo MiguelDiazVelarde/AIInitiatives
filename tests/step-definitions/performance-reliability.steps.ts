@@ -26,7 +26,7 @@ When('I perform any user interaction:', async function (this: CustomWorld, dataT
         break;
       case 'loading product list':
         await this.page.goto(`${this.baseURL}/dashboard`, { waitUntil: 'domcontentloaded', timeout: 15000 });
-        await this.page.waitForSelector('.product-list, .no-products', { timeout: 2000 });
+        await this.page.waitForSelector('.course-list, .no-courses', { timeout: 2000 });
         break;
     }
     
@@ -59,7 +59,7 @@ Given('I am an authenticated user', async function (this: CustomWorld) {
 When('I navigate to the dashboard', async function (this: CustomWorld) {
   const startTime = Date.now();
   await this.page.goto(`${this.baseURL}/dashboard`, { waitUntil: 'domcontentloaded', timeout: 15000 });
-  await this.page.waitForSelector('h1:has-text("Dashboard")', { timeout: 3000 });
+  await this.page.waitForSelector('.dashboard-header', { timeout: 3000 });
   const endTime = Date.now();
   
   (this as any).dashboardLoadTime = endTime - startTime;
@@ -71,13 +71,13 @@ Then('the dashboard should load completely within 3 seconds', async function (th
 });
 
 Then('all essential elements should be visible', async function (this: CustomWorld) {
-  await expect(this.page.locator('h1:has-text("Dashboard")')).toBeVisible();
+  await expect(this.page.locator('.dashboard-header')).toBeVisible();
   await expect(this.page.locator('.logout-btn, button:has-text("Logout")')).toBeVisible();
-  await expect(this.page.locator('.add-product-btn, button:has-text("Add Product")')).toBeVisible();
+  await expect(this.page.locator('.register-progress-btn, button:has-text("Register progress")')).toBeVisible();
 });
 
 Then('the product list should be populated', async function (this: CustomWorld) {
-  const productList = await this.page.locator('.product-list, .no-products').first();
+  const productList = await this.page.locator('.course-list, .no-courses').first();
   await expect(productList).toBeVisible();
 });
 
@@ -103,7 +103,7 @@ When('each user performs typical operations', async function (this: CustomWorld)
   // Simulate concurrent operations
   const operations = [
     this.page.reload(),
-    this.page.locator('.product-list').count(),
+    this.page.locator('.course-list').count(),
     this.page.locator('button').count()
   ];
   
@@ -139,11 +139,11 @@ Then('no user should experience significant delays', async function (this: Custo
     return;
   }
   
-  await this.page.waitForSelector('button:has-text("Add Product")', { timeout: 10000 });
+  await this.page.waitForSelector('button:has-text("Register progress")', { timeout: 10000 });
   
   // Verify quick response to user interaction
   const startTime = Date.now();
-  await this.page.click('button:has-text("Add Product")', { timeout: 5000 });
+  await this.page.click('button:has-text("Register progress")', { timeout: 5000 });
   const endTime = Date.now();
   
   expect(endTime - startTime).toBeLessThan(2000);
@@ -165,7 +165,7 @@ Given('I am making API requests', async function (this: CustomWorld) {
   await this.page.waitForURL(/.*\//, { timeout: 15000 });
 });
 
-When('I request product data or user information', async function (this: CustomWorld) {
+When('I request course data or user information', async function (this: CustomWorld) {
   // Monitor network requests
   let responseSize = 0;
   
@@ -335,7 +335,7 @@ Then('allow me to retry failed operations', async function (this: CustomWorld) {
 Then('maintain my session and data where possible', async function (this: CustomWorld) {
   // Try to login and verify session works
   await this.login('admin', 'password');
-  const dashboardVisible = await this.page.locator('h1:has-text("Dashboard")').isVisible();
+  const dashboardVisible = await this.page.locator('.dashboard-header').isVisible();
   expect(dashboardVisible).toBe(true);
 });
 
@@ -359,7 +359,7 @@ Given('the system contains a large number of products', async function (this: Cu
 
 When('I view the product list for performance testing', async function (this: CustomWorld) {
   const startTime = Date.now();
-  await this.page.locator('.product-list, .product-card, [data-testid="product-list"]').first().waitFor({ timeout: 5000 }).catch(() => {
+  await this.page.locator('.course-list, .course-card, [data-testid="product-list"]').first().waitFor({ timeout: 5000 }).catch(() => {
     console.log('⚠️ Product list not found for performance test');
   });
   const endTime = Date.now();
@@ -404,8 +404,8 @@ When('I perform many operations over time', async function (this: CustomWorld) {
   for (let i = 0; i < 10; i++) {
     await this.page.reload();
     await this.page.waitForLoadState('domcontentloaded', { timeout: 10000 });
-    await this.page.locator('.add-product-btn').click();
-    await this.page.locator('.add-product-btn').click(); // Toggle form
+    await this.page.locator('.register-progress-btn').click();
+    await this.page.locator('.register-progress-btn').click(); // Toggle form
     await this.page.waitForTimeout(100);
   }
 });
@@ -419,7 +419,7 @@ Then('memory usage should remain stable', async function (this: CustomWorld) {
 Then('the application should not slow down over time', async function (this: CustomWorld) {
   // Test response time after extended use
   const startTime = Date.now();
-  await this.page.click('.add-product-btn');
+  await this.page.click('.register-progress-btn');
   const endTime = Date.now();
   
   expect(endTime - startTime).toBeLessThan(1000);
@@ -460,7 +460,7 @@ Then('each submission should process quickly', async function (this: CustomWorld
 
 Then('provide immediate feedback on success or failure', async function (this: CustomWorld) {
   // Check that the product appeared in the list (success feedback)
-  const productVisible = await this.page.locator('.product-card').first().isVisible();
+  const productVisible = await this.page.locator('.course-card').first().isVisible();
   expect(productVisible).toBe(true);
 });
 

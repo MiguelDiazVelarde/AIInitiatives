@@ -224,7 +224,7 @@ When('I create a new product', async function (this: CustomWorld) {
   // Click Add Product button to show form if not visible
   const formVisible = await this.page.locator('input[name="name"]').isVisible().catch(() => false);
   if (!formVisible) {
-    await this.page.click('button.add-product-btn, button:has-text("Add Product")');
+    await this.page.click('button.register-progress-btn, button:has-text("Register progress")');
     await this.page.waitForTimeout(500);
   }
   

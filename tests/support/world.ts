@@ -114,7 +114,7 @@ export class CustomWorld {
       timeout: 15000 
     });
     // Wait for dashboard to load
-    await this.page.waitForSelector('h1:has-text("Dashboard"), .dashboard-header', { 
+    await this.page.waitForSelector('.dashboard-header', { 
       timeout: 10000 
     }).catch(() => {
       console.log('⚠️ Dashboard selector not found, but navigation completed');
@@ -199,6 +199,23 @@ export class CustomWorld {
     const productElement = this.page.locator(productSelector).first();
     const deleteButton = productElement.locator('..').locator('button.btn-danger');
     await deleteButton.click();
+  }
+
+  async registerCourseProgress(courseName: string, data: { minutesStudied: string; status?: string; notes?: string }) {
+    await this.page.goto(`${this.baseURL}/dashboard`, { waitUntil: 'domcontentloaded', timeout: 15000 });
+    await this.page.waitForSelector('.course-card', { timeout: 10000 });
+    const card = this.page.locator('.course-card', { has: this.page.locator(`h3:has-text("${courseName}")`) });
+    await card.locator('.register-progress-btn').click();
+    await this.page.waitForSelector('input[name="minutesStudied"]', { timeout: 10000 });
+    await this.page.fill('input[name="minutesStudied"]', data.minutesStudied);
+    if (data.status) {
+      await this.page.selectOption('select[name="status"]', data.status);
+    }
+    if (data.notes) {
+      await this.page.fill('textarea[name="notes"]', data.notes);
+    }
+    await this.page.click('button.submit-btn');
+    await this.page.waitForTimeout(1000);
   }
 
   async confirmDeleteDialog() {

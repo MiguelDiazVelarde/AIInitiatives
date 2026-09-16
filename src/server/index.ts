@@ -9,24 +9,24 @@ import progressRoutes from './routes/progress';
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Configuración de CORS para permitir requests desde React
+// CORS configuration to allow requests from React
 app.use(cors({
-  origin: 'http://localhost:5173', // Puerto de Vite en desarrollo
+  origin: 'http://localhost:5173', // Vite dev server port
   credentials: true
 }));
 
-// Configuración de middleware
+// Middleware configuration
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Configuración de sesiones
+// Session configuration
 app.use(session({
-  secret: 'tu-secreto-super-seguro-aqui', // En producción usar variable de entorno
+  secret: 'your-super-secure-secret-here', // Use an environment variable in production
   resave: false,
   saveUninitialized: false,
   cookie: {
-    secure: false, // En producción con HTTPS poner en true
-    maxAge: 24 * 60 * 60 * 1000 // 24 horas
+    secure: false, // Set to true in production with HTTPS
+    maxAge: 24 * 60 * 60 * 1000 // 24 hours
   }
 }));
 
@@ -71,9 +71,9 @@ if (process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'test') {
         if (!req.path.startsWith('/api')) {
           res.send(`
             <html>
-              <head><title>Academia con IA</title></head>
+              <head><title>AI Academy</title></head>
               <body>
-                <h1>Academia con IA - Server</h1>
+                <h1>AI Academy - Server</h1>
                 <p>API is running but client not built.</p>
                 <p>Available endpoints:</p>
                 <ul>

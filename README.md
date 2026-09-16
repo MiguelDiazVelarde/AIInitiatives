@@ -1,4 +1,4 @@
-# Products App - AI-Powered Testing & Smart Development Platform
+# Academia con IA - AI-Powered Testing & Smart Development Platform
 
 ![Simplified CI/CD Pipeline](https://github.com/MiguelDiazVelarde/AIInitiatives/workflows/Simplified%20CI/CD%20Pipeline/badge.svg)
 ![Simple PR Validation](https://github.com/MiguelDiazVelarde/AIInitiatives/workflows/%F0%9F%94%8D%20Simple%20PR%20Validation/badge.svg)
@@ -15,7 +15,7 @@
 ![Evaluation](https://img.shields.io/badge/Evaluation-7%20Metrics-blueviolet)
 ![Human Oversight](https://img.shields.io/badge/Human%20Oversight-HITL-blueviolet)
 
-A modern web application built with **React**, **TypeScript**, **Express.js** and **Node.js** featuring an advanced **AI-powered Test Optimization System** that intelligently manages test execution, reduces CI/CD time, and maximizes defect detection coverage. **Now includes comprehensive authentication testing with 100% reliability.**
+A modern web application built with **React**, **TypeScript**, **Express.js** and **Node.js**. The sample app, **Academia con IA**, is a courses platform to learn *Inglés con IA*, *Portugués con IA*, *Desarrollo con TypeScript y Playwright* and *Ingeniería de IA* applying **Barbara Oakley's learning principles** (active recall, spaced repetition, interleaving, chunking, focused/diffuse mode, Pomodoro and the Feynman technique). Student progress is logged to a plain CSV file to generate statistics. The repository also features an advanced **AI-powered Test Optimization System** that intelligently manages test execution, reduces CI/CD time, and maximizes defect detection coverage. **Now includes comprehensive authentication testing with 100% reliability.**
 
 ## 🌟 Highlights
 
@@ -62,8 +62,9 @@ The project has been recently **cleaned and optimized** to maintain only essenti
 ## 🚀 Features
 
 - ✅ **Login/Registration System** - Secure authentication with sessions
-- ✅ **Product Management** - Complete CRUD (Create, Read, **Update**, Delete)
-- ✅ **Edit Products** - Inline edit form pre-filled with existing product data
+- ✅ **Course Catalog** - 4 courses (Inglés con IA, Portugués con IA, TypeScript y Playwright, Ingeniería de IA) with modules, objectives and recommended Oakley techniques
+- ✅ **Progress Tracking** - Students log study sessions (module, technique, minutes, status) appended to a plain CSV file
+- ✅ **Statistics Dashboard** - Sessions, total minutes, completion %, study streak and favorite technique computed from the CSV log
 - ✅ **React Frontend** - Modern Single Page Application (SPA)
 - ✅ **Interactive Forms** - Responsive web interface with React components
 - ✅ **TypeScript** - Static typing for enhanced robustness
@@ -585,29 +586,19 @@ Or register a new user through the registration form.
   - Navigation state preservation
   - Protected route access control
 
-#### **2. Product Management** 📦
+#### **2. Course Catalog & Progress Tracking** 📚
 
-- **View Products**
-  - List all products with details
-  - Real-time updates
-  - Responsive grid layout
-- **Add Products**
-  - Interactive form with validation
-  - Fields: name, description, price, category, stock
-  - Instant feedback on submission
-- **Edit Products**
-  - Inline edit button on each product card
-  - Form pre-filled with existing product data
-  - Save or cancel without page reload
-  - Real-time list update after saving
-- **Delete Products**
-  - Confirmation dialog
-  - Cascade delete handling
-  - Updated list view
-- **Product Search** (Coming soon)
-  - Filter by category
-  - Search by name
-  - Price range filtering
+- **Browse Courses**
+  - 4 courses: Inglés con IA, Portugués con IA, Desarrollo con TypeScript y Playwright, Ingeniería de IA
+  - Each course lists modules, objectives, content and recommended Barbara Oakley learning technique
+  - Expandable syllabus view per course card
+- **Register Study Progress**
+  - Log a study session per module: technique used, minutes studied, status (started/in-progress/completed), notes
+  - Entries are appended to a plain CSV file (`data/progress-log.csv`) - no database required
+- **Statistics Dashboard**
+  - Total sessions, total minutes, courses started, study streak (consecutive days)
+  - Per-course completion percentage and last-studied date
+  - Most frequently used Oakley technique across all sessions
 
 #### **3. User Interface** 🎨
 
@@ -637,8 +628,9 @@ client/                   # React Frontend
 │   ├── components/       # React components
 │   │   ├── LoginForm.tsx
 │   │   ├── RegisterForm.tsx
-│   │   ├── ProductList.tsx
-│   │   └── ProductForm.tsx
+│   │   ├── CourseList.tsx
+│   │   ├── ProgressForm.tsx
+│   │   └── ProgressStats.tsx
 │   ├── pages/            # Page components
 │   │   └── Dashboard.tsx
 │   ├── context/          # React Context
@@ -658,15 +650,21 @@ src/server/               # Express Backend
 ├── index.ts              # Main server
 ├── models/               # TypeScript interfaces
 │   ├── User.ts
-│   └── Product.ts
+│   ├── Course.ts         # Course catalog + Oakley techniques
+│   └── Progress.ts       # Progress entry + stats types
 ├── services/             # Business logic
 │   ├── UserService.ts
-│   └── ProductService.ts
+│   ├── CourseService.ts
+│   └── ProgressService.ts # Reads/writes data/progress-log.csv
 ├── routes/               # HTTP routes
 │   ├── auth.ts
-│   └── products.ts
+│   ├── courses.ts
+│   └── progress.ts
 └── middleware/           # Custom middleware
     └── auth.ts
+
+data/                     # Plain-file student progress log (git-ignored)
+└── progress-log.csv      # Appended on each POST /api/progress
 
 src/test-optimizer/       # AI Test Optimizer
 ├── core/                 # Core optimization logic
@@ -695,7 +693,7 @@ tests/                    # Test Suite (Clean & Organized)
 ├── features/             # Gherkin feature files
 │   ├── functional-requirements/
 │   │   ├── authentication/    # Authentication test scenarios
-│   │   ├── product-management/    # Product CRUD test scenarios
+│   │   ├── course-progress/   # Course catalog & progress tracking scenarios
 │   │   └── user-interface/    # UI navigation test scenarios
 │   ├── non-functional-requirements/
 │   ├── technical-requirements/
@@ -703,7 +701,7 @@ tests/                    # Test Suite (Clean & Organized)
 │   └── session-test.feature
 ├── step-definitions/     # Test step implementations
 │   ├── authentication.steps.ts
-│   ├── products.steps.ts
+│   ├── course-progress.steps.ts
 │   └── navigation.steps.ts
 ├── step-definitions-backup/  # Backup of step definitions
 └── support/              # Test configuration
@@ -783,7 +781,7 @@ npm run test:headed      # Run tests in visible browser (for debugging)
 # Specific Test Suites
 npm run test:auth        # 🔐 Authentication tests (23 scenarios, 100% passing)
 npm run test:auth:session # Session persistence tests with optimized timeouts
-npm run test:products    # 📦 Product management tests (20 scenarios, server auto-started)
+npm run test:courses     # 📚 Course catalog & progress tracking tests (server auto-started)
 npm run test:navigation  # UI navigation and routing tests
 npm run test:smoke       # Quick smoke tests (alias for test:auth)
 
@@ -1202,7 +1200,7 @@ npm start
 
 # Terminal 2: Run tests  
 npm run test:auth        # Authentication tests (23 scenarios)
-npm run test:products    # Product management tests
+npm run test:courses     # Course catalog & progress tracking tests
 npm run test:navigation  # UI navigation tests
 npm run test:full        # All tests with HTML report
 ```
@@ -1403,13 +1401,16 @@ Complete documentation available in `ui-testing-ai/`:
 - `POST /api/auth/logout` - User logout (JSON)
 - `GET /api/auth/me` - Check authentication status (JSON)
 
-### Products
+### Courses
 
-- `GET /api/products` - Get all products (JSON)
-- `POST /api/products` - Create product (JSON)
-- `GET /api/products/:id` - Get product by ID (JSON)
-- `PUT /api/products/:id` - Update product (JSON)
-- `DELETE /api/products/:id` - Delete product (JSON)
+- `GET /api/courses` - Get all courses with modules and techniques (JSON)
+- `GET /api/courses/:id` - Get course by ID (JSON)
+
+### Progress
+
+- `POST /api/progress` - Register a study session (courseId, module, technique, minutesStudied, status, notes)
+- `GET /api/progress` - Get all progress entries for the logged in student (JSON)
+- `GET /api/progress/stats` - Get aggregated statistics for the logged in student (JSON)
 
 ### 🤖 Test Optimizer API (Port 3001)
 
@@ -1454,11 +1455,12 @@ curl -X POST http://localhost:3001/api/optimize \
 - ✅ **Browser Context Improvements** with multiple fallback strategies
 - ✅ **Session Management Testing** across page refreshes and navigation
 
-### 📦 **Product Management Testing**
+### � **Course & Progress Testing**
 
-- ✅ **20/20 Scenarios Passing** with full CRUD coverage
-- ✅ **Edit Product Tests** — 4 new scenarios: pre-fill form, save changes, cancel, real-time update
-- ✅ **Auto Server Startup** — `test:products` levanta y apaga el servidor automáticamente
+- ✅ **Migrated** from the legacy product-management suite to `tests/features/functional-requirements/course-progress/`
+- ✅ **Course Catalog Tests** — catalog display, syllabus expansion
+- ✅ **Progress Tracking Tests** — register study session, statistics view, required-field validation
+- ✅ **Auto Server Startup** — `test:courses` levanta y apaga el servidor automáticamente
 - ✅ **`start-server-and-test`** — integración robusta para CI/CD sin configuración manual
 
 ### 📊 **Development Productivity**

@@ -70,15 +70,15 @@ Feature: User Interface Navigation and Responsiveness
     Given I am logging in
     When the authentication is in progress
     Then I should see appropriate loading indicators
-    When I am loading products on the dashboard
+    When I am loading courses on the dashboard
     Then I should see loading feedback
-    When I am navigating to create a new product
+    When I am navigating to register course progress
     Then I should see submission progress indicators
 
   # REQ-UI-009: Form data clearing after submission
   Scenario: Form reset after successful operations
     Given I am on the dashboard
-    When I fill out the product form completely
+    When I fill out the progress form completely
     And I submit it successfully
     Then all form fields should be cleared automatically
     And the form should be ready for new input
@@ -99,8 +99,8 @@ Feature: User Interface Navigation and Responsiveness
   Scenario: Layout optimization for different screens
     Given I am on the dashboard
     When I view it on a large desktop screen
-    Then the product grid should utilize the available space efficiently
+    Then the course grid should utilize the available space efficiently
     When I view it on a smaller laptop screen
     Then the layout should compact appropriately
     When I view it on a mobile screen
-    Then the products should stack vertically for easy scrolling
+    Then the courses should stack vertically for easy scrolling

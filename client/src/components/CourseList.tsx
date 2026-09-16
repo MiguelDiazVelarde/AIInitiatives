@@ -12,7 +12,7 @@ const CourseList: React.FC<CourseListProps> = ({ courses, onRegisterProgress }) 
   if (courses.length === 0) {
     return (
       <div className="no-courses">
-        <p>No hay cursos disponibles.</p>
+        <p>No courses available.</p>
       </div>
     );
   }
@@ -27,7 +27,7 @@ const CourseList: React.FC<CourseListProps> = ({ courses, onRegisterProgress }) 
               <span className="course-category">{course.category}</span>
               <h3>{course.name}</h3>
               <p className="course-description">{course.description}</p>
-              <p className="course-level">Nivel: {course.level}</p>
+              <p className="course-level">Level: {course.level}</p>
               <div className="course-techniques">
                 {course.recommendedTechniques.map((technique) => (
                   <span key={technique} className="technique-badge">{technique}</span>
@@ -39,7 +39,7 @@ const CourseList: React.FC<CourseListProps> = ({ courses, onRegisterProgress }) 
                 className="toggle-syllabus-btn"
                 onClick={() => setExpandedCourseId(isExpanded ? null : course.id)}
               >
-                {isExpanded ? 'Ocultar temario' : `Ver temario (${course.modules.length} módulos)`}
+                {isExpanded ? 'Hide syllabus' : `View syllabus (${course.modules.length} modules)`}
               </button>
 
               {isExpanded && (
@@ -51,13 +51,13 @@ const CourseList: React.FC<CourseListProps> = ({ courses, onRegisterProgress }) 
                         <span className="module-duration">{module.estimatedMinutes} min</span>
                       </div>
                       <span className="technique-badge module-technique">{module.technique}</span>
-                      <p className="module-subheading">Objetivos</p>
+                      <p className="module-subheading">Objectives</p>
                       <ul>
                         {module.objectives.map((objective) => (
                           <li key={objective}>{objective}</li>
                         ))}
                       </ul>
-                      <p className="module-subheading">Contenido</p>
+                      <p className="module-subheading">Content</p>
                       <ul>
                         {module.content.map((item) => (
                           <li key={item}>{item}</li>
@@ -73,7 +73,7 @@ const CourseList: React.FC<CourseListProps> = ({ courses, onRegisterProgress }) 
                   onClick={() => onRegisterProgress(course)}
                   className="register-progress-btn"
                 >
-                  Registrar avance
+                  Register progress
                 </button>
               </div>
             </div>

@@ -25,7 +25,7 @@ When('I am on the dashboard', async function () {
     if (currentUrl.includes('/dashboard')) {
       console.log('✅ Already on dashboard');
       // Wait for dashboard to be fully loaded
-      await this.page.waitForSelector('h1:has-text("Dashboard"), .dashboard-header', { 
+      await this.page.waitForSelector('.dashboard-header', { 
         timeout: 10000 
       }).catch(() => console.log('⚠️ Dashboard header not found, but on dashboard URL'));
       return;
@@ -70,7 +70,7 @@ When('I am on the dashboard', async function () {
     }
     
     // Wait for dashboard content to be visible
-    await this.page.waitForSelector('h1:has-text("Dashboard"), .dashboard-header', { 
+    await this.page.waitForSelector('.dashboard-header', { 
       timeout: 10000 
     });
     console.log('✅ Dashboard loaded successfully');
@@ -173,7 +173,7 @@ Then('I should see the {string} section', async function (sectionName: string) {
 
 Then('I should see the {string} button', async function (buttonText: string) {
   if (buttonText === 'Logout') {
-    await expect(this.page.locator(`button:has-text("Cerrar Sesión")`)).toBeVisible({ timeout: 5000 });
+    await expect(this.page.locator(`button:has-text("Logout")`)).toBeVisible({ timeout: 5000 });
   } else {
     await expect(this.page.locator(`button:has-text("${buttonText}")`)).toBeVisible({ timeout: 5000 });
   }
@@ -265,7 +265,9 @@ When('I click the register link', async function () {
   
   // Multiple fallback selectors for register link
   const registerSelectors = [
+    'button.link-button:has-text("Regístrate")',
     'button.link-button:has-text("Register")',
+    'button:has-text("Regístrate")',
     'button:has-text("Register")',
     'a:has-text("Register")',
     '.link-button:has-text("Register")',
@@ -492,7 +494,7 @@ Then('I should see appropriate loading indicators', async function () {
   expect(true).toBe(true);
 });
 
-When('I am loading products on the dashboard', async function () {
+When('I am loading courses on the dashboard', async function () {
   // Navigate to dashboard (assuming user is already authenticated)
   await this.page.goto(`${this.baseURL}/dashboard`);
   await this.page.waitForLoadState('domcontentloaded', { timeout: 10000 });
@@ -501,16 +503,16 @@ When('I am loading products on the dashboard', async function () {
 
 Then('I should see loading feedback', async function () {
   // Check that dashboard loads properly
-  const dashboardVisible = await this.page.locator('h1:has-text("Dashboard")').isVisible();
+  const dashboardVisible = await this.page.locator('.dashboard-header').isVisible();
   expect(dashboardVisible).toBe(true);
 });
 
-When('I am navigating to create a new product', async function () {
+When('I am navigating to register course progress', async function () {
   // Navigate to dashboard (assuming user is already authenticated)
   await this.page.goto(`${this.baseURL}/dashboard`);
   await this.page.waitForLoadState('domcontentloaded', { timeout: 10000 });
   await this.page.waitForTimeout(1000);
-  await this.page.click('button:has-text("Add Product")');
+  await this.page.click('.register-progress-btn >> nth=0');
 });
 
 Then('I should see submission progress indicators', async function () {
@@ -519,27 +521,24 @@ Then('I should see submission progress indicators', async function () {
   expect(formVisible).toBe(true);
 });
 
-When('I fill out the product form completely', async function () {
-  console.log('🔄 Filling product form...');
+When('I fill out the progress form completely', async function () {
+  console.log('🔄 Filling progress form...');
   
-  // Click Add Product button to show form if not visible
-  const formVisible = await this.page.locator('input[name="name"]').isVisible().catch(() => false);
+  // Click the register-progress button to show the form if not visible
+  const formVisible = await this.page.locator('input[name="minutesStudied"]').isVisible().catch(() => false);
   if (!formVisible) {
-    console.log('📝 Form not visible, clicking Add Product button...');
-    await this.page.click('button.add-product-btn, button:has-text("Add Product")');
+    console.log('📝 Form not visible, clicking Register progress button...');
+    await this.page.click('.register-progress-btn >> nth=0');
     await this.page.waitForTimeout(500);
   }
   
   // Wait for form elements to be available
-  await this.page.waitForSelector('input[name="name"]', { timeout: 30000 });
-  console.log('✅ Product form found');
+  await this.page.waitForSelector('input[name="minutesStudied"]', { timeout: 30000 });
+  console.log('✅ Progress form found');
   
-  await this.page.fill('input[name="name"]', 'Test Product');
-  await this.page.fill('textarea[name="description"]', 'Test Description');
-  await this.page.fill('input[name="price"]', '29.99');
-  await this.page.fill('input[name="category"]', 'electronics'); // Category is a text input, not select
-  await this.page.fill('input[name="stock"]', '10');
-  console.log('✅ Product form filled completely');
+  await this.page.fill('input[name="minutesStudied"]', '30');
+  await this.page.fill('textarea[name="notes"]', 'Practice session');
+  console.log('✅ Progress form filled completely');
 });
 
 When('I submit it successfully', async function () {
@@ -548,14 +547,13 @@ When('I submit it successfully', async function () {
 });
 
 Then('all form fields should be cleared automatically', async function () {
-  // Form might be hidden after successful submission (showForm=false)
-  // Check if form is either hidden OR fields are cleared
-  const formVisible = await this.page.locator('input[name="name"]').isVisible().catch(() => false);
+  // The progress form is unmounted after a successful submission (selectedCourse is reset)
+  const formVisible = await this.page.locator('input[name="minutesStudied"]').isVisible().catch(() => false);
   
   if (formVisible) {
     // If form is still visible, check that fields are cleared
-    const nameValue = await this.page.inputValue('input[name="name"]');
-    expect(nameValue).toBe('');
+    const minutesValue = await this.page.inputValue('input[name="minutesStudied"]');
+    expect(minutesValue).toBe('');
   } else {
     // If form is hidden, that's also acceptable (indicates successful submission and reset)
     expect(formVisible).toBe(false);
@@ -563,10 +561,12 @@ Then('all form fields should be cleared automatically', async function () {
 });
 
 Then('the form should be ready for new input', async function () {
-  // Form should either be visible OR can be shown by clicking Add Product
-  const formVisible = await this.page.locator('input[name="name"]').isVisible().catch(() => false);
-  const addButtonVisible = await this.page.locator('button:has-text("Add Product")').isVisible().catch(() => false);
-  expect(formVisible || addButtonVisible).toBe(true);
+  // After a successful submission the dashboard switches to the statistics view;
+  // the "Cursos" toggle lets the user get back to a fresh registration form.
+  const formVisible = await this.page.locator('input[name="minutesStudied"]').isVisible().catch(() => false);
+  const addButtonVisible = await this.page.locator('.register-progress-btn').first().isVisible().catch(() => false);
+  const coursesToggleVisible = await this.page.locator('.toggle-btn:has-text("Courses")').isVisible().catch(() => false);
+  expect(formVisible || addButtonVisible || coursesToggleVisible).toBe(true);
 });
 
 When('I access it from a desktop browser', async function () {
@@ -593,7 +593,7 @@ Then('all features should work correctly', async function () {
   await this.page.waitForLoadState('domcontentloaded', { timeout: 10000 });
   await this.page.waitForTimeout(2000);
   
-  const dashboardWorking = await this.page.locator('h1:has-text("Dashboard")').isVisible();
+  const dashboardWorking = await this.page.locator('.dashboard-header').isVisible();
   expect(dashboardWorking).toBe(true);
 });
 
@@ -638,10 +638,10 @@ When('I view it on a large desktop screen', async function () {
   await this.page.waitForTimeout(1000);
 });
 
-Then('the product grid should utilize the available space efficiently', async function () {
-  // Check for products-grid, product-list, or no-products (empty state)
-  const productArea = await this.page.locator('.products-grid, .product-list, .no-products').first().isVisible().catch(() => false);
-  expect(productArea).toBe(true);
+Then('the course grid should utilize the available space efficiently', async function () {
+  // Check for courses-grid, course-list, or no-courses (empty state)
+  const courseArea = await this.page.locator('.courses-grid, .course-list, .no-courses').first().isVisible().catch(() => false);
+  expect(courseArea).toBe(true);
 });
 
 When('I view it on a smaller laptop screen', async function () {
@@ -657,9 +657,9 @@ When('I view it on a mobile screen', async function () {
   await this.page.setViewportSize({ width: 375, height: 667 });
 });
 
-Then('the products should stack vertically for easy scrolling', async function () {
-  const productsVisible = await this.page.locator('.product-list, .no-products').isVisible();
-  expect(productsVisible).toBe(true);
+Then('the courses should stack vertically for easy scrolling', async function () {
+  const coursesVisible = await this.page.locator('.course-list, .no-courses').isVisible();
+  expect(coursesVisible).toBe(true);
 });
 
 When('I navigate through different sections of the application', async function () {
@@ -814,7 +814,7 @@ Then('I should not see the login form', async function () {
 });
 
 When('I switch to registration', async function () {
-  await this.page.click('button:has-text("Register"), a:has-text("Register")');
+  await this.page.click('button:has-text("Regístrate"), button:has-text("Register"), a:has-text("Register")');
   await this.page.waitForTimeout(500);
 });
 
@@ -849,7 +849,7 @@ Then('redirected to the login page', async function () {
 });
 
 When('I switch to registration page', async function () {
-  await this.page.click('button:has-text("Register"), a:has-text("Register")');
+  await this.page.click('button:has-text("Regístrate"), button:has-text("Register"), a:has-text("Register")');
   await this.page.waitForTimeout(500);
 });
 

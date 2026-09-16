@@ -1,7 +1,7 @@
 {
-  "name": "products-app",
+  "name": "academia-con-ia",
   "version": "1.0.0",
-  "description": "Simple app with login and product form",
+  "description": "Courses app with login and student progress tracking",
   "main": "dist/server/index.js",
   "scripts": {
     "build": "npm run build:server && npm run build:client",
@@ -23,8 +23,8 @@
     "test:full": "npm run test:cucumber && npm run test:report",
     "test:auth": "cucumber-js tests/features/functional-requirements/authentication/authentication.feature --require-module ts-node/register --require tests/step-definitions/**/*.ts --format progress-bar",
     "test:auth:session": "cucumber-js tests/features/functional-requirements/authentication/authentication.feature --require-module ts-node/register --require tests/step-definitions/**/*.ts --format progress-bar --grep \"Session persistence\"",
-    "test:products:cucumber": "cucumber-js tests/features/functional-requirements/product-management/products.feature --require-module ts-node/register --require tests/step-definitions/**/*.ts",
-    "test:products": "npm run build && start-server-and-test start:test http-get://localhost:3000 test:products:cucumber",
+    "test:courses:cucumber": "cucumber-js tests/features/functional-requirements/course-progress/course-progress.feature --require-module ts-node/register --require tests/step-definitions/**/*.ts",
+    "test:courses": "npm run build && start-server-and-test start:test http-get://localhost:3000 test:courses:cucumber",
     "test:navigation": "cucumber-js tests/features/functional-requirements/user-interface/navigation.feature --require-module ts-node/register --require tests/step-definitions/**/*.ts",
     "test:smoke": "npm run test:auth",
     "test:health": "echo 'Running health check tests...' && npm run build && echo 'Build successful'",
@@ -57,7 +57,7 @@
     "optimizer:init": "ts-node src/test-optimizer/index.ts config init",
     "server:debug": "node --inspect-brk -r ts-node/register src/server/index.ts",
     "server:debug:auth": "cross-env DEBUG=server:auth:* nodemon --inspect src/server/index.ts",
-    "server:debug:products": "cross-env DEBUG=server:products:* nodemon --inspect src/server/index.ts",
+    "server:debug:courses": "cross-env DEBUG=server:courses:* nodemon --inspect src/server/index.ts",
     "server:debug:api": "cross-env DEBUG=server:api:* nodemon --inspect src/server/index.ts",
     "client:debug": "cross-env DEBUG=client:* npm run dev:client",
     "client:debug:build": "cross-env DEBUG=client:* npm run build:client",
@@ -68,7 +68,7 @@
     "typescript",
     "express",
     "login",
-    "products"
+    "courses"
   ],
   "author": "MiguelDiazVelarde",
   "license": "MIT",

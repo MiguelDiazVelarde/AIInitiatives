@@ -49,7 +49,7 @@ Given('multiple users are accessing the system simultaneously', async function (
   this.concurrentUsers = true;
 });
 
-When('I login, view products, create items, or navigate', async function (this: CustomWorld) {
+When('I login, view courses, register progress, or navigate', async function (this: CustomWorld) {
   const startTime = Date.now();
   // Already logged in from previous step
   await this.page.goto(`${this.baseURL}/dashboard`, { waitUntil: 'domcontentloaded', timeout: 15000 });
@@ -81,15 +81,15 @@ Then('the dashboard should load quickly', async function (this: CustomWorld) {
   expect(loadTime).toBeLessThan(3000); // 3 seconds max
 });
 
-Then('product lists should appear promptly', async function (this: CustomWorld) {
-  // Check for dashboard elements (products section, add button, or product list) - use first() for strict mode
-  await expect(this.page.locator('.products-section, .add-product-btn, .product-list, .no-products').first()).toBeVisible({ timeout: 3000 });
+Then('course lists should appear promptly', async function (this: CustomWorld) {
+  // Check for dashboard elements (courses section, register button, or course list) - use first() for strict mode
+  await expect(this.page.locator('.courses-section, .register-progress-btn, .course-list, .no-courses').first()).toBeVisible({ timeout: 3000 });
 });
 
 Then('the interface should be usable immediately', async function (this: CustomWorld) {
-  // Check if Add Product button is visible (form might be hidden initially)
-  const addButtonVisible = await this.page.locator('button:has-text("Add Product")').isVisible();
-  expect(addButtonVisible).toBe(true);
+  // Check if a course card with a Register progress button is visible
+  const registerButtonVisible = await this.page.locator('.register-progress-btn').first().isVisible();
+  expect(registerButtonVisible).toBe(true);
 });
 
 Then('the system should maintain good performance for all users', async function (this: CustomWorld) {

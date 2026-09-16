@@ -4,8 +4,8 @@ import { v4 as uuidv4 } from 'uuid';
 import { ProgressEntry, CreateProgressRequest, CourseStats, OverallStats } from '../models/Progress';
 import { CourseService } from './CourseService';
 
-// El avance de los estudiantes se registra en un archivo plano (CSV) para poder
-// generar estadísticas sin depender de una base de datos.
+// Student progress is logged to a plain file (CSV) so statistics can be
+// generated without depending on a database.
 const DATA_DIR = path.join(__dirname, '../../../data');
 const PROGRESS_FILE = path.join(DATA_DIR, 'progress-log.csv');
 const CSV_HEADER = 'id,userId,username,courseId,courseName,module,technique,minutesStudied,status,notes,timestamp';
@@ -134,7 +134,7 @@ export class ProgressService {
         }
 
         const modulesCompleted = new Set(
-          courseEntries.filter(e => e.status === 'completado').map(e => e.module)
+          courseEntries.filter(e => e.status === 'completed').map(e => e.module)
         ).size;
 
         const techniqueBreakdown: Record<string, number> = {};

@@ -11,17 +11,17 @@ Feature: Performance Requirements
   # REQ-PERF-001: Response time under normal load
   Scenario: Acceptable response times for standard operations
     Given I am performing typical application operations
-    When I login, view products, create items, or navigate
+    When I login, view courses, register progress, or navigate
     Then each operation should complete within acceptable time limits
     And response times should be under 2 seconds for most actions
     And the interface should remain responsive during operations
 
   # REQ-PERF-002: Dashboard loading performance
-  Scenario: Fast dashboard loading with product data
+  Scenario: Fast dashboard loading with course data
     Given I am logged into the application
     When I navigate to the dashboard
     Then the dashboard should load quickly
-    And product lists should appear promptly
+    And course lists should appear promptly
     And the interface should be usable immediately
 
   # REQ-PERF-003: Concurrent user session handling
@@ -35,7 +35,7 @@ Feature: Performance Requirements
   # REQ-PERF-004: API response optimization
   Scenario: Optimized API responses for minimal data transfer
     Given I am making API requests
-    When I request product data or user information
+    When I request course data or user information
     Then the API should return only necessary data
     And response sizes should be optimized
     And unnecessary data should not be transmitted

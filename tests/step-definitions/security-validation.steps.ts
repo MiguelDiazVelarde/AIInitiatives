@@ -72,7 +72,7 @@ Then('no malicious code should be executed', async function (this: CustomWorld) 
 Then('the data should be stored safely', async function (this: CustomWorld) {
   // Check that data appears escaped/sanitized in the display
   await this.page.waitForTimeout(1000);
-  const productCards = await this.page.locator('.product-card').count();
+  const productCards = await this.page.locator('.course-card').count();
   // Should either reject the submission or sanitize the content
   expect(productCards).toBeGreaterThanOrEqual(0);
 });
@@ -166,7 +166,7 @@ Given('I register a new user with password {string}', async function (this: Cust
   await this.page.waitForSelector('input[name="username"]');
   
   // Switch to register mode to access email field
-  await this.page.click('button.link-button:has-text("Register")');
+  await this.page.click('button.link-button:has-text("Regístrate"), button.link-button:has-text("Register")');
   await this.page.waitForSelector('input[name="email"]', { timeout: 5000 });
   
   const username = `user_${Date.now()}`;
@@ -209,7 +209,7 @@ Then('the password should be stored as a bcrypt hash', async function (this: Cus
   await this.page.click('button[type="submit"]');
   await this.page.waitForTimeout(2000);
   
-  const dashboardVisible = await this.page.locator('h1:has-text("Dashboard")').isVisible({ timeout: 5000 });
+  const dashboardVisible = await this.page.locator('.dashboard-header').isVisible({ timeout: 5000 });
   expect(dashboardVisible).toBe(true);
 });
 
@@ -285,7 +285,7 @@ Given('I am submitting any form in the application', async function (this: Custo
   await this.page.waitForSelector('input[name="username"]');
   
   // Switch to register mode to access email field
-  await this.page.click('button.link-button:has-text("Register")');
+  await this.page.click('button.link-button:has-text("Regístrate"), button.link-button:has-text("Register")');
   await this.page.waitForSelector('input[name="email"]', { timeout: 5000 });
 });
 
@@ -418,47 +418,53 @@ When('I try to inject JavaScript code', async function (this: CustomWorld) {
     throw new Error(`Authentication failed - redirected to ${currentUrl} instead of dashboard`);
   }
   
-  // Wait for Add Product button and check initial form state
-  await this.page.waitForSelector('button:has-text("Add Product")', { timeout: 10000 });
-  console.log('✅ Add Product button found');
+  // Wait for a Register progress button and check initial form state
+  await this.page.waitForSelector('.register-progress-btn', { timeout: 10000 });
+  console.log('✅ Register progress button found');
   
-  // Check if form is already visible (shouldn't be, but check)
-  let formVisible = await this.page.locator('input[name="name"]').isVisible().catch(() => false);
+  // Check if the progress form is already visible (shouldn't be, but check)
+  let formVisible = await this.page.locator('input[name="minutesStudied"]').isVisible().catch(() => false);
   console.log(`📝 Initial form visibility: ${formVisible}`);
   
-  // If form not visible, click to show it
+  // If form not visible, click the first course's register button to show it
   if (!formVisible) {
-    await this.page.click('button:has-text("Add Product")');
-    console.log('🔘 Clicked Add Product to show form');
+    await this.page.locator('.register-progress-btn').first().click();
+    console.log('🔘 Clicked Register progress to show form');
     await this.page.waitForTimeout(2000); // Wait for form animation
     
-    formVisible = await this.page.locator('input[name="name"]').isVisible().catch(() => false);
+    formVisible = await this.page.locator('input[name="minutesStudied"]').isVisible().catch(() => false);
     console.log(`📝 Form visible after click: ${formVisible}`);
     
     if (!formVisible) {
-      throw new Error('Form did not become visible after clicking Add Product');
+      throw new Error('Form did not become visible after clicking Register progress');
     }
   }
   
   // Verify form is still visible before filling
-  await this.page.waitForSelector('input[name="name"]', { state: 'visible', timeout: 5000 });
+  await this.page.waitForSelector('input[name="minutesStudied"]', { state: 'visible', timeout: 5000 });
   
   for (const payload of xssPayloads) {
     // Re-check visibility before each payload (in case form gets hidden)
-    const stillVisible = await this.page.locator('input[name="name"]').isVisible();
+    const stillVisible = await this.page.locator('input[name="minutesStudied"]').isVisible();
     if (!stillVisible) {
       console.log('⚠️ Form became hidden, skipping remaining payloads');
       break;
     }
     
-    await this.page.fill('input[name="name"]', payload);
-    await this.page.fill('textarea[name="description"]', 'Test description');
-    await this.page.fill('input[name="price"]', '29.99');
-    await this.page.fill('input[name="category"]', 'electronics');
-    await this.page.fill('input[name="stock"]', '10');
+    await this.page.fill('input[name="minutesStudied"]', '30');
+    await this.page.fill('textarea[name="notes"]', payload);
     
-    await this.page.click('button[type="submit"]');
+    await this.page.click('button.submit-btn');
     await this.page.waitForTimeout(1000);
+
+    // Progress submissions succeed and switch the dashboard to the statistics
+    // view, so re-open the form for the next payload.
+    const formStillOpen = await this.page.locator('input[name="minutesStudied"]').isVisible().catch(() => false);
+    if (!formStillOpen) {
+      await this.page.click('.toggle-btn:has-text("Courses")');
+      await this.page.locator('.register-progress-btn').first().click();
+      await this.page.waitForSelector('input[name="minutesStudied"]', { state: 'visible', timeout: 5000 });
+    }
   }
 });
 
@@ -479,6 +485,6 @@ Then('not executed in the browser', async function (this: CustomWorld) {
 Then('other users should not be affected', async function (this: CustomWorld) {
   // In a real scenario, this would test that XSS doesn't affect other user sessions
   // For now, verify the current session is stable
-  const dashboardVisible = await this.page.locator('h1:has-text("Dashboard")').isVisible();
+  const dashboardVisible = await this.page.locator('.dashboard-header').isVisible();
   expect(dashboardVisible).toBe(true);
 });

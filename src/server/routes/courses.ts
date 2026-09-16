@@ -13,7 +13,7 @@ router.get('/courses', requireAuth, (req: Request, res: Response) => {
     console.error('Error getting courses:', error);
     res.status(500).json({
       success: false,
-      message: 'Error al obtener cursos',
+      message: 'Error getting courses',
     });
   }
 });
@@ -27,7 +27,7 @@ router.get('/courses/:id', requireAuth, (req: Request, res: Response) => {
     if (!course) {
       return res.status(404).json({
         success: false,
-        message: 'Curso no encontrado',
+        message: 'Course not found',
       });
     }
 
@@ -36,7 +36,7 @@ router.get('/courses/:id', requireAuth, (req: Request, res: Response) => {
     console.error('Error getting course:', error);
     res.status(500).json({
       success: false,
-      message: 'Error al obtener curso',
+      message: 'Error getting course',
     });
   }
 });

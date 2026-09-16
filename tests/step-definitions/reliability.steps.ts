@@ -266,7 +266,7 @@ Then('my session should remain active', async function (this: CustomWorld) {
     if (currentUrl.includes('/dashboard')) {
       console.log('✅ Session active - on dashboard page');
       // Check for dashboard content as additional confirmation
-      const dashboardContent = await this.page.locator('h1:has-text("Dashboard"), .dashboard').first().isVisible({ timeout: 5000 });
+      const dashboardContent = await this.page.locator('.dashboard-header, .dashboard').first().isVisible({ timeout: 5000 });
       expect(dashboardContent).toBe(true);
     } else {
       throw new Error(`Expected to be authenticated but current URL is: ${currentUrl}`);

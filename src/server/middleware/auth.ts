@@ -17,7 +17,7 @@ export interface AuthenticatedRequest extends Request {
 
 export const requireAuth = (req: Request, res: Response, next: NextFunction) => {
   if (!req.session || !req.session.userId) {
-    return res.status(401).json({ error: 'Acceso no autorizado. Por favor inicia sesión.' });
+    return res.status(401).json({ error: 'Unauthorized access. Please log in.' });
   }
 
   (req as AuthenticatedRequest).user = {

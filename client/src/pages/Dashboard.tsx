@@ -29,7 +29,7 @@ const Dashboard: React.FC = () => {
       setCourses(courseList);
       setStats(statsData);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Error al cargar los cursos');
+      setError(err instanceof Error ? err.message : 'Error loading courses');
     } finally {
       setLoading(false);
     }
@@ -53,17 +53,17 @@ const Dashboard: React.FC = () => {
   };
 
   if (loading) {
-    return <div className="loading">Cargando cursos...</div>;
+    return <div className="loading">Loading courses...</div>;
   }
 
   return (
     <div className="dashboard">
       <header className="dashboard-header">
-        <h1>Academia con IA - Aprende con los principios de Barbara Oakley</h1>
+        <h1>AI Academy - Learn with Barbara Oakley's principles</h1>
         <div className="user-info">
-          <span>Bienvenido, {user?.username}!</span>
+          <span>Welcome, {user?.username}!</span>
           <button onClick={handleLogout} className="logout-btn">
-            Cerrar sesión
+            Logout
           </button>
         </div>
       </header>
@@ -71,19 +71,19 @@ const Dashboard: React.FC = () => {
       <main className="dashboard-main">
         <div className="courses-section">
           <div className="courses-header">
-            <h2>{view === 'courses' ? 'Mis cursos' : 'Mis estadísticas'}</h2>
+            <h2>{view === 'courses' ? 'My courses' : 'My statistics'}</h2>
             <div className="view-toggle">
               <button
                 className={view === 'courses' ? 'toggle-btn active' : 'toggle-btn'}
                 onClick={() => setView('courses')}
               >
-                Cursos
+                Courses
               </button>
               <button
                 className={view === 'stats' ? 'toggle-btn active' : 'toggle-btn'}
                 onClick={() => setView('stats')}
               >
-                Estadísticas
+                Statistics
               </button>
             </div>
           </div>

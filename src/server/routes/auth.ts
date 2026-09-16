@@ -52,7 +52,7 @@ router.post('/register', async (req: Request, res: Response) => {
     if (!username || !email || !password) {
       return res.status(400).json({ 
         success: false, 
-        message: 'Todos los campos son requeridos' 
+        message: 'All fields are required' 
       });
     }
 

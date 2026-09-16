@@ -14,14 +14,14 @@ router.post('/progress', requireAuth, (req: Request, res: Response) => {
     if (!courseId || !module || !technique || minutesStudied === undefined || !status) {
       return res.status(400).json({
         success: false,
-        message: 'Todos los campos son requeridos',
+        message: 'All fields are required',
       });
     }
 
     if (Number.isNaN(Number(minutesStudied)) || Number(minutesStudied) <= 0) {
       return res.status(400).json({
         success: false,
-        message: 'Los minutos estudiados deben ser un número válido mayor a 0',
+        message: 'Minutes studied must be a valid number greater than 0',
       });
     }
 
@@ -29,7 +29,7 @@ router.post('/progress', requireAuth, (req: Request, res: Response) => {
     if (!course) {
       return res.status(404).json({
         success: false,
-        message: 'Curso no encontrado',
+        message: 'Course not found',
       });
     }
 
@@ -47,7 +47,7 @@ router.post('/progress', requireAuth, (req: Request, res: Response) => {
     console.error('Error registering progress:', error);
     res.status(500).json({
       success: false,
-      message: 'Error al registrar el avance',
+      message: 'Error registering progress',
     });
   }
 });
@@ -62,7 +62,7 @@ router.get('/progress', requireAuth, (req: Request, res: Response) => {
     console.error('Error getting progress:', error);
     res.status(500).json({
       success: false,
-      message: 'Error al obtener el avance',
+      message: 'Error getting progress',
     });
   }
 });
@@ -77,7 +77,7 @@ router.get('/progress/stats', requireAuth, (req: Request, res: Response) => {
     console.error('Error getting stats:', error);
     res.status(500).json({
       success: false,
-      message: 'Error al obtener estadísticas',
+      message: 'Error getting statistics',
     });
   }
 });

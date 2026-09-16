@@ -13,7 +13,7 @@ const ProgressForm: React.FC<ProgressFormProps> = ({ course, onProgressAdded, on
     module: course.modules[0].title,
     technique: course.modules[0].technique as string,
     minutesStudied: '',
-    status: 'en-progreso' as ProgressStatus,
+    status: 'in-progress' as ProgressStatus,
     notes: '',
   });
   const [error, setError] = useState('');
@@ -54,7 +54,7 @@ const ProgressForm: React.FC<ProgressFormProps> = ({ course, onProgressAdded, on
       });
       onProgressAdded(entry);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Error al registrar el avance');
+      setError(err instanceof Error ? err.message : 'Error registering progress');
     } finally {
       setLoading(false);
     }
@@ -62,10 +62,10 @@ const ProgressForm: React.FC<ProgressFormProps> = ({ course, onProgressAdded, on
 
   return (
     <div className="progress-form-container">
-      <h3>Registrar avance: {course.name}</h3>
+      <h3>Register progress: {course.name}</h3>
       <form onSubmit={handleSubmit} className="progress-form">
         <div className="form-group">
-          <label htmlFor="module">Módulo</label>
+          <label htmlFor="module">Module</label>
           <select id="module" name="module" value={formData.module} onChange={handleChange}>
             {course.modules.map((module) => (
               <option key={module.id} value={module.title}>{module.title}</option>
@@ -74,7 +74,7 @@ const ProgressForm: React.FC<ProgressFormProps> = ({ course, onProgressAdded, on
         </div>
 
         <div className="form-group">
-          <label htmlFor="technique">Técnica de aprendizaje (Barbara Oakley)</label>
+          <label htmlFor="technique">Learning technique (Barbara Oakley)</label>
           <select id="technique" name="technique" value={formData.technique} onChange={handleChange}>
             {OAKLEY_TECHNIQUES.map((technique) => (
               <option key={technique} value={technique}>{technique}</option>
@@ -84,12 +84,12 @@ const ProgressForm: React.FC<ProgressFormProps> = ({ course, onProgressAdded, on
 
         <div className="form-row">
           <div className="form-group">
-            <label htmlFor="minutesStudied">Minutos estudiados</label>
+            <label htmlFor="minutesStudied">Minutes studied</label>
             <input
               id="minutesStudied"
               type="number"
               name="minutesStudied"
-              placeholder="Minutos"
+              placeholder="Minutes"
               value={formData.minutesStudied}
               onChange={handleChange}
               required
@@ -98,11 +98,11 @@ const ProgressForm: React.FC<ProgressFormProps> = ({ course, onProgressAdded, on
           </div>
 
           <div className="form-group">
-            <label htmlFor="status">Estado del módulo</label>
+            <label htmlFor="status">Module status</label>
             <select id="status" name="status" value={formData.status} onChange={handleChange}>
-              <option value="iniciado">Iniciado</option>
-              <option value="en-progreso">En progreso</option>
-              <option value="completado">Completado</option>
+              <option value="started">Started</option>
+              <option value="in-progress">In progress</option>
+              <option value="completed">Completed</option>
             </select>
           </div>
         </div>
@@ -110,7 +110,7 @@ const ProgressForm: React.FC<ProgressFormProps> = ({ course, onProgressAdded, on
         <div className="form-group">
           <textarea
             name="notes"
-            placeholder="Notas (opcional)"
+            placeholder="Notes (optional)"
             value={formData.notes}
             onChange={handleChange}
             rows={2}
@@ -121,10 +121,10 @@ const ProgressForm: React.FC<ProgressFormProps> = ({ course, onProgressAdded, on
 
         <div className="form-actions">
           <button type="button" onClick={onCancel} className="cancel-btn">
-            Cancelar
+            Cancel
           </button>
           <button type="submit" disabled={loading} className="submit-btn">
-            {loading ? 'Guardando...' : 'Guardar avance'}
+            {loading ? 'Saving...' : 'Save progress'}
           </button>
         </div>
       </form>

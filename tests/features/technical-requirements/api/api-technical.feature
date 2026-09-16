@@ -18,17 +18,18 @@ Feature: API Technical Requirements
       | POST   | /api/auth/logout   | User logout                  |
       | GET    | /api/auth/me       | Check authentication status  |
 
-  # REQ-API-002: Product management endpoints
-  Scenario: Product API endpoints availability
+  # REQ-API-002: Course and progress management endpoints
+  Scenario: Course and progress API endpoints availability
     Given the API server is running
     And I am authenticated
-    When I check the product endpoints
+    When I check the course and progress endpoints
     Then the following endpoints should be available:
-      | method | endpoint              | description        |
-      | GET    | /api/products         | Get all products   |
-      | POST   | /api/products         | Create product     |
-      | GET    | /api/products/:id     | Get product by ID  |
-      | DELETE | /api/products/:id     | Delete product     |
+      | method | endpoint              | description                |
+      | GET    | /api/courses          | Get all courses            |
+      | GET    | /api/courses/:id      | Get course by ID           |
+      | POST   | /api/progress         | Register study progress    |
+      | GET    | /api/progress         | Get progress entries       |
+      | GET    | /api/progress/stats   | Get aggregated statistics  |
 
   # REQ-API-003: Consistent JSON response format
   Scenario: Consistent API response structure

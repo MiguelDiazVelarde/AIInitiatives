@@ -49,8 +49,8 @@ When('I check the authentication endpoints', async function (this: CustomWorld) 
 
 Then('the following endpoints should be available:', async function (this: CustomWorld, dataTable) {
   const expectedEndpoints = dataTable.hashes();
-  // Try both endpointResults (auth endpoints) and productEndpointResults (product endpoints)
-  const results = (this as any).endpointResults || (this as any).productEndpointResults || [];
+  // Try both endpointResults (auth endpoints) and courseEndpointResults (course/progress endpoints)
+  const results = (this as any).endpointResults || (this as any).courseEndpointResults || [];
   
   console.log('📊 Endpoint results:', results);
   console.log('📋 Expected endpoints:', expectedEndpoints);
@@ -93,12 +93,13 @@ Given('I am authenticated', async function (this: CustomWorld) {
   await this.page.waitForURL(/.*\//, { timeout: 15000 });
 });
 
-When('I check the product endpoints', async function (this: CustomWorld) {
+When('I check the course and progress endpoints', async function (this: CustomWorld) {
   const endpoints = [
-    { method: 'GET', path: '/api/products' },
-    { method: 'POST', path: '/api/products' },
-    { method: 'GET', path: '/api/products/test-id' },
-    { method: 'DELETE', path: '/api/products/test-id' }
+    { method: 'GET', path: '/api/courses' },
+    { method: 'GET', path: '/api/courses/test-id' },
+    { method: 'POST', path: '/api/progress' },
+    { method: 'GET', path: '/api/progress' },
+    { method: 'GET', path: '/api/progress/stats' }
   ];
   
   const endpointResults = [];
@@ -144,7 +145,7 @@ When('I check the product endpoints', async function (this: CustomWorld) {
     }
   }
   
-  (this as any).productEndpointResults = endpointResults;
+  (this as any).courseEndpointResults = endpointResults;
 });
 
 // REQ-API-003: Consistent JSON response format
@@ -184,16 +185,16 @@ When('I call any API endpoint', async function (this: CustomWorld) {
   }
   
   try {
-    const productsResponse = await this.page.request.get(`${this.baseURL}/api/products`, {
+    const coursesResponse = await this.page.request.get(`${this.baseURL}/api/courses`, {
       headers: { 'Cookie': cookieHeader }
     });
     responses.push({
-      endpoint: '/api/products',
-      status: productsResponse.status(),
-      body: await productsResponse.json().catch(() => ({}))
+      endpoint: '/api/courses',
+      status: coursesResponse.status(),
+      body: await coursesResponse.json().catch(() => ({}))
     });
   } catch (error) {
-    responses.push({ endpoint: '/api/products', status: 0, body: {} });
+    responses.push({ endpoint: '/api/courses', status: 0, body: {} });
   }
   
   (this as any).apiResponses = responses;
@@ -276,7 +277,7 @@ When('I make requests with different conditions:', async function (this: CustomW
         break;
         
       case 'resource not found':
-        response = await this.page.request.get(`${this.baseURL}/api/products/nonexistent-id`);
+        response = await this.page.request.get(`${this.baseURL}/api/courses/nonexistent-id`);
         break;
         
       case 'unauthorized access': {
@@ -285,11 +286,11 @@ When('I make requests with different conditions:', async function (this: CustomW
         if (browser) {
           const newContext = await browser.newContext();
           const apiRequestContext = newContext.request;
-          response = await apiRequestContext.get(`${this.baseURL}/api/products`);
+          response = await apiRequestContext.get(`${this.baseURL}/api/courses`);
           await newContext.close();
         } else {
           // Fallback if browser is not available
-          response = await this.page.request.get(`${this.baseURL}/api/products`, {
+          response = await this.page.request.get(`${this.baseURL}/api/courses`, {
             headers: {} // Clear any authentication headers
           });
         }
@@ -495,14 +496,14 @@ Then('the application should work correctly in each browser', async function (th
 Then('all features should be functional', async function (this: CustomWorld) {
   // Test key features
   await this.login('admin', 'password');
-  const dashboardVisible = await this.page.locator('h1:has-text("Dashboard")').isVisible();
+  const dashboardVisible = await this.page.locator('.dashboard-header').isVisible();
   expect(dashboardVisible).toBe(true);
 });
 
 Then('performance should be consistent', async function (this: CustomWorld) {
   // Test response time
   const startTime = Date.now();
-  await this.page.click('button:has-text("Add Product")');
+  await this.page.click('button:has-text("Register progress")');
   const endTime = Date.now();
   
   expect(endTime - startTime).toBeLessThan(2000);
@@ -541,7 +542,7 @@ Then('be ready for deployment', async function (this: CustomWorld) {
   // Test core functionality to ensure deployment readiness
   await this.navigateToLogin();
   await this.login('admin', 'password');
-  const dashboardWorking = await this.page.locator('h1:has-text("Dashboard")').isVisible();
+  const dashboardWorking = await this.page.locator('.dashboard-header').isVisible();
   expect(dashboardWorking).toBe(true);
 });
 

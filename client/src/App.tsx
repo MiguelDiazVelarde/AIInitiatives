@@ -47,7 +47,7 @@ const AppContent: React.FC = () => {
   }, [login]);
 
   if (loading) {
-    return <div className="loading">Cargando...</div>;
+    return <div className="loading">Loading...</div>;
   }
 
   return (

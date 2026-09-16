@@ -1,5 +1,10 @@
 const { Before, After, setDefaultTimeout } = require('@cucumber/cucumber');
 const { chromium } = require('@playwright/test');
+// Force-load world.ts as a value import so its setWorldConstructor() call always
+// runs. TypeScript elides `import { CustomWorld } from '../support/world'` in
+// step-definition files when CustomWorld is only ever used as a type annotation,
+// which otherwise leaves Cucumber's default World class in place.
+require('./world');
 
 // Increased timeout for session persistence tests and CI environments
 setDefaultTimeout(60 * 1000); // Increased to 60s for better reliability in CI

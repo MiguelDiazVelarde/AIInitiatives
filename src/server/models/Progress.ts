@@ -1,4 +1,4 @@
-export type ProgressStatus = 'iniciado' | 'en-progreso' | 'completado';
+export type ProgressStatus = 'started' | 'in-progress' | 'completed';
 
 export interface ProgressEntry {
   id: string;
