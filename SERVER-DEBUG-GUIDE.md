@@ -19,13 +19,13 @@ The project includes pre-configured debug setups in `.vscode/launch.json`:
 
 ```bash
 # Server debug scripts
-npm run server:debug              # General server debug with breakpoints
-npm run server:debug:auth         # Authentication routes debug
-npm run server:debug:products     # Product routes debug  
-npm run server:debug:api          # API endpoints debug
+pnpm run server:debug              # General server debug with breakpoints
+pnpm run server:debug:auth         # Authentication routes debug
+pnpm run server:debug:products     # Product routes debug  
+pnpm run server:debug:api          # API endpoints debug
 
 # Full stack debug
-npm run fullstack:debug           # Server + Client together
+pnpm run fullstack:debug           # Server + Client together
 ```
 
 ## 🎯 Debug Methods
@@ -49,13 +49,13 @@ npm run fullstack:debug           # Server + Client together
 #### Basic Server Debug Commands
 ```bash
 # Debug server with breakpoints
-npm run server:debug
+pnpm run server:debug
 
 # Debug with authentication focus
-npm run server:debug:auth
+pnpm run server:debug:auth
 
 # Debug with verbose logging
-npx nodemon --inspect src/server/index.ts
+pnpm exec nodemon --inspect src/server/index.ts
 
 # Debug specific port
 node --inspect-brk=0.0.0.0:9229 -r ts-node/register src/server/index.ts
@@ -73,7 +73,7 @@ cross-env DEBUG=server:products:* nodemon --inspect src/server/index.ts
 cross-env DEBUG=server:api:* nodemon --inspect src/server/index.ts
 
 # Debug with specific environment
-cross-env NODE_ENV=development PORT=3000 npm run server:debug
+cross-env NODE_ENV=development PORT=3002 pnpm run server:debug
 ```
 
 ### C. Chrome DevTools Debug
@@ -128,11 +128,11 @@ cross-env NODE_ENV=development PORT=3000 npm run server:debug
 **Solution**:
 ```bash
 # 1. Start auth-focused debug
-npm run server:debug:auth
+pnpm run server:debug:auth
 
 # 2. Set breakpoints in auth routes
 # 3. Test with curl or Postman
-curl -X POST http://localhost:3000/api/auth/login \
+curl -X POST http://localhost:3002/api/auth/login \
   -H "Content-Type: application/json" \
   -d '{"username": "admin", "password": "password"}'
 ```
@@ -150,11 +150,11 @@ curl -X POST http://localhost:3000/api/auth/login \
 **Solution**:
 ```bash
 # Debug all API endpoints
-npm run server:debug:api
+pnpm run server:debug:api
 
 # Test specific endpoints
-curl -X GET http://localhost:3000/api/products
-curl -X POST http://localhost:3000/api/products \
+curl -X GET http://localhost:3002/api/products
+curl -X POST http://localhost:3002/api/products \
   -H "Content-Type: application/json" \
   -d '{"name": "Test Product", "price": 100}'
 ```
@@ -172,7 +172,7 @@ curl -X POST http://localhost:3000/api/products \
 **Solution**:
 ```bash
 # Debug with session focus
-cross-env DEBUG=express-session npm run server:debug
+cross-env DEBUG=express-session pnpm run server:debug
 ```
 
 **Key Debug Points**:
@@ -188,7 +188,7 @@ cross-env DEBUG=express-session npm run server:debug
 **Solution**:
 ```bash
 # Debug with middleware logging
-cross-env DEBUG=express:* npm run server:debug
+cross-env DEBUG=express:* pnpm run server:debug
 ```
 
 **Key Debug Points**:
@@ -201,7 +201,7 @@ cross-env DEBUG=express:* npm run server:debug
 
 ### Console Debug Output
 ```bash
-🔍 DEBUG: Server starting on port 3000
+🔍 DEBUG: Server starting on port 3002
 🔍 DEBUG: MongoDB connection established
 🔍 DEBUG: Authentication middleware initialized
 🔍 DEBUG: CORS enabled for origins: http://localhost:5173
@@ -229,36 +229,36 @@ cross-env DEBUG=express:* npm run server:debug
 ### Issue 1: Port Already in Use
 **Solution**:
 ```bash
-# Kill process using port 3000
-netstat -ano | findstr :3000
+# Kill process using port 3002
+netstat -ano | findstr :3002
 taskkill /PID <PID> /F
 
 # Or use different port
-cross-env PORT=3001 npm run server:debug
+cross-env PORT=3001 pnpm run server:debug
 ```
 
 ### Issue 2: TypeScript Compilation Errors
 **Solution**:
 ```bash
 # Check server TypeScript compilation
-npm run build:server
+pnpm run build:server
 
 # Fix compilation errors
-npx tsc --noEmit --project tsconfig.server.json
+pnpm exec tsc --noEmit --project tsconfig.server.json
 ```
 
 ### Issue 3: Session Store Issues
 **Solution**:
 ```bash
 # Debug session configuration
-cross-env DEBUG=express-session,connect:* npm run server:debug
+cross-env DEBUG=express-session,connect:* pnpm run server:debug
 ```
 
 ### Issue 4: Authentication Middleware Not Working
 **Solution**:
 ```bash
 # Debug middleware execution
-cross-env DEBUG=server:middleware:* npm run server:debug
+cross-env DEBUG=server:middleware:* pnpm run server:debug
 ```
 
 ## 🔧 Development Debug Setup
@@ -266,16 +266,16 @@ cross-env DEBUG=server:middleware:* npm run server:debug
 ### 1. Hot Reload with Debug
 ```bash
 # Development with auto-restart and debug
-npx nodemon --inspect --exec "ts-node src/server/index.ts"
+pnpm exec nodemon --inspect --exec "ts-node src/server/index.ts"
 ```
 
 ### 2. Environment-specific Debug
 ```bash
 # Debug with production-like settings
-cross-env NODE_ENV=production npm run server:debug
+cross-env NODE_ENV=production pnpm run server:debug
 
 # Debug with custom database
-cross-env DB_URL="mongodb://localhost:27017/debug" npm run server:debug
+cross-env DB_URL="mongodb://localhost:27017/debug" pnpm run server:debug
 ```
 
 ### 3. Isolated Component Testing
@@ -292,29 +292,29 @@ console.log('Auth result:', user);
 ### Basic Commands
 ```bash
 # Server management
-npm run build:server             # Build server TypeScript
-npm run start                    # Start production server
-npm run dev:server               # Start development server
+pnpm run build:server             # Build server TypeScript
+pnpm run start                    # Start production server
+pnpm run dev:server               # Start development server
 
 # Debug commands
-npm run server:debug             # General server debug
-npm run server:debug:auth        # Authentication debug
-npm run server:debug:products    # Product management debug
-npm run server:debug:api         # API endpoints debug
+pnpm run server:debug             # General server debug
+pnpm run server:debug:auth        # Authentication debug
+pnpm run server:debug:products    # Product management debug
+pnpm run server:debug:api         # API endpoints debug
 ```
 
 ### Testing Commands
 ```bash
 # Test authentication
-curl -X POST http://localhost:3000/api/auth/login \
+curl -X POST http://localhost:3002/api/auth/login \
   -H "Content-Type: application/json" \
   -d '{"username": "admin", "password": "password"}'
 
 # Test products API
-curl -X GET http://localhost:3000/api/products
+curl -X GET http://localhost:3002/api/products
 
 # Test with session
-curl -X GET http://localhost:3000/api/auth/me \
+curl -X GET http://localhost:3002/api/auth/me \
   -H "Cookie: connect.sid=your-session-cookie"
 ```
 
@@ -394,7 +394,7 @@ app.use((err, req, res, next) => {
 If you encounter issues with server debugging:
 
 1. **Check server logs** for error messages
-2. **Verify TypeScript compilation** with `npm run build:server`
+2. **Verify TypeScript compilation** with `pnpm run build:server`
 3. **Check port availability** and environment variables
 4. **Review middleware configuration** and execution order
 5. **Test API endpoints** with curl or Postman

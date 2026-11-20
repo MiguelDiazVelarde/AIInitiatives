@@ -16,7 +16,7 @@ permissions:
 **Problem**: Browser installation takes too long or fails
 **Solution**: Enhanced timeout and monitoring (already implemented)
 ```bash
-timeout 300 bash -c 'npx playwright install --with-deps chromium'
+timeout 300 bash -c 'pnpm exec playwright install --with-deps chromium'
 ```
 
 ### 3. **Server Startup Issues**
@@ -33,11 +33,12 @@ timeout 300 bash -c 'npx playwright install --with-deps chromium'
 - Dependencies are compatible
 
 ### 5. **Cache Issues**
-**Solution**: Using npm cache with node_modules caching
+**Solution**: Using pnpm store caching via `actions/setup-node`
 ```yaml
+- uses: pnpm/action-setup@v4
 - uses: actions/setup-node@v4
   with:
-    cache: 'npm'
+    cache: 'pnpm'
 ```
 
 ### 6. **Test Timeout Issues**
@@ -51,8 +52,8 @@ timeout 300 bash -c 'npx playwright install --with-deps chromium'
 **Properly Set**:
 ```bash
 NODE_ENV=test
-PORT=3000
-TEST_BASE_URL=http://localhost:3000
+PORT=3002
+TEST_BASE_URL=http://localhost:3002
 ```
 
 ## 🚀 **Recommended Next Steps**

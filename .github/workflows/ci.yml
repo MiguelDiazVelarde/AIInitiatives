@@ -29,29 +29,29 @@ jobs:
       with:
         fetch-depth: 0
         
+    - name: Setup pnpm
+      uses: pnpm/action-setup@v4
+      with:
+        version: 10
+        
     - name: Setup Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v4
       with:
         node-version: ${{ matrix.node-version }}
-        cache: 'npm'
+        cache: 'pnpm'
         
     - name: Install dependencies
-      run: npm ci
-      
-    - name: Install client dependencies
-      run: |
-        cd client
-        npm ci
+      run: pnpm install --frozen-lockfile
 
     - name: Install Playwright Browsers
       run: |
         echo "Installing Playwright browsers for authentication testing..."
-        npx playwright install chromium
+        pnpm exec playwright install chromium
         
     - name: Lint and build
       run: |
         echo "Building application..."
-        npm run build
+        pnpm run build
         
     - name: Verify build output
       run: |
@@ -65,11 +65,11 @@ jobs:
     - name: Run TypeScript compilation tests
       run: |
         echo "Testing TypeScript compilation..."
-        npx tsc -p tsconfig.server.json --noEmit
+        pnpm exec tsc -p tsconfig.server.json --noEmit
         
         if [ -f "client/tsconfig.json" ]; then
           cd client
-          npx tsc --noEmit
+          pnpm exec tsc --noEmit
           cd ..
         fi
         
@@ -79,12 +79,12 @@ jobs:
       timeout-minutes: 10
       env:
         NODE_ENV: test
-        PORT: 3000
-        TEST_BASE_URL: http://localhost:3000
+        PORT: 3002
+        TEST_BASE_URL: http://localhost:3002
         HEADLESS: true
       run: |
         echo "Starting server for testing..."
-        npm start &
+        pnpm start &
         SERVER_PID=$!
         echo "Server started with PID: $SERVER_PID"
         
@@ -103,7 +103,7 @@ jobs:
         
         # Health check with retries
         for i in {1..6}; do
-          if curl -f --max-time 10 http://localhost:3000/api/health; then
+          if curl -f --max-time 10 http://localhost:3002/api/health; then
             echo "✅ Server health check passed"
             break
           else
@@ -118,7 +118,7 @@ jobs:
         
         # Test homepage
         echo "Testing homepage..."
-        if curl -f --max-time 10 http://localhost:3000/ >/dev/null 2>&1; then
+        if curl -f --max-time 10 http://localhost:3002/ >/dev/null 2>&1; then
           echo "✅ Homepage test passed"
         else
           echo "❌ Homepage test failed"
@@ -132,14 +132,14 @@ jobs:
       timeout-minutes: 8
       env:
         NODE_ENV: test
-        PORT: 3000
-        TEST_BASE_URL: http://localhost:3000
+        PORT: 3002
+        TEST_BASE_URL: http://localhost:3002
         HEADLESS: true
       run: |
         echo "Running authentication test suite..."
         
         # Start server for authentication tests
-        npm start &
+        pnpm start &
         SERVER_PID=$!
         echo "Server started with PID: $SERVER_PID"
         
@@ -158,7 +158,7 @@ jobs:
         
         # Verify server is responding
         for i in {1..5}; do
-          if curl -s --max-time 5 http://localhost:3000/api/health >/dev/null 2>&1; then
+          if curl -s --max-time 5 http://localhost:3002/api/health >/dev/null 2>&1; then
             echo "✅ Server ready for authentication tests"
             break
           else
@@ -173,7 +173,7 @@ jobs:
         
         # Run authentication tests
         echo "🧪 Running authentication tests..."
-        if npm run test:auth; then
+        if pnpm run test:auth; then
           echo "✅ Authentication tests passed!"
         else
           echo "⚠️ Some authentication tests failed - this is not critical for CI"
@@ -185,7 +185,7 @@ jobs:
       timeout-minutes: 3
       run: |
         echo "Attempting to run Test Optimizer analysis..."
-        if timeout 120 npm run optimizer:quick; then
+        if timeout 120 pnpm run optimizer:quick; then
           echo "✅ Test Optimizer analysis completed"
         else
           echo "⚠️ Test Optimizer analysis failed or timed out - continuing"

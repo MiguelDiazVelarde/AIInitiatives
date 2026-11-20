@@ -1,8 +1,8 @@
-import express, { Request, Response } from 'express';
+import express, { Request, Response, Router } from 'express';
 import { CourseService } from '../services/CourseService';
 import { requireAuth } from '../middleware/auth';
 
-const router = express.Router();
+const router: Router = express.Router();
 
 // Get all courses
 router.get('/courses', requireAuth, (req: Request, res: Response) => {

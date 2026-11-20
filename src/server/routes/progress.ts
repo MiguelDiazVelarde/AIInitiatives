@@ -1,9 +1,9 @@
-import express, { Request, Response } from 'express';
+import express, { Request, Response, Router } from 'express';
 import { ProgressService } from '../services/ProgressService';
 import { CourseService } from '../services/CourseService';
 import { requireAuth, AuthenticatedRequest } from '../middleware/auth';
 
-const router = express.Router();
+const router: Router = express.Router();
 
 // Register a new study progress entry
 router.post('/progress', requireAuth, (req: Request, res: Response) => {

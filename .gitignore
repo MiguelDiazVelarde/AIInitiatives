@@ -18,6 +18,8 @@ cucumber_report.json
 # Dependencias
 node_modules/
 npm-debug.log*
+.pnpm-store/
+.pnpm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 

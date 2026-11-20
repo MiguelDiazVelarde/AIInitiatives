@@ -18,7 +18,7 @@ GH -> GH: Install dependencies\n& Playwright browsers
 GH -> GH: Build server + client
 
 == Server Start ==
-GH -> Server: Start server (port 3000)
+GH -> Server: Start server (port 3002)
 activate Server
 loop Health Check (15 attempts)
     GH -> Server: GET /api/health
@@ -37,7 +37,7 @@ alt Auth files changed
     GH -> AI: optimize balanced
     AI --> GH: Optimization plan
     
-    GH -> Tests: npm run test:auth
+    GH -> Tests: pnpm run test:auth
     activate Tests
     Tests --> GH: Auth test results
     deactivate Tests
@@ -86,7 +86,7 @@ else No auth changes
         AI --> GH: ⚠️ Fallback
         deactivate AI
         
-        GH -> Tests: npm run test:smoke
+        GH -> Tests: pnpm run test:smoke
         activate Tests
         Tests --> GH: Smoke results
         deactivate Tests

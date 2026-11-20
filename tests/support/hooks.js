@@ -92,7 +92,7 @@ Before(async function () {
     console.log('📄 Creating new page...');
     this.page = await this.context.newPage();
     
-    this.baseURL = process.env.TEST_BASE_URL || 'http://localhost:3000';
+    this.baseURL = process.env.TEST_BASE_URL || 'http://localhost:3002';
     console.log(`🌐 Base URL set to: ${this.baseURL}`);
     
   } catch (error) {
@@ -102,7 +102,7 @@ Before(async function () {
     // Try to provide helpful debugging info
     if (error.message.includes("Executable doesn't exist")) {
       console.error('🚨 Browser executable not found. This usually means Playwright browsers are not installed.');
-      console.error('💡 Try running: npx playwright install');
+      console.error('💡 Try running: pnpm exec playwright install');
       
       // In CI, try to diagnose what browsers are available
       if (process.env.CI || process.env.GITHUB_ACTIONS) {

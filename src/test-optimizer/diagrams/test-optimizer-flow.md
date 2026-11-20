@@ -250,19 +250,19 @@ The system tracks:
 
 ```bash
 # Optimize with balanced strategy
-npx ts-node src/test-optimizer/index.ts optimize balanced
+pnpm exec ts-node src/test-optimizer/index.ts optimize balanced
 
 # Optimize considering code changes
-npx ts-node src/test-optimizer/index.ts optimize quick <commit-hash>
+pnpm exec ts-node src/test-optimizer/index.ts optimize quick <commit-hash>
 
 # Run smoke tests
-npx ts-node src/test-optimizer/index.ts smoke
+pnpm exec ts-node src/test-optimizer/index.ts smoke
 
 # View optimization stats
-npx ts-node src/test-optimizer/index.ts stats
+pnpm exec ts-node src/test-optimizer/index.ts stats
 
 # Start API server
-npx ts-node src/test-optimizer/index.ts server 3001
+pnpm exec ts-node src/test-optimizer/index.ts server 3001
 ```
 
 ## Benefits

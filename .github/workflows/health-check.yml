@@ -15,22 +15,22 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
       
+    - name: Setup pnpm
+      uses: pnpm/action-setup@v4
+      with:
+        version: 10
+        
     - name: Setup Node.js
       uses: actions/setup-node@v4
       with:
         node-version: '24.x'
-        cache: 'npm'
+        cache: 'pnpm'
         
     - name: Install dependencies
-      run: npm ci
+      run: pnpm install --frozen-lockfile
       
-    - name: Install client dependencies
-      run: |
-        cd client
-        npm ci
-        
     - name: Build application
-      run: npm run build
+      run: pnpm run build
       
     - name: Start server and health check
       env:
@@ -38,7 +38,7 @@ jobs:
         PORT: 3001
       run: |
         echo "Starting server for health check..."
-        npm start &
+        pnpm start &
         SERVER_PID=$!
         echo "Server PID: $SERVER_PID"
         

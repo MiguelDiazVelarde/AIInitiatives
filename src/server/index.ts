@@ -1,13 +1,14 @@
-import express from 'express';
+import express, { Express } from 'express';
 import session from 'express-session';
 import cors from 'cors';
 import path from 'node:path';
+import fs from 'node:fs';
 import authRoutes from './routes/auth';
 import courseRoutes from './routes/courses';
 import progressRoutes from './routes/progress';
 
-const app = express();
-const PORT = process.env.PORT || 3000;
+const app: Express = express();
+const PORT = process.env.PORT || 3002;
 
 // CORS configuration to allow requests from React
 app.use(cors({
@@ -40,14 +41,13 @@ app.get('/api/health', (req, res) => {
   res.json({ status: 'OK', message: 'Server is running' });
 });
 
-// Serve React static files in production or test
-if (process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'test') {
-  const clientDistPath = path.join(__dirname, '../../client/dist');
+// Serve the built React app in production/test, or whenever client/dist exists
+const clientDistPath = path.join(__dirname, '../../client/dist');
+if (process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'test' || fs.existsSync(clientDistPath)) {
   console.log(`📁 Looking for client files at: ${clientDistPath}`);
   
   // Check if client dist directory exists
   try {
-    const fs = require('node:fs');
     if (fs.existsSync(clientDistPath)) {
       console.log('✅ Client dist directory found');
       app.use(express.static(clientDistPath));

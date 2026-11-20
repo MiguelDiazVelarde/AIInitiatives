@@ -25,19 +25,19 @@ jobs:
         echo "Current HEAD: $(git rev-parse HEAD)"
         echo "Main ref: $(git rev-parse origin/main 2>/dev/null || echo 'not found')"
 
+    - name: Setup pnpm
+      uses: pnpm/action-setup@v4
+      with:
+        version: 10
+
     - name: 🔧 Setup Node.js
       uses: actions/setup-node@v4
       with:
         node-version: '24'
-        cache: 'npm'
+        cache: 'pnpm'
 
-    - name: 📦 Install root dependencies
-      run: npm ci
-
-    - name: 📦 Install client dependencies  
-      run: |
-        cd client
-        npm ci
+    - name: 📦 Install dependencies
+      run: pnpm install --frozen-lockfile
 
     - name: 🎭 Install and Verify Playwright Browsers
       timeout-minutes: 5
@@ -53,7 +53,7 @@ jobs:
         
         # Verify Playwright package exists
         echo "📦 Checking Playwright..."
-        if npm ls @playwright/test > /dev/null 2>&1; then
+        if pnpm ls @playwright/test > /dev/null 2>&1; then
           echo "✅ Playwright package found"
         else
           echo "❌ Playwright package not found"
@@ -61,7 +61,7 @@ jobs:
         fi
         
         # Quick version check
-        PLAYWRIGHT_VERSION=$(npx playwright --version 2>/dev/null | head -1 || echo "unknown")
+        PLAYWRIGHT_VERSION=$(pnpm exec playwright --version 2>/dev/null | head -1 || echo "unknown")
         echo "Playwright version: $PLAYWRIGHT_VERSION"
         
         # Ensure cache directory exists with proper permissions
@@ -71,7 +71,7 @@ jobs:
         
         # Install browsers with timeout and minimal output
         echo "🔄 Installing browsers (this may take 2-3 minutes)..."
-        npx playwright install --with-deps chromium > /tmp/playwright-install.log 2>&1 &
+        pnpm exec playwright install --with-deps chromium > /tmp/playwright-install.log 2>&1 &
         INSTALL_PID=$!
         
         # Monitor installation with timeout
@@ -136,7 +136,7 @@ jobs:
           echo "📋 Falling back to minimal installation..."
           
           # Emergency fallback - try minimal installation
-          npx playwright install chromium --force || {
+          pnpm exec playwright install chromium --force || {
             echo "❌ Even minimal installation failed"
             echo "⚠️ Tests requiring browsers will be skipped"
             exit 0  # Don't fail the entire workflow
@@ -146,10 +146,10 @@ jobs:
         echo "✅ Playwright browsers ready for PR validation"
 
     - name: 🏗️ Build server
-      run: npm run build:server
+      run: pnpm run build:server
 
     - name: 🏗️ Build client
-      run: npm run build:client
+      run: pnpm run build:client
 
     - name: ✅ Verify builds
       run: |
@@ -185,7 +185,7 @@ jobs:
         sleep 5
         
         # Try to connect
-        if curl -f --max-time 5 http://localhost:3000/api/health 2>/dev/null; then
+        if curl -f --max-time 5 http://localhost:3002/api/health 2>/dev/null; then
           echo "✅ Server is responding"
         else
           echo "⚠️ Server test skipped (health endpoint may not exist)"
@@ -199,9 +199,9 @@ jobs:
       run: |
         echo "Starting server for tests..."
         
-        # Check if port 3000 is already in use
-        if lsof -Pi :3000 -sTCP:LISTEN -t >/dev/null 2>&1; then
-          echo "⚠️ Port 3000 is already in use, killing existing process..."
+        # Check if port 3002 is already in use
+        if lsof -Pi :3002 -sTCP:LISTEN -t >/dev/null 2>&1; then
+          echo "⚠️ Port 3002 is already in use, killing existing process..."
           pkill -f "node.*dist/server" 2>/dev/null || true
           sleep 2
         fi
@@ -240,13 +240,13 @@ jobs:
         echo "Checking if server is ready..."
         for i in {1..15}; do
           # Try different endpoints to check server health
-          if curl -s --max-time 5 http://localhost:3000 >/dev/null 2>&1; then
-            echo "✅ Server is ready and responding on port 3000"
+          if curl -s --max-time 5 http://localhost:3002 >/dev/null 2>&1; then
+            echo "✅ Server is ready and responding on port 3002"
             break
-          elif curl -s --max-time 5 http://localhost:3000/api/health >/dev/null 2>&1; then
+          elif curl -s --max-time 5 http://localhost:3002/api/health >/dev/null 2>&1; then
             echo "✅ Server health endpoint responding"
             break
-          elif curl -s --max-time 5 http://localhost:3000/api >/dev/null 2>&1; then
+          elif curl -s --max-time 5 http://localhost:3002/api >/dev/null 2>&1; then
             echo "✅ Server API endpoint responding"
             break
           else
@@ -254,14 +254,14 @@ jobs:
             if [ $i -eq 15 ]; then
               echo "❌ Server failed to respond after 15 attempts"
               echo "🔍 Testing server response manually:"
-              echo "Response from localhost:3000:"
-              curl -v http://localhost:3000 2>&1 | head -10 || echo "Curl failed"
-              echo "Response from localhost:3000/api:"
-              curl -v http://localhost:3000/api 2>&1 | head -10 || echo "API curl failed"
+              echo "Response from localhost:3002:"
+              curl -v http://localhost:3002 2>&1 | head -10 || echo "Curl failed"
+              echo "Response from localhost:3002/api:"
+              curl -v http://localhost:3002/api 2>&1 | head -10 || echo "API curl failed"
               echo "Final server log:"
               cat server.log || echo "No log file found"
-              echo "Checking what's listening on port 3000:"
-              lsof -i :3000 || echo "Nothing listening on port 3000"
+              echo "Checking what's listening on port 3002:"
+              lsof -i :3002 || echo "Nothing listening on port 3002"
               # Don't exit - server is running, just continue with tests
               echo "⚠️ Server seems to be running but not responding to health checks, continuing with tests..."
               break
@@ -311,7 +311,7 @@ jobs:
         
         # Generate optimization plan with authentication focus
         echo "🧠 Generating authentication-aware optimization plan..."
-        if npx ts-node src/test-optimizer/index.ts optimize balanced; then
+        if pnpm exec ts-node src/test-optimizer/index.ts optimize balanced; then
           echo "✅ PR optimization plan generated with authentication focus"
         else
           echo "⚠️ PR analysis failed - will use authentication fallback"
@@ -319,7 +319,7 @@ jobs:
         
         # Verify Playwright is working for authentication tests
         echo "🔍 Verifying Playwright setup for authentication testing..."
-        if npx playwright --version; then
+        if pnpm exec playwright --version; then
           echo "✅ Playwright CLI is available"
         else
           echo "❌ Playwright CLI not working"
@@ -334,7 +334,7 @@ jobs:
           
           # Run authentication tests first
           echo "🧪 Testing authentication scenarios with all fixes applied..."
-          if npm run test:auth; then
+          if pnpm run test:auth; then
             echo "✅ Authentication tests passed - PR authentication changes verified!"
             AUTH_TEST_SUCCESS=true
           else
@@ -356,7 +356,7 @@ jobs:
           # Still run the AI optimizer if auth tests completed
           if [ "$AUTH_TEST_SUCCESS" = true ]; then
             echo "🤖 Running AI optimizer after successful auth tests..."
-            if npx ts-node src/test-optimizer/index.ts execute; then
+            if pnpm exec ts-node src/test-optimizer/index.ts execute; then
               echo "✅ AI-optimized tests completed successfully after auth validation"
             else
               echo "⚠️ AI optimizer failed but authentication tests passed"
@@ -365,7 +365,7 @@ jobs:
         else
           # Normal AI-optimized execution
           echo "🤖 Running standard AI-optimized test execution..."
-          if npx ts-node src/test-optimizer/index.ts execute; then
+          if pnpm exec ts-node src/test-optimizer/index.ts execute; then
             echo "✅ AI-optimized tests completed successfully"
           else
             echo "⚠️ AI-optimized execution failed, falling back to enhanced smoke tests"
@@ -373,7 +373,7 @@ jobs:
             
             # Enhanced fallback that includes our authentication fixes
             echo "🔐 Running authentication smoke test with fixes..."
-            if npm run test:smoke; then
+            if pnpm run test:smoke; then
               echo "✅ Enhanced smoke tests passed"
             else
               echo "⚠️ Smoke tests failed - but authentication infrastructure is in place"

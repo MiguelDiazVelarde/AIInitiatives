@@ -1,7 +1,7 @@
 #!/usr/bin/env ts-node
 /**
  * Demo sin API key real — usa un ModelClient mock que simula respuestas.
- * Ejecutar: npx ts-node src/agent/demo.ts
+ * Ejecutar: pnpm exec ts-node src/agent/demo.ts
  */
 
 import { ModelClient } from './foundation/ModelClient';

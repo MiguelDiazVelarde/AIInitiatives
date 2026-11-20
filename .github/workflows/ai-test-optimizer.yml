@@ -44,26 +44,29 @@ jobs:
       with:
         fetch-depth: 0  # Full history for better analysis
 
+    - name: Setup pnpm
+      uses: pnpm/action-setup@v4
+      with:
+        version: 10
+
     - name: 🔧 Setup Node.js
       uses: actions/setup-node@v4
       with:
         node-version: '24'
-        cache: 'npm'
+        cache: 'pnpm'
 
     - name: 📦 Install dependencies
-      run: |
-        npm ci
-        cd client && npm ci
+      run: pnpm install --frozen-lockfile
 
     - name: 🏗️ Build application
-      run: npm run build
+      run: pnpm run build
 
     - name: 🤖 Initialize AI Test Optimizer
       run: |
         echo "🚀 Initializing AI Test Optimizer..."
         
         # Initialize configuration
-        if npx ts-node src/test-optimizer/index.ts config init; then
+        if pnpm exec ts-node src/test-optimizer/index.ts config init; then
           echo "✅ Test Optimizer initialized successfully"
         else
           echo "❌ Failed to initialize Test Optimizer"
@@ -85,7 +88,7 @@ jobs:
         echo "🎯 Analyzing files: $TARGET_FILES"
         
         # Run comprehensive analysis
-        npx ts-node src/test-optimizer/index.ts analyze $TARGET_FILES
+        pnpm exec ts-node src/test-optimizer/index.ts analyze $TARGET_FILES
         echo "✅ Code analysis completed"
 
     - name: 🧠 Generate Smart Test Strategies
@@ -97,19 +100,19 @@ jobs:
         case $ANALYSIS_TYPE in
           "full")
             echo "Running full optimization analysis..."
-            npx ts-node src/test-optimizer/index.ts optimize --full
+            pnpm exec ts-node src/test-optimizer/index.ts optimize --full
             ;;
           "smart")
             echo "Running smart optimization..."
-            npx ts-node src/test-optimizer/index.ts optimize --smart
+            pnpm exec ts-node src/test-optimizer/index.ts optimize --smart
             ;;
           "recommendations")
             echo "Generating test recommendations..."
-            npx ts-node src/test-optimizer/index.ts recommendations
+            pnpm exec ts-node src/test-optimizer/index.ts recommendations
             ;;
           "performance")
             echo "Running performance analysis..."
-            npx ts-node src/test-optimizer/index.ts analyze --performance
+            pnpm exec ts-node src/test-optimizer/index.ts analyze --performance
             ;;
         esac
         
@@ -119,14 +122,14 @@ jobs:
       continue-on-error: true
       env:
         NODE_ENV: test
-        PORT: 3000
-        TEST_BASE_URL: http://localhost:3000
+        PORT: 3002
+        TEST_BASE_URL: http://localhost:3002
       run: |
         echo "🎯 Executing AI-optimized test suite with live server..."
         
         # Start server for real testing
         echo "Starting server for live test execution..."
-        npm start &
+        pnpm start &
         SERVER_PID=$!
         echo "Server started with PID: $SERVER_PID"
         
@@ -144,12 +147,12 @@ jobs:
         sleep 10
         
         # Verify server health
-        if curl -f --max-time 10 http://localhost:3000/api/health; then
+        if curl -f --max-time 10 http://localhost:3002/api/health; then
           echo "✅ Server ready for live testing"
           
           # Execute the optimized tests with real server
           echo "🧠 Running AI-optimized test execution against live server..."
-          if npx ts-node src/test-optimizer/index.ts execute; then
+          if pnpm exec ts-node src/test-optimizer/index.ts execute; then
             echo "✅ Optimized test execution completed successfully"
           else
             echo "⚠️ Some optimized tests failed - this provides valuable feedback"
@@ -159,17 +162,17 @@ jobs:
           echo "🥒 Running AI-targeted Cucumber tests..."
           if [ -f "test-recommendations.json" ]; then
             echo "📋 Executing tests based on AI recommendations..."
-            npm run test:smoke || echo "Smoke tests provided feedback data"
-            npm run test:auth || echo "Auth tests provided feedback data"
+            pnpm run test:smoke || echo "Smoke tests provided feedback data"
+            pnpm run test:auth || echo "Auth tests provided feedback data"
           else
             echo "📋 Running standard test suite for AI learning..."
-            npm run test:smoke || echo "Standard tests provided feedback data"
+            pnpm run test:smoke || echo "Standard tests provided feedback data"
           fi
           
         else
           echo "❌ Server failed to start - cannot run live tests"
           echo "🔄 Running AI optimizer in analysis-only mode..."
-          npx ts-node src/test-optimizer/index.ts analyze src/server/ tests/
+          pnpm exec ts-node src/test-optimizer/index.ts analyze src/server/ tests/
         fi
 
     - name: 📈 Performance Metrics Collection
@@ -177,7 +180,7 @@ jobs:
         echo "📊 Collecting test performance metrics..."
         
         # Generate performance report
-        npx ts-node src/test-optimizer/index.ts metrics
+        pnpm exec ts-node src/test-optimizer/index.ts metrics
         
         # Collect system metrics
         echo "💻 System metrics:"
@@ -191,7 +194,7 @@ jobs:
         echo "📄 Generating comprehensive optimization report..."
         
         # Generate detailed report
-        npx ts-node src/test-optimizer/index.ts report --detailed
+        pnpm exec ts-node src/test-optimizer/index.ts report --detailed
         
         # Create summary
         echo "## 🤖 AI Test Optimizer Report" > optimization-summary.md

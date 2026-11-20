@@ -12,13 +12,13 @@ git clone https://github.com/YOUR_USERNAME/iainitiatives.git
 cd iainitiatives
 
 # Install dependencies
-npm install
+pnpm install
 
 # Build the project
-npm run build
+pnpm run build
 
 # Run tests locally
-npm run test:smoke
+pnpm run test:smoke
 ```
 
 ### 2. Creating a Pull Request
@@ -71,7 +71,7 @@ If you're contributing from a forked repository:
    - Comment results on PR
 
 3. **Security Checks**
-   - npm audit for vulnerabilities
+   - pnpm audit for vulnerabilities
    - License compliance check
    - Dependency analysis
 
@@ -89,16 +89,16 @@ Before submitting a PR, ensure all tests pass:
 
 ```bash
 # Required: Smoke tests must pass
-npm run test:smoke
+pnpm run test:smoke
 
 # Optional: Run full test suite
-npm run test
+pnpm run test
 
 # Check for TypeScript errors
-npm run build
+pnpm run build
 
 # Security audit
-npm audit --audit-level high
+pnpm audit --audit-level high
 ```
 
 ### 5. What Our CI/CD Checks
@@ -127,29 +127,29 @@ npm audit --audit-level high
 **❌ TypeScript Compilation Error**
 ```bash
 # Run locally to see the error
-npm run build
+pnpm run build
 # Fix TypeScript errors and commit
 ```
 
 **❌ Smoke Tests Failing**
 ```bash
 # Run tests locally
-npm run test:smoke
+pnpm run test:smoke
 # Check application logs and fix issues
 ```
 
 **❌ Security Audit Failed**
 ```bash
 # Check for vulnerabilities
-npm audit
+pnpm audit
 # Update dependencies
-npm audit fix
+pnpm audit --fix
 ```
 
 **❌ Application Won't Start**
 ```bash
 # Test locally
-npm start
+pnpm start
 # Check logs for startup errors
 ```
 

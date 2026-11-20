@@ -18,12 +18,12 @@ The project includes pre-configured debug setups in `.vscode/launch.json`:
 
 ```bash
 # Client debug scripts
-npm run client:debug              # Development server with debug logs
-npm run client:debug:build        # Build process debug
-npm run client:debug:preview      # Preview production build
+pnpm run client:debug              # Development server with debug logs
+pnpm run client:debug:build        # Build process debug
+pnpm run client:debug:preview      # Preview production build
 
 # Full stack debug
-npm run fullstack:debug           # Server + Client together
+pnpm run fullstack:debug           # Server + Client together
 ```
 
 ## 🎯 Debug Methods
@@ -47,7 +47,7 @@ npm run fullstack:debug           # Server + Client together
 #### Chrome DevTools React Debugging
 ```bash
 # 1. Start development server
-npm run dev:client
+pnpm run dev:client
 
 # 2. Open http://localhost:5173 in Chrome
 # 3. Open DevTools (F12)
@@ -71,31 +71,31 @@ npm run dev:client
 #### Basic Client Debug Commands
 ```bash
 # Debug development server
-npm run client:debug
+pnpm run client:debug
 
 # Debug with verbose Vite logs
-npm run dev:client -- --debug
+pnpm run dev:client --debug
 
 # Debug build process
-npm run client:debug:build
+pnpm run client:debug:build
 
 # Debug with custom port
-npm run dev:client -- --port 5174
+pnpm run dev:client --port 5174
 ```
 
 #### Advanced Client Debug Commands
 ```bash
 # Debug with specific environment
-cross-env NODE_ENV=development VITE_DEBUG=true npm run dev:client
+cross-env NODE_ENV=development VITE_DEBUG=true pnpm run dev:client
 
 # Debug API connections
-cross-env VITE_API_URL=http://localhost:3000 npm run dev:client
+cross-env VITE_API_URL=http://localhost:3002 pnpm run dev:client
 
 # Debug build with source maps
-npm run build:client -- --sourcemap
+pnpm run build:client --sourcemap
 
 # Debug preview of production build
-npm run client:debug:preview
+pnpm run client:debug:preview
 ```
 
 ## 🔍 Strategic Debug Points
@@ -139,7 +139,7 @@ npm run client:debug:preview
 **Solution**:
 ```bash
 # 1. Start client with debug logging
-npm run client:debug
+pnpm run client:debug
 
 # 2. Open browser DevTools
 # 3. Check Components tab in React DevTools
@@ -159,7 +159,7 @@ npm run client:debug
 **Solution**:
 ```bash
 # Debug with API logging
-cross-env VITE_DEBUG_API=true npm run dev:client
+cross-env VITE_DEBUG_API=true pnpm run dev:client
 ```
 
 **Key Debug Points**:
@@ -195,7 +195,7 @@ cross-env VITE_DEBUG_API=true npm run dev:client
 **Solution**:
 ```bash
 # Debug router configuration
-cross-env VITE_DEBUG_ROUTER=true npm run dev:client
+cross-env VITE_DEBUG_ROUTER=true pnpm run dev:client
 ```
 
 **Key Debug Points**:
@@ -209,7 +209,7 @@ cross-env VITE_DEBUG_ROUTER=true npm run dev:client
 ### Console Debug Output
 ```bash
 🔍 DEBUG: Vite dev server starting on port 5173
-🔍 DEBUG: API base URL: http://localhost:3000
+🔍 DEBUG: API base URL: http://localhost:3002
 🔍 DEBUG: Authentication context initialized
 🔍 DEBUG: Router configured with 5 routes
 ```
@@ -240,7 +240,7 @@ cross-env VITE_DEBUG_ROUTER=true npm run dev:client
 rm -rf node_modules/.vite
 
 # Restart with clean cache
-npm run dev:client -- --force
+pnpm run dev:client --force
 ```
 
 ### Issue 2: Hot Module Replacement Not Working
@@ -248,7 +248,7 @@ npm run dev:client -- --force
 ```bash
 # Check Vite configuration
 # Ensure file watching is enabled
-npm run dev:client -- --host
+pnpm run dev:client --host
 ```
 
 ### Issue 3: API Calls Failing (CORS)
@@ -263,7 +263,7 @@ npm run dev:client -- --host
 **Solution**:
 ```bash
 # Check TypeScript compilation
-npx tsc --noEmit --project client/tsconfig.json
+pnpm exec tsc --noEmit --project client/tsconfig.json
 
 # Fix type errors before debugging
 ```
@@ -273,16 +273,16 @@ npx tsc --noEmit --project client/tsconfig.json
 ### 1. Hot Reload with Debug
 ```bash
 # Development with enhanced logging
-cross-env VITE_DEBUG=true npm run dev:client
+cross-env VITE_DEBUG=true pnpm run dev:client
 ```
 
 ### 2. Environment-specific Debug
 ```bash
 # Debug with production build
-npm run build:client && npm run preview
+pnpm run build:client && pnpm run preview
 
 # Debug with custom API endpoint
-cross-env VITE_API_URL=http://localhost:3001 npm run dev:client
+cross-env VITE_API_URL=http://localhost:3001 pnpm run dev:client
 ```
 
 ### 3. Component Isolation Testing
@@ -301,23 +301,23 @@ console.log('Component rendered:', component.container.innerHTML);
 ### Basic Commands
 ```bash
 # Client management
-npm run build:client            # Build client for production
-npm run dev:client              # Start development server
-npm run preview                 # Preview production build
+pnpm run build:client            # Build client for production
+pnpm run dev:client              # Start development server
+pnpm run preview                 # Preview production build
 
 # Debug commands
-npm run client:debug            # Development with debug logs
-npm run client:debug:build      # Build process debug
-npm run client:debug:preview    # Preview with debug logs
+pnpm run client:debug            # Development with debug logs
+pnpm run client:debug:build      # Build process debug
+pnpm run client:debug:preview    # Preview with debug logs
 ```
 
 ### Vite-specific Commands
 ```bash
 # Vite development options
-npm run dev:client -- --port 5174      # Custom port
-npm run dev:client -- --host           # Network access
-npm run dev:client -- --debug          # Verbose Vite logs
-npm run dev:client -- --force          # Clear cache and restart
+pnpm run dev:client --port 5174      # Custom port
+pnpm run dev:client --host           # Network access
+pnpm run dev:client --debug          # Verbose Vite logs
+pnpm run dev:client --force          # Clear cache and restart
 ```
 
 ### Environment Variables
@@ -326,7 +326,7 @@ npm run dev:client -- --force          # Clear cache and restart
 VITE_DEBUG=true                 # Enable client debug logs
 VITE_DEBUG_API=true            # Enable API debug logs
 VITE_DEBUG_ROUTER=true         # Enable router debug logs
-VITE_API_URL=http://localhost:3000  # Custom API URL
+VITE_API_URL=http://localhost:3002  # Custom API URL
 ```
 
 ## 📈 Performance Debug Tips
@@ -334,10 +334,10 @@ VITE_API_URL=http://localhost:3000  # Custom API URL
 ### 1. Bundle Analysis
 ```bash
 # Analyze bundle size
-npm run build:client -- --analyze
+pnpm run build:client --analyze
 
 # Check bundle composition
-npx vite-bundle-analyzer dist
+pnpm exec vite-bundle-analyzer dist
 ```
 
 ### 2. React Performance Profiling

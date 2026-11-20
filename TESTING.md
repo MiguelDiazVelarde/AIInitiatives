@@ -60,18 +60,18 @@ tests/
 
 ```bash
 # Run all tests
-npm run test
+pnpm run test
 
 # Run with HTML report
-npm run test:full
+pnpm run test:full
 
 # Run in visible mode (not headless)
-npm run test:headed
+pnpm run test:headed
 
 # Run specific tests
-npm run test:auth          # Authentication only
-npm run test:products      # Products only  
-npm run test:navigation    # Navigation only
+pnpm run test:auth          # Authentication only
+pnpm run test:products      # Products only  
+pnpm run test:navigation    # Navigation only
 ```
 
 ### Automated Scripts
@@ -111,13 +111,13 @@ Tests are configured to run on:
 
 ```bash
 # Run in visible mode
-HEADLESS=false npm run test:cucumber
+HEADLESS=false pnpm run test:cucumber
 
 # Change execution speed
-SLOW_MO=1000 npm run test:cucumber
+SLOW_MO=1000 pnpm run test:cucumber
 
 # Record videos
-VIDEO=true npm run test:cucumber
+VIDEO=true pnpm run test:cucumber
 ```
 
 ## 🔧 Custom Configuration
@@ -140,7 +140,7 @@ module.exports = {
 export default defineConfig({
   testDir: './tests',
   use: {
-    baseURL: 'http://localhost:3000',
+    baseURL: 'http://localhost:3002',
     trace: 'on-first-retry',
     screenshot: 'only-on-failure',
   }
@@ -189,12 +189,12 @@ Then('I should see a result', async function (this: CustomWorld) {
 ### Run in Debug Mode
 
 ```bash
-npm run test:debug
+pnpm run test:debug
 ```
 
 ### Common Issues
 
-1. **Application won't start**: Check that port 3000 is free
+1. **Application won't start**: Check that port 3002 is free
 2. **Timeouts**: Increase timeout in `world.ts`
 3. **Elements not found**: Check CSS selectors
 4. **Sessions**: Clear cookies between tests
@@ -203,7 +203,7 @@ npm run test:debug
 
 ```bash
 # Enable Playwright logs
-DEBUG=pw:api npm run test:cucumber
+DEBUG=pw:api pnpm run test:cucumber
 ```
 
 ## 🎯 Best Practices

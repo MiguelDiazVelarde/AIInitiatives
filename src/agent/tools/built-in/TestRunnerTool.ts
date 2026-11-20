@@ -31,7 +31,7 @@ export class TestRunnerTool extends Tool {
   private readonly command: string;
   private readonly baseArgs: string[];
 
-  constructor(cwd: string, command = 'npm', baseArgs = ['test']) {
+  constructor(cwd: string, command = 'pnpm', baseArgs = ['test']) {
     super();
     this.cwd = cwd;
     this.command = command;

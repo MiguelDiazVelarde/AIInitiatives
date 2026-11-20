@@ -4,7 +4,7 @@ Write-Host "Starting Server and Running Authentication Tests" -ForegroundColor C
 Write-Host "================================================" -ForegroundColor Cyan
 
 Write-Host "`nStep 1: Building the application..." -ForegroundColor Yellow
-npm run build
+pnpm run build
 
 if ($LASTEXITCODE -ne 0) {
     Write-Host "Build failed! Exiting..." -ForegroundColor Red
@@ -14,7 +14,7 @@ if ($LASTEXITCODE -ne 0) {
 Write-Host "`nStep 2: Starting the server..." -ForegroundColor Yellow
 
 # Start the server in background
-Start-Process -FilePath "npm" -ArgumentList "start" -WindowStyle Hidden
+Start-Process -FilePath "pnpm" -ArgumentList "start" -WindowStyle Hidden
 
 Write-Host "Server starting... Waiting for it to be ready..." -ForegroundColor Green
 
@@ -28,7 +28,7 @@ while ($elapsed -lt $timeout -and -not $serverReady) {
     $elapsed += 2
     
     try {
-        $response = Invoke-WebRequest -Uri "http://localhost:3000" -UseBasicParsing -TimeoutSec 5 -ErrorAction SilentlyContinue
+        $response = Invoke-WebRequest -Uri "http://localhost:3002" -UseBasicParsing -TimeoutSec 5 -ErrorAction SilentlyContinue
         if ($response.StatusCode -eq 200) {
             $serverReady = $true
             Write-Host "Server is ready!" -ForegroundColor Green
@@ -43,14 +43,14 @@ if (-not $serverReady) {
     Write-Host "Trying to start with development mode..." -ForegroundColor Yellow
     
     # Try alternative startup
-    Start-Process -FilePath "npm" -ArgumentList "run", "dev" -WindowStyle Hidden
+    Start-Process -FilePath "pnpm" -ArgumentList "run", "dev" -WindowStyle Hidden
     Start-Sleep 10
 }
 
 Write-Host "`nStep 3: Running authentication tests..." -ForegroundColor Yellow
 
 # Run the tests
-npm run test:auth
+pnpm run test:auth
 
 $testResult = $LASTEXITCODE
 

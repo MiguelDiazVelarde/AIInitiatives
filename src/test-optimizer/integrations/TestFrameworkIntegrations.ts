@@ -94,7 +94,7 @@ export class CucumberIntegration {
    * Build Cucumber command with appropriate options
    */
   private buildCucumberCommand(featureFile: string, scenarioNames: string[]): string {
-    let command = 'npx cucumber-js';
+    let command = 'pnpm exec cucumber-js';
     command += ` "${featureFile}"`;
     command += ' --require-module ts-node/register';
     command += ' --require tests/step-definitions/**/*.ts';
@@ -272,7 +272,7 @@ export class PlaywrightIntegration {
    * Build Playwright command
    */
   private buildPlaywrightCommand(testIds: string[]): string {
-    let command = 'npx playwright test';
+    let command = 'pnpm exec playwright test';
     command += ' --reporter=json';
     
     // Add test file filtering if needed

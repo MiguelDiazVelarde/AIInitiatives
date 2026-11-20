@@ -200,7 +200,7 @@ This document outlines the system requirements for the Products Management Appli
 
 ## 7. Deployment Requirements
 
-- **REQ-DEPLOY-001**: The system SHALL be buildable using npm build commands
+- **REQ-DEPLOY-001**: The system SHALL be buildable using pnpm build commands
 - **REQ-DEPLOY-002**: The system SHALL serve static files efficiently
 - **REQ-DEPLOY-003**: The system SHALL run on Node.js version 20 or higher
 - **REQ-DEPLOY-004**: The system SHALL be deployable to standard web hosting environments
@@ -240,7 +240,7 @@ This document outlines the system requirements for the Products Management Appli
 ### 10.2 Dependencies
 
 - Node.js runtime environment (v20+)
-- npm package manager (v8+)
+- pnpm package manager (v10.x, install via `corepack enable` or https://pnpm.io/installation)
 - Modern web browser for client access
 - Network connectivity for API communication
 

@@ -18,12 +18,12 @@ sequenceDiagram
     GH->>Git: Checkout PR code
     Git-->>GH: Code downloaded
     GH->>GH: Install Node.js 18
-    GH->>GH: npm ci (dependencies)
+    GH->>GH: pnpm install --frozen-lockfile (dependencies)
     GH->>GH: Install Playwright browsers
     
     Note over GH: 🏗️ Build Phase
-    GH->>GH: npm run build:server
-    GH->>GH: npm run build:client
+    GH->>GH: pnpm run build:server
+    GH->>GH: pnpm run build:client
     GH->>GH: Verify build artifacts
     
     Note over GH,Server: 🚀 Server Startup
@@ -42,7 +42,7 @@ sequenceDiagram
         GH->>AI: optimize balanced
         AI-->>GH: Optimization plan
         
-        GH->>Tests: npm run test:auth
+        GH->>Tests: pnpm run test:auth
         activate Tests
         Tests-->>GH: Results (23 scenarios)
         deactivate Tests
@@ -86,7 +86,7 @@ sequenceDiagram
             deactivate AI
             
             Note over GH,Tests: 🔥 Fallback: Smoke Tests
-            GH->>Tests: npm run test:smoke
+            GH->>Tests: pnpm run test:smoke
             activate Tests
             Tests-->>GH: Basic results
             deactivate Tests

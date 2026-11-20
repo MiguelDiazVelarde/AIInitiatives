@@ -142,37 +142,37 @@ This test organization ensures complete coverage of all 134 system requirements:
 ### By Category
 ```bash
 # Run all functional requirement tests
-npm run test:functional
+pnpm run test:functional
 
 # Run all non-functional requirement tests  
-npm run test:non-functional
+pnpm run test:non-functional
 
 # Run all technical requirement tests
-npm run test:technical
+pnpm run test:technical
 
 # Run smoke tests
-npm run test:smoke
+pnpm run test:smoke
 ```
 
 ### By Specific Area
 ```bash
 # Run authentication tests
-npm run test:auth
+pnpm run test:auth
 
 # Run product management tests
-npm run test:products
+pnpm run test:products
 
 # Run performance tests
-npm run test:performance
+pnpm run test:performance
 
 # Run security tests
-npm run test:security
+pnpm run test:security
 ```
 
 ### All Tests
 ```bash
 # Run complete test suite
-npm test
+pnpm test
 ```
 
 ## Benefits of This Organization

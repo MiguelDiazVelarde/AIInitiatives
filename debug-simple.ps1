@@ -10,7 +10,7 @@ if (-not (Test-Path "package.json")) {
 
 # Step 2: Install dependencies
 Write-Host "`nInstalling dependencies..." -ForegroundColor Yellow
-npm ci
+pnpm install --frozen-lockfile
 if ($LASTEXITCODE -ne 0) {
     Write-Host "ERROR: Dependency installation failed" -ForegroundColor Red
     exit 1
@@ -18,13 +18,13 @@ if ($LASTEXITCODE -ne 0) {
 
 # Step 3: Build application
 Write-Host "`nBuilding application..." -ForegroundColor Yellow
-npm run build:server
+pnpm run build:server
 if ($LASTEXITCODE -ne 0) {
     Write-Host "ERROR: Server build failed" -ForegroundColor Red
     exit 1
 }
 
-npm run build:client
+pnpm run build:client
 if ($LASTEXITCODE -ne 0) {
     Write-Host "ERROR: Client build failed" -ForegroundColor Red
     exit 1
@@ -32,7 +32,7 @@ if ($LASTEXITCODE -ne 0) {
 
 # Step 4: Install Playwright
 Write-Host "`nInstalling Playwright browsers..." -ForegroundColor Yellow
-npx playwright install chromium
+pnpm exec playwright install chromium
 if ($LASTEXITCODE -ne 0) {
     Write-Host "ERROR: Playwright installation failed" -ForegroundColor Red
     exit 1

@@ -80,8 +80,8 @@ function Stop-ProcessOnPort {
 
 # Set environment variables
 $env:NODE_ENV = "test"
-$env:PORT = "3000"
-$env:TEST_BASE_URL = "http://localhost:3000"
+$env:PORT = "3002"
+$env:TEST_BASE_URL = "http://localhost:3002"
 $env:HEADLESS = "true"
 
 Write-Host "📋 Environment Variables:" -ForegroundColor Cyan
@@ -90,22 +90,21 @@ Write-Host "   PORT: $env:PORT"
 Write-Host "   TEST_BASE_URL: $env:TEST_BASE_URL"
 Write-Host ""
 
-# Step 1: Verify Node.js and npm
+# Step 1: Verify Node.js and pnpm
 Invoke-CommandWithTimeout -Command "node --version" -Description "Check Node.js version" -TimeoutSeconds 10
-Invoke-CommandWithTimeout -Command "npm --version" -Description "Check npm version" -TimeoutSeconds 10
+Invoke-CommandWithTimeout -Command "pnpm --version" -Description "Check pnpm version" -TimeoutSeconds 10
 
 # Step 2: Install dependencies (with timeout)
 Write-Host "📦 Installing Dependencies..." -ForegroundColor Yellow
-Invoke-CommandWithTimeout -Command "npm ci --silent" -Description "Install main dependencies" -TimeoutSeconds 120
-Invoke-CommandWithTimeout -Command "cd client; npm ci --silent; cd .." -Description "Install client dependencies" -TimeoutSeconds 120
+Invoke-CommandWithTimeout -Command "pnpm install --frozen-lockfile --silent" -Description "Install workspace dependencies (root + client)" -TimeoutSeconds 240
 
 # Step 3: Install Playwright (with timeout)
 Write-Host "🎭 Installing Playwright..." -ForegroundColor Yellow
-Invoke-CommandWithTimeout -Command "npx playwright install chromium" -Description "Install Playwright browsers" -TimeoutSeconds 300 -ContinueOnError $true
+Invoke-CommandWithTimeout -Command "pnpm exec playwright install chromium" -Description "Install Playwright browsers" -TimeoutSeconds 300 -ContinueOnError $true
 
 # Step 4: Build application
 Write-Host "🔨 Building Application..." -ForegroundColor Yellow
-Invoke-CommandWithTimeout -Command "npm run build" -Description "Build application" -TimeoutSeconds 120
+Invoke-CommandWithTimeout -Command "pnpm run build" -Description "Build application" -TimeoutSeconds 120
 
 # Step 5: Verify build artifacts
 if (Test-Path "dist/server/index.js") {
@@ -117,18 +116,18 @@ if (Test-Path "dist/server/index.js") {
 
 # Step 6: TypeScript compilation check
 Write-Host "📝 TypeScript Compilation Check..." -ForegroundColor Yellow
-Invoke-CommandWithTimeout -Command "npx tsc -p tsconfig.server.json --noEmit" -Description "Server TypeScript compilation" -TimeoutSeconds 60
-Invoke-CommandWithTimeout -Command "cd client; npx tsc --noEmit; cd .." -Description "Client TypeScript compilation" -TimeoutSeconds 60
+Invoke-CommandWithTimeout -Command "pnpm exec tsc -p tsconfig.server.json --noEmit" -Description "Server TypeScript compilation" -TimeoutSeconds 60
+Invoke-CommandWithTimeout -Command "cd client; pnpm exec tsc --noEmit; cd .." -Description "Client TypeScript compilation" -TimeoutSeconds 60
 
 # Step 7: Test Optimizer Stats
 Write-Host "🤖 AI Test Optimizer..." -ForegroundColor Yellow
-Invoke-CommandWithTimeout -Command "npx ts-node src/test-optimizer/index.ts stats" -Description "Test Optimizer stats" -TimeoutSeconds 30 -ContinueOnError $true
+Invoke-CommandWithTimeout -Command "pnpm exec ts-node src/test-optimizer/index.ts stats" -Description "Test Optimizer stats" -TimeoutSeconds 30 -ContinueOnError $true
 
 # Step 8: Quick Server Test (with timeout and cleanup)
 Write-Host "🚀 Server Test..." -ForegroundColor Yellow
 
 # Ensure port is free
-Stop-ProcessOnPort -Port 3000
+Stop-ProcessOnPort -Port 3002
 
 # Test with simple server
 $serverTest = {
@@ -137,7 +136,7 @@ $serverTest = {
         $serverJob = Start-Job -ScriptBlock {
             Set-Location "C:\Workspaces\iainitiatives"
             $env:NODE_ENV = "test"
-            $env:PORT = "3000"
+            $env:PORT = "3002"
             node dist/server/index.js
         }
         
@@ -145,7 +144,7 @@ $serverTest = {
         Start-Sleep 5
         
         # Test health endpoint
-        $response = Invoke-WebRequest -Uri "http://localhost:3000/api/health" -UseBasicParsing -TimeoutSec 10
+        $response = Invoke-WebRequest -Uri "http://localhost:3002/api/health" -UseBasicParsing -TimeoutSec 10
         
         if ($response.StatusCode -eq 200) {
             Write-Host "✅ Server health check passed" -ForegroundColor Green
@@ -173,30 +172,30 @@ if ($serverResult) {
     Write-Host "🧪 Running Tests..." -ForegroundColor Yellow
     
     # Ensure clean environment
-    Stop-ProcessOnPort -Port 3000
+    Stop-ProcessOnPort -Port 3002
     
     # Start server for tests
     Write-Host "   Starting server for tests..."
     $testServerJob = Start-Job -ScriptBlock {
         Set-Location "C:\Workspaces\iainitiatives"
         $env:NODE_ENV = "test"
-        $env:PORT = "3000"
+        $env:PORT = "3002"
         node dist/server/index.js
     }
     
     Start-Sleep 8
     
     # Run smoke tests with timeout
-    Invoke-CommandWithTimeout -Command "npm run test:smoke" -Description "Smoke tests" -TimeoutSeconds 180 -ContinueOnError $true
+    Invoke-CommandWithTimeout -Command "pnpm run test:smoke" -Description "Smoke tests" -TimeoutSeconds 180 -ContinueOnError $true
     
     # Cleanup
     Stop-Job $testServerJob -ErrorAction SilentlyContinue
     Remove-Job $testServerJob -ErrorAction SilentlyContinue
-    Stop-ProcessOnPort -Port 3000
+    Stop-ProcessOnPort -Port 3002
 }
 
 # Final cleanup
-Stop-ProcessOnPort -Port 3000
+Stop-ProcessOnPort -Port 3002
 
 Write-Host ""
 Write-Host "🎯 Local CI Execution Completed" -ForegroundColor Green

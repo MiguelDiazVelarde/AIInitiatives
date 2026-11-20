@@ -121,15 +121,15 @@ Our authentication system now includes a **comprehensive test suite with 100% re
 
 ```bash
 # Complete authentication test suite
-npm run test:auth                    # Run all 23 authentication scenarios
+pnpm run test:auth                   # Run all 23 authentication scenarios
 
 # Specific authentication testing
-npm run test:auth:session           # Session persistence tests only  
-npm run test:smoke                  # Quick authentication validation
+pnpm run test:auth:session          # Session persistence tests only  
+pnpm run test:smoke                 # Quick authentication validation
 
 # Enhanced CI testing (used in workflows)
-npm run test:cucumber               # Full BDD test suite with auth coverage
-npm run test:full                   # Complete test suite with HTML reports
+pnpm run test:cucumber              # Full BDD test suite with auth coverage
+pnpm run test:full                  # Complete test suite with HTML reports
 ```
 
 ### 📊 **Authentication Test Results**
@@ -191,30 +191,30 @@ The AI Test Optimizer is **currently running** in all GitHub workflows:
 
 ```bash
 # 🔥 LIVE COMMANDS - Currently running in CI/CD
-npm run optimizer:smoke        # 15 tests, 1.3min (75.8% time reduction)
-npm run optimizer:quick        # 60 tests, 5min (3.2% time reduction)  
-npm run optimizer:balanced     # 50 tests, 5sec (19.4% time reduction)
+pnpm run optimizer:smoke       # 15 tests, 1.3min (75.8% time reduction)
+pnpm run optimizer:quick       # 60 tests, 5min (3.2% time reduction)  
+pnpm run optimizer:balanced    # 50 tests, 5sec (19.4% time reduction)
 
 # 📊 MONITORING & ANALYTICS
-npm run optimizer:stats        # View real-time optimization statistics
-npm run optimizer:config       # Show current AI configuration
+pnpm run optimizer:stats       # View real-time optimization statistics
+pnpm run optimizer:config      # Show current AI configuration
 
 # 🔧 ADVANCED OPERATIONS  
-npm run optimizer:analyze      # Analyze specific files for test recommendations
-npm run optimizer:execute      # Execute AI-generated optimization plans
-npm run optimizer:report       # Generate detailed optimization reports
-npm run optimizer:server       # Start REST API server on port 3001
+pnpm run optimizer:analyze     # Analyze specific files for test recommendations
+pnpm run optimizer:execute     # Execute AI-generated optimization plans
+pnpm run optimizer:report      # Generate detailed optimization reports
+pnpm run optimizer:server      # Start REST API server on port 3001
 
 # 📋 CONFIGURATION & MANAGEMENT
-npm run optimizer:init         # Initialize AI Test Optimizer configuration
-npm run optimizer:help         # Show all available commands and options
+pnpm run optimizer:init        # Initialize AI Test Optimizer configuration
+pnpm run optimizer:help        # Show all available commands and options
 ```
 
 ### 🧠 Advanced AI Commands
 
 ```bash
 # Analyze specific code changes for test recommendations
-npx ts-node src/test-optimizer/index.ts analyze src/server/routes/auth.ts
+pnpm exec ts-node src/test-optimizer/index.ts analyze src/server/routes/auth.ts
 ```
 
 ## 🧠 AI Agent Architecture
@@ -325,13 +325,13 @@ src/agent/
 ```bash
 
 # Generate recommendations for specific commit
-npx ts-node src/test-optimizer/index.ts recommendations be658d6
+pnpm exec ts-node src/test-optimizer/index.ts recommendations be658d6
 
 # Execute optimization with custom strategy  
-npx ts-node src/test-optimizer/index.ts optimize balanced HEAD~1
+pnpm exec ts-node src/test-optimizer/index.ts optimize balanced HEAD~1
 
 # Start API server for external integrations
-npx ts-node src/test-optimizer/index.ts server 3001
+pnpm exec ts-node src/test-optimizer/index.ts server 3001
 ```
 
 ## 🐛 **COMPREHENSIVE DEBUG SYSTEM**
@@ -350,22 +350,22 @@ Complete debugging system for all application components with VS Code integratio
 
 ```bash
 # Test Optimizer Debug
-npm run optimizer:debug              # General debug with breakpoints
-npm run optimizer:debug:stats        # Debug statistics calculation
-npm run optimizer:debug:server       # Debug API server
+pnpm run optimizer:debug             # General debug with breakpoints
+pnpm run optimizer:debug:stats       # Debug statistics calculation
+pnpm run optimizer:debug:server      # Debug API server
 
 # Server Debug  
-npm run server:debug                 # Express server debug
-npm run server:debug:auth            # Authentication debug
-npm run server:debug:api             # API endpoint debug
+pnpm run server:debug                # Express server debug
+pnpm run server:debug:auth           # Authentication debug
+pnpm run server:debug:api            # API endpoint debug
 
 # Client Debug
-npm run client:debug                 # React dev server debug
-npm run client:debug:build           # Build process debug
-npm run client:debug:preview         # Preview production debug
+pnpm run client:debug                # React dev server debug
+pnpm run client:debug:build          # Build process debug
+pnpm run client:debug:preview        # Preview production debug
 
 # Full Stack Debug
-npm run fullstack:debug              # Server + Client together
+pnpm run fullstack:debug             # Server + Client together
 ```
 
 ### 🔧 **VS Code Debug Configurations**
@@ -398,7 +398,7 @@ The AI Test Optimizer provides live metrics and can be monitored through:
 - **GitHub Actions Logs:** Real-time execution in CI/CD workflows  
 - **Optimization Reports:** Generated automatically in `test-optimizer-reports/`
 - **REST API:** Live metrics available at `http://localhost:3001/api/stats`
-- **Command Line:** `npm run optimizer:stats` for current performance data
+- **Command Line:** `pnpm run optimizer:stats` for current performance data
 
 ## 🛠️ Technologies Used
 
@@ -407,7 +407,7 @@ The AI Test Optimizer provides live metrics and can be monitored through:
 - **Backend**: Node.js 20.x + Express.js + TypeScript (REST API)
 - **Frontend**: React 18 + TypeScript + Vite 5
 - **Build Tools**: TypeScript 5.x compiler + Vite bundler
-- **Package Manager**: npm with package-lock for consistency
+- **Package Manager**: pnpm (workspace) with a single `pnpm-lock.yaml` for consistency
 
 ### **Authentication & Security**
 
@@ -459,9 +459,9 @@ The AI Test Optimizer provides live metrics and can be monitored through:
 
 ### **Development Tools**
 
-- **Hot Reload**: Vite HMR for frontend, nodemon for backend
+- **Hot Reload**: Vite HMR for frontend, `node --watch` for backend
 - **Debugging**: VS Code launch configurations included
-- **Task Automation**: npm scripts + PowerShell scripts
+- **Task Automation**: pnpm scripts + PowerShell scripts
 - **Concurrency**: concurrently for parallel processes
 
 ## 📋 Prerequisites
@@ -471,8 +471,31 @@ The AI Test Optimizer provides live metrics and can be monitored through:
 - **Node.js**: v20.x or higher (LTS recommended)
   - Download: <https://nodejs.org/>
   - Verify: `node --version`
-- **npm**: v10.x or higher (comes with Node.js)
-  - Verify: `npm --version`
+- **pnpm**: v10.x (required; this repo uses pnpm only)
+  - Install: see [Installing pnpm](#installing-pnpm) below
+  - Verify: `pnpm --version`
+  - If the build is blocked by group policy, see [Troubleshooting the build](#troubleshooting-the-build-group-policy)
+
+### **Installing pnpm**
+
+Install Node.js first, then use **one** of these options:
+
+| Method | Command | Notes |
+| --- | --- | --- |
+| **Corepack** (recommended) | `corepack enable pnpm` | Bundled with Node.js 20–24. Uses the version pinned in `packageManager` in `package.json`. On Windows, run the terminal as Administrator if Node.js is installed in `C:\Program Files`. |
+| **Standalone script (Windows)** | `iwr https://get.pnpm.io/install.ps1 -useb \| iex` | Run in PowerShell. Restart the terminal afterwards. |
+| **Standalone script (macOS/Linux)** | `curl -fsSL https://get.pnpm.io/install.sh \| sh -` | Restart the terminal afterwards. |
+| **winget (Windows)** | `winget install -e --id pnpm.pnpm` | |
+| **Homebrew (macOS)** | `brew install pnpm` | |
+| **Chocolatey (Windows)** | `choco install pnpm` | |
+
+Then verify the installation:
+
+```bash
+pnpm --version   # should print 10.x
+```
+
+More options: <https://pnpm.io/installation>. If your organization restricts which programs can run, ask IT which installation method is allowed.
 
 ### **Optional (for development)**
 
@@ -502,24 +525,28 @@ For detailed system requirements, see [SYSTEM-REQUIREMENTS.md](SYSTEM-REQUIREMEN
 1. **Install dependencies**:
 
    ```bash
-   npm install
+   pnpm install
    ```
+
+   A single install at the repo root also installs the `client/` workspace.
 
 1. **Compile TypeScript**:
 
    ```bash
-   npm run build
+   pnpm run build
    ```
 
 1. **Start the application**:
 
    ```bash
-   npm start
+   pnpm start
    ```
 
 1. **Open in browser**:
-   - **React App**: <http://localhost:5173> (Development with `npm run dev`)
-   - **API Server**: <http://localhost:3000> (Backend with `npm start`)
+   - **React App**: <http://localhost:5173> (Development with `pnpm run dev`)
+   - **API Server + built app**: <http://localhost:3002> (Backend with `pnpm start`; serves the compiled React app from `client/dist`, so run `pnpm run build` first)
+
+   > If you open <http://localhost:3002> and see `Cannot GET /`, the client has not been built (`client/dist` is missing) or the server was started before building. Run `pnpm run build` and restart the server. In development, use <http://localhost:5173>.
 
 ## 🎯 Application Usage
 
@@ -528,31 +555,50 @@ For detailed system requirements, see [SYSTEM-REQUIREMENTS.md](SYSTEM-REQUIREMEN
 1. **Start the application**:
 
    ```bash
-   npm run dev
+   pnpm run dev
    ```
 
    This starts both the backend server and frontend React app concurrently.
 
 1. **Access the application**:
    - **Frontend**: <http://localhost:5173> (React app with Vite HMR)
-   - **Backend API**: <http://localhost:3000> (Express.js REST API)
+   - **Backend API**: <http://localhost:3002> (Express.js REST API)
    - **AI Test Optimizer API**: <http://localhost:3001> (when started separately)
+
+### **Ports**
+
+| Service | Default port | Notes |
+| --- | --- | --- |
+| Frontend (Vite) | `5173` | Proxies `/api` and `/auth` to the backend. |
+| Backend (Express) | `3002` | Override with the `PORT` environment variable. |
+| AI Test Optimizer API | `3001` | Only when started separately. |
+
+The backend uses `3002` instead of `3000` because `3000` is commonly taken by other local tools (for example, a service already listening on `127.0.0.1:3000` can intercept requests to `localhost:3000` and answer with a different app).
+
+If `3002` is also in use (`EADDRINUSE`), find the process and stop it:
+
+```powershell
+netstat -ano | findstr :3002
+Stop-Process -Id <PID>
+```
+
+To use another port, keep these in sync: `PORT` (server), the proxy `target` in `client/vite.config.ts`, `API_BASE_URL` in `client/src/services/api.ts`, `baseURL` in `playwright.config.ts`, and `TEST_BASE_URL` for the tests (default in `tests/support/`).
 
 ### **Production Mode**
 
 1. **Build the application**:
 
    ```bash
-   npm run build
+   pnpm run build
    ```
 
 1. **Start production server**:
 
    ```bash
-   npm start
+   pnpm start
    ```
 
-1. **Access**: Backend API at <http://localhost:3000> (serve built React app from `/dist`)
+1. **Access**: Backend API at <http://localhost:3002> (serve built React app from `/dist`)
 
 ### **Test Credentials**
 
@@ -754,86 +800,98 @@ ui-testing-ai/            # UI Testing with AI (ISTQB CT-AI 11.6)
 
 ```bash
 # Development (Hot Reload)
-npm run dev              # Start full stack (server + client with hot reload)
-npm run dev:server       # Start backend only (nodemon for auto-restart)
-npm run dev:client       # Start frontend only (Vite HMR)
+pnpm run dev             # Start full stack (server + client with hot reload)
+pnpm run dev:server      # Start backend only (node --watch for auto-restart)
+pnpm run dev:client      # Start frontend only (Vite HMR)
 
 # Production Build
-npm run build            # Build both frontend and backend
-npm run build:server     # Build backend TypeScript only
-npm run build:client     # Build frontend React app only
+pnpm run build           # Build both frontend and backend
+pnpm run build:server    # Build backend TypeScript only (node node_modules/typescript/bin/tsc)
+pnpm run build:client    # Build frontend React app only (node node_modules/vite/bin/vite.js)
 
 # Run Production
-npm start                # Run built application (production mode)
+pnpm start               # Run built application (production mode)
 
 # Cleanup
-npm run clean            # Remove all build artifacts (dist folders)
+pnpm run clean           # Remove all build artifacts (dist folders)
 ```
+
+> This repository uses pnpm only. The build and dev scripts (`build*`, `dev`, `dev:server`, `dev:client`) call `node` directly on the TypeScript, Vite and concurrently entry points (the backend uses `node --watch` with `ts-node/register`) and use `pnpm` for chaining, so they do not depend on the `.cmd` launchers in `node_modules/.bin`. Other scripts (`cucumber-js`, `playwright`, `ts-node`, `rimraf`, `cross-env`, `nodemon`) still use those launchers.
+
+#### **Troubleshooting the build (group policy)**
+
+If `pnpm run build` fails with `This program is blocked by group policy`:
+
+- **Cause**: the policy (AppLocker / WDAC) blocks `npm` and the `.cmd` launchers in `node_modules/.bin` (for example `tsc.CMD`). `node.exe` and `pnpm.exe` are allowed, which is why the repo is pnpm-only.
+- **Fix**: use `pnpm run build` (never `npm`). The build scripts invoke `node` directly on `typescript/bin/tsc` and `vite/bin/vite.js`.
+- **Verify**: `node node_modules/typescript/bin/tsc --version` works while `pnpm exec tsc --version` is blocked.
+- **Type error TS2742** ("inferred type of `app`/`router` cannot be named...") appears with pnpm's strict `node_modules` layout; `app` and `router` are explicitly typed as `Express` / `Router` in `src/server` to avoid it.
+- If other scripts are blocked, ask IT to allow the blocked executable, or run them with `node node_modules/<package>/bin/<tool>`.
 
 ### **Testing Commands**
 
 ```bash
 # Core Testing
-npm run test             # Run all Cucumber tests
-npm run test:full        # Run tests + generate HTML report  
-npm run test:headed      # Run tests in visible browser (for debugging)
+pnpm run test            # Run all Cucumber tests
+pnpm run test:full       # Run tests + generate HTML report  
+pnpm run test:headed     # Run tests in visible browser (for debugging)
 
 # Specific Test Suites
-npm run test:auth        # 🔐 Authentication tests (23 scenarios, 100% passing)
-npm run test:auth:session # Session persistence tests with optimized timeouts
-npm run test:courses     # 📚 Course catalog & progress tracking tests (server auto-started)
-npm run test:navigation  # UI navigation and routing tests
-npm run test:smoke       # Quick smoke tests (alias for test:auth)
+pnpm run test:auth       # 🔐 Authentication tests (23 scenarios, 100% passing)
+pnpm run test:auth:session # Session persistence tests with optimized timeouts
+pnpm run test:courses    # 📚 Course catalog & progress tracking tests (server auto-started)
+pnpm run test:navigation # UI navigation and routing tests
+pnpm run test:smoke      # Quick smoke tests (alias for test:auth)
 
 # Alternative Test Runners
-npm run test:cucumber    # Direct Cucumber execution with JSON output
-npm run test:playwright  # Playwright native test runner
-npm run test:ui          # Playwright UI mode for interactive debugging
-npm run test:debug       # Playwright debug mode with DevTools
-npm run test:report      # Generate HTML report from last test run
+pnpm run test:cucumber   # Direct Cucumber execution with JSON output
+pnpm run test:playwright # Playwright native test runner
+pnpm run test:ui         # Playwright UI mode for interactive debugging
+pnpm run test:debug      # Playwright debug mode with DevTools
+pnpm run test:report     # Generate HTML report from last test run
 ```
 
 ### **🤖 AI Test Optimizer Commands** (✅ LIVE in CI/CD)
 
 ```bash
 # Quick Commands (Most Used)
-npm run optimizer:help      # Show all available commands and options
-npm run optimizer:smoke     # Critical smoke tests (~1.3 min, 75.8% faster)
-npm run optimizer:quick     # Quick feedback tests (~5 min, 3.2% faster)
-npm run optimizer:balanced  # Balanced strategy (~5 sec, 19.4% faster)
-npm run optimizer:stats     # Show real-time optimization statistics
+pnpm run optimizer:help     # Show all available commands and options
+pnpm run optimizer:smoke    # Critical smoke tests (~1.3 min, 75.8% faster)
+pnpm run optimizer:quick    # Quick feedback tests (~5 min, 3.2% faster)
+pnpm run optimizer:balanced # Balanced strategy (~5 sec, 19.4% faster)
+pnpm run optimizer:stats    # Show real-time optimization statistics
 
 # Analysis & Recommendations
-npm run optimizer:analyze           # Analyze code files for test impact
-npm run optimizer:recommendations   # Get AI test recommendations
-npm run optimizer:pr                # Analyze PR changes for relevant tests
+pnpm run optimizer:analyze          # Analyze code files for test impact
+pnpm run optimizer:recommendations  # Get AI test recommendations
+pnpm run optimizer:pr               # Analyze PR changes for relevant tests
 
 # Execution & Reporting
-npm run optimizer:execute           # Execute optimization plan
-npm run optimizer:report            # Generate detailed optimization report
-npm run optimizer:comprehensive     # Full test suite with optimization
+pnpm run optimizer:execute          # Execute optimization plan
+pnpm run optimizer:report           # Generate detailed optimization report
+pnpm run optimizer:comprehensive    # Full test suite with optimization
 
 # Configuration & Server
-npm run optimizer:config    # View/manage optimizer configuration
-npm run optimizer:server    # Start REST API server (port 3001)
+pnpm run optimizer:config   # View/manage optimizer configuration
+pnpm run optimizer:server   # Start REST API server (port 3001)
 ```
 
 ### **CI/CD & Quality**
 
 ```bash
 # Pre-Commit Checks
-npm run pre-commit      # Fast validation (build + smoke tests)
-npm run ci:quick        # Quick CI simulation (build + smoke)
+pnpm run pre-commit     # Fast validation (build + smoke tests)
+pnpm run ci:quick       # Quick CI simulation (build + smoke)
 
 # Complete Validation
-npm run pre-push        # Full validation before pushing
-npm run ci:full         # Complete CI pipeline (build + test + security)
+pnpm run pre-push       # Full validation before pushing
+pnpm run ci:full        # Complete CI pipeline (build + test + security)
 
 # Individual CI Steps
-npm run ci:build        # Build validation
-npm run ci:test         # Test execution
-npm run ci:security     # Security audit (high vulnerabilities only)
-npm run ci:check        # All CI steps in sequence
+pnpm run ci:build       # Build validation
+pnpm run ci:test        # Test execution
+pnpm run ci:security    # Security audit (high vulnerabilities only)
+pnpm run ci:check       # All CI steps in sequence
 ```
 
 ### **AI Test Optimizer Benefits** (✅ LIVE IN PRODUCTION)
@@ -1169,25 +1227,25 @@ Run these commands locally to ensure your changes will pass CI:
 
 ```bash
 # Full pre-commit validation (recommended)
-npm run pre-commit       # Build + smoke tests
+pnpm run pre-commit      # Build + smoke tests
 
 # Or run individually:
-npm run build            # TypeScript compilation
-npm run test:smoke       # Quick smoke tests
-npm audit --audit-level high  # Security check
+pnpm run build           # TypeScript compilation
+pnpm run test:smoke      # Quick smoke tests
+pnpm audit --audit-level high  # Security check
 ```
 
 #### **AI Test Optimizer (Smart Testing)**
 
 ```bash
 # Let AI recommend which tests to run based on your changes
-npm run optimizer:recommendations HEAD~1
+pnpm run optimizer:recommendations HEAD~1
 
 # Run AI-optimized smoke tests
-npm run optimizer:smoke
+pnpm run optimizer:smoke
 
 # Get optimization statistics
-npm run optimizer:stats
+pnpm run optimizer:stats
 ```
 
 #### **Comprehensive Testing** (Optional)
@@ -1196,30 +1254,30 @@ npm run optimizer:stats
 
 ```bash
 # Terminal 1: Start server
-npm start
+pnpm start
 
 # Terminal 2: Run tests  
-npm run test:auth        # Authentication tests (23 scenarios)
-npm run test:courses     # Course catalog & progress tracking tests
-npm run test:navigation  # UI navigation tests
-npm run test:full        # All tests with HTML report
+pnpm run test:auth       # Authentication tests (23 scenarios)
+pnpm run test:courses    # Course catalog & progress tracking tests
+pnpm run test:navigation # UI navigation tests
+pnpm run test:full       # All tests with HTML report
 ```
 
 **Complete CI simulation:**
 
 ```bash
 # Run full CI pipeline locally
-npm run ci:full          # Build + test + security
+pnpm run ci:full         # Build + test + security
 
 # Quick CI check
-npm run ci:quick         # Build + smoke tests only
+pnpm run ci:quick        # Build + smoke tests only
 ```
 
 #### **Pre-Push Validation**
 
 ```bash
 # Complete validation before pushing (recommended)
-npm run pre-push         # Full CI checks
+pnpm run pre-push        # Full CI checks
 ```
 
 ## 🎨 UI Testing with AI (ISTQB CT-AI 11.6)
@@ -1637,7 +1695,7 @@ We welcome contributions from the community! This project follows a structured C
    ```bash
    git clone https://github.com/YOUR_USERNAME/AIInitiatives.git
    cd AIInitiatives
-   npm install
+   pnpm install
    ```
 
 1. **Create Feature Branch**
@@ -1649,8 +1707,8 @@ We welcome contributions from the community! This project follows a structured C
 1. **Develop and Test**
 
    ```bash
-   npm run pre-commit    # Build + smoke tests
-   npm run test:full     # Optional: Full test suite
+   pnpm run pre-commit   # Build + smoke tests
+   pnpm run test:full    # Optional: Full test suite
    ```
 
 1. **Commit Changes**

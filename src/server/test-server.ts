@@ -1,4 +1,4 @@
-import express from 'express';
+import express, { Express } from 'express';
 import session from 'express-session';
 import cors from 'cors';
 import path from 'path';
@@ -6,8 +6,8 @@ import authRoutes from './routes/auth';
 import courseRoutes from './routes/courses';
 import progressRoutes from './routes/progress';
 
-const app = express();
-const PORT = process.env.PORT || 3000;
+const app: Express = express();
+const PORT = process.env.PORT || 3002;
 
 // More permissive CORS configuration for tests
 app.use(cors({

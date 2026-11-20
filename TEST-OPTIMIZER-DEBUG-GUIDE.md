@@ -21,15 +21,15 @@ The project includes pre-configured debug setups in `.vscode/launch.json`:
 
 ```bash
 # General debug with Node.js Inspector
-npm run optimizer:debug
+pnpm run optimizer:debug
 
 # Debug with verbose logging
-npm run optimizer:debug:quick
-npm run optimizer:debug:stats
-npm run optimizer:debug:server
+pnpm run optimizer:debug:quick
+pnpm run optimizer:debug:stats
+pnpm run optimizer:debug:server
 
 # Direct debug commands
-npx ts-node src/test-optimizer/index.ts [command]
+pnpm exec ts-node src/test-optimizer/index.ts [command]
 ```
 
 ## 🎯 Debug Methods
@@ -53,13 +53,13 @@ npx ts-node src/test-optimizer/index.ts [command]
 #### Basic Debug Commands
 ```bash
 # Debug general with breakpoints
-npx ts-node --inspect-brk src/test-optimizer/index.ts help
+pnpm exec ts-node --inspect-brk src/test-optimizer/index.ts help
 
 # Debug specific strategy
-npx ts-node --inspect-brk=0.0.0.0:9229 src/test-optimizer/index.ts optimize quick
+pnpm exec ts-node --inspect-brk=0.0.0.0:9229 src/test-optimizer/index.ts optimize quick
 
 # Debug with verbose logging (cross-platform)
-npx ts-node src/test-optimizer/index.ts stats
+pnpm exec ts-node src/test-optimizer/index.ts stats
 
 # Debug API server
 node --inspect-brk -r ts-node/register src/test-optimizer/index.ts server 3001
@@ -68,16 +68,16 @@ node --inspect-brk -r ts-node/register src/test-optimizer/index.ts server 3001
 #### Advanced Debug Commands
 ```bash
 # Analyze specific files
-npx ts-node src/test-optimizer/index.ts analyze src/server/routes/auth.ts
+pnpm exec ts-node src/test-optimizer/index.ts analyze src/server/routes/auth.ts
 
 # Generate recommendations for commit
-npx ts-node src/test-optimizer/index.ts recommendations HEAD~1
+pnpm exec ts-node src/test-optimizer/index.ts recommendations HEAD~1
 
 # Execute with custom strategy
-npx ts-node src/test-optimizer/index.ts optimize balanced HEAD~1
+pnpm exec ts-node src/test-optimizer/index.ts optimize balanced HEAD~1
 
 # Start API server with debugging
-npx ts-node src/test-optimizer/index.ts server 3001
+pnpm exec ts-node src/test-optimizer/index.ts server 3001
 ```
 
 ### C. Chrome DevTools Debug
@@ -127,7 +127,7 @@ npx ts-node src/test-optimizer/index.ts server 3001
 **Solution**:
 ```bash
 # 1. Start debug session
-npm run optimizer:debug
+pnpm run optimizer:debug
 
 # 2. Set breakpoints in handleOptimize method
 # 3. Run with specific strategy
@@ -147,7 +147,7 @@ npm run optimizer:debug
 **Solution**:
 ```bash
 # 1. Start server with debug
-npm run optimizer:debug:server
+pnpm run optimizer:debug:server
 
 # 2. Test endpoints
 curl http://localhost:3001/api/stats
@@ -169,7 +169,7 @@ curl http://localhost:3001/api/config
 **Solution**:
 ```bash
 # Debug specific file analysis
-npx ts-node --inspect-brk src/test-optimizer/index.ts analyze src/server/routes/auth.ts
+pnpm exec ts-node --inspect-brk src/test-optimizer/index.ts analyze src/server/routes/auth.ts
 ```
 
 **Key Debug Points**:
@@ -185,7 +185,7 @@ npx ts-node --inspect-brk src/test-optimizer/index.ts analyze src/server/routes/
 **Solution**:
 ```bash
 # Debug statistics generation
-npx ts-node --inspect-brk src/test-optimizer/index.ts stats
+pnpm exec ts-node --inspect-brk src/test-optimizer/index.ts stats
 ```
 
 **Key Debug Points**:
@@ -232,20 +232,20 @@ plan: {
 **Solution**:
 ```bash
 # Check TypeScript compilation
-npm run build
+pnpm run build
 
 # Fix compilation errors before debugging
-npx tsc --noEmit
+pnpm exec tsc --noEmit
 ```
 
 ### Issue 2: Missing Dependencies
 **Solution**:
 ```bash
-# Install missing dependencies
-npm install
+# Install missing dependencies (single workspace install from the repo root)
+pnpm install
 
 # Check for missing types
-npm install @types/node @types/jest
+pnpm add -D -w @types/node @types/jest
 ```
 
 ### Issue 3: Port Already in Use
@@ -256,7 +256,7 @@ netstat -ano | findstr :3001
 taskkill /PID <PID> /F
 
 # Or use different port
-npx ts-node src/test-optimizer/index.ts server 3002
+pnpm exec ts-node src/test-optimizer/index.ts server 3002
 ```
 
 ### Issue 4: Debug Session Not Starting
@@ -266,7 +266,7 @@ npx ts-node src/test-optimizer/index.ts server 3002
 node --version
 
 # Update ts-node if needed
-npm install -g ts-node
+pnpm add -g ts-node
 
 # Use alternative debug command
 node -r ts-node/register --inspect-brk src/test-optimizer/index.ts
@@ -277,18 +277,18 @@ node -r ts-node/register --inspect-brk src/test-optimizer/index.ts
 ### Basic Commands
 ```bash
 # Help and general info
-npx ts-node src/test-optimizer/index.ts help
-npx ts-node src/test-optimizer/index.ts config show
+pnpm exec ts-node src/test-optimizer/index.ts help
+pnpm exec ts-node src/test-optimizer/index.ts config show
 
 # Strategy execution
-npx ts-node src/test-optimizer/index.ts optimize quick
-npx ts-node src/test-optimizer/index.ts optimize balanced
-npx ts-node src/test-optimizer/index.ts optimize comprehensive
+pnpm exec ts-node src/test-optimizer/index.ts optimize quick
+pnpm exec ts-node src/test-optimizer/index.ts optimize balanced
+pnpm exec ts-node src/test-optimizer/index.ts optimize comprehensive
 
 # Analysis and statistics
-npx ts-node src/test-optimizer/index.ts stats
-npx ts-node src/test-optimizer/index.ts analyze [file]
-npx ts-node src/test-optimizer/index.ts recommendations [commit]
+pnpm exec ts-node src/test-optimizer/index.ts stats
+pnpm exec ts-node src/test-optimizer/index.ts analyze [file]
+pnpm exec ts-node src/test-optimizer/index.ts recommendations [commit]
 ```
 
 ### Debug Commands
@@ -306,7 +306,7 @@ node --inspect -r ts-node/register src/test-optimizer/index.ts server 3001
 ### API Testing Commands
 ```bash
 # Start API server
-npx ts-node src/test-optimizer/index.ts server 3001
+pnpm exec ts-node src/test-optimizer/index.ts server 3001
 
 # Test endpoints
 curl http://localhost:3001/api/stats
@@ -341,13 +341,13 @@ console.timeEnd('optimization');
 ### 1. Watch Mode for Development
 ```bash
 # Watch TypeScript files and restart on changes
-npx nodemon --exec "ts-node src/test-optimizer/index.ts" --ext ts --watch src/
+pnpm exec nodemon --exec "ts-node src/test-optimizer/index.ts" --ext ts --watch src/
 ```
 
 ### 2. Debug with Test Data
 ```bash
 # Create test data for debugging
-npx ts-node src/test-optimizer/index.ts optimize quick --mock-data
+pnpm exec ts-node src/test-optimizer/index.ts optimize quick --mock-data
 ```
 
 ### 3. Isolated Component Testing
@@ -375,8 +375,8 @@ After setting up debugging:
 If you encounter issues with debugging:
 
 1. **Check console output** for error messages
-2. **Verify TypeScript compilation** with `npm run build`
-3. **Check Node.js and npm versions**
+2. **Verify TypeScript compilation** with `pnpm run build`
+3. **Check Node.js and pnpm versions**
 4. **Review VS Code debug console** for detailed errors
 5. **Use simpler debug commands** if complex ones fail
 

@@ -28,28 +28,28 @@ jobs:
       with:
         fetch-depth: 0
         
+    - name: Setup pnpm
+      uses: pnpm/action-setup@v4
+      with:
+        version: 10
+        
     - name: Setup Node.js
       uses: actions/setup-node@v4
       with:
         node-version: '24.x'
-        cache: 'npm'
+        cache: 'pnpm'
         
     - name: Install dependencies
-      run: npm ci
-      
-    - name: Install client dependencies
-      run: |
-        cd client
-        npm ci
+      run: pnpm install --frozen-lockfile
       
     - name: Build application
-      run: npm run build
+      run: pnpm run build
       
     - name: 🚀 Run Comprehensive Test Suite (AI-Optimized)
       continue-on-error: true
       run: |
         echo "Attempting comprehensive test suite for release validation..."
-        if npm run optimizer:comprehensive; then
+        if pnpm run optimizer:comprehensive; then
           echo "✅ Comprehensive AI-optimized tests completed successfully"
         else
           echo "⚠️ AI-optimized comprehensive tests failed"
@@ -60,7 +60,7 @@ jobs:
       continue-on-error: true
       run: |
         echo "Attempting to generate comprehensive test optimization report..."
-        if npm run optimizer:stats; then
+        if pnpm run optimizer:stats; then
           echo "✅ Release optimization report generated successfully"
         else
           echo "⚠️ Could not generate optimization report"
@@ -69,7 +69,7 @@ jobs:
     - name: Run full test suite
       run: |
         # Start backend server
-        npm start &
+        pnpm start &
         SERVER_PID=$!
         echo $SERVER_PID > app.pid
         echo "Started server with PID: $SERVER_PID for release testing"
@@ -77,7 +77,7 @@ jobs:
         # Wait for server with comprehensive health checks
         echo "Running comprehensive release health checks..."
         for i in {1..30}; do
-          if curl -f http://localhost:3000/api/health; then
+          if curl -f http://localhost:3002/api/health; then
             echo "✅ Server is running and healthy!"
             break
           fi
@@ -86,7 +86,7 @@ jobs:
         done
         
         # Final verification
-        curl -f http://localhost:3000/api/health || exit 1
+        curl -f http://localhost:3002/api/health || exit 1
         
         # Cleanup
         kill $SERVER_PID || true
@@ -100,7 +100,8 @@ jobs:
         mkdir -p release
         cp -r dist release/
         cp package.json release/
-        cp package-lock.json release/
+        cp pnpm-lock.yaml release/
+        cp pnpm-workspace.yaml release/
         cp README.md release/
         cp -r public release/
         
@@ -148,9 +149,9 @@ jobs:
         echo "" >> release_notes.md
         echo "## Installation" >> release_notes.md
         echo '```bash' >> release_notes.md
-        echo 'npm install' >> release_notes.md
-        echo 'npm run build' >> release_notes.md
-        echo 'npm start' >> release_notes.md
+        echo 'pnpm install' >> release_notes.md
+        echo 'pnpm run build' >> release_notes.md
+        echo 'pnpm start' >> release_notes.md
         echo '```' >> release_notes.md
         
     - name: Create GitHub Release

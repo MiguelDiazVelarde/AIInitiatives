@@ -39,7 +39,7 @@ Detailed test optimizer flow diagrams are located in:
 All diagrams highlight the execution of:
 
 ```bash
-npx ts-node src/test-optimizer/index.ts execute
+pnpm exec ts-node src/test-optimizer/index.ts execute
 ```
 
 This is the point where the AI Test Optimizer:
@@ -72,7 +72,7 @@ code --install-extension jebbs.plantuml
 #### From Mermaid
 
 ```bash
-npm install -g @mermaid-js/mermaid-cli
+pnpm add -g @mermaid-js/mermaid-cli
 mmdc -i pr-validation-sequence.md -o output.png
 ```
 

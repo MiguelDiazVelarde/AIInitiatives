@@ -1,7 +1,7 @@
-import express, { Request, Response } from 'express';
+import express, { Request, Response, Router } from 'express';
 import { UserService } from '../services/UserService';
 
-const router = express.Router();
+const router: Router = express.Router();
 
 // Login endpoint
 router.post('/login', async (req: Request, res: Response) => {
