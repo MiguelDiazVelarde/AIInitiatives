@@ -816,7 +816,9 @@ pnpm start               # Run built application (production mode)
 pnpm run clean           # Remove all build artifacts (dist folders)
 ```
 
-> This repository uses pnpm only. The build and dev scripts (`build*`, `dev`, `dev:server`, `dev:client`) call `node` directly on the TypeScript, Vite and concurrently entry points (the backend uses `node --watch` with `ts-node/register`) and use `pnpm` for chaining, so they do not depend on the `.cmd` launchers in `node_modules/.bin`. Other scripts (`cucumber-js`, `playwright`, `ts-node`, `rimraf`, `cross-env`, `nodemon`) still use those launchers.
+> This repository uses pnpm only. The build, dev, test (`test*`, `test:playwright`) and `clean` scripts call `node` directly on the entry points of TypeScript, Vite, concurrently, Cucumber, Playwright, rimraf and start-server-and-test (the backend uses `node --watch` with `ts-node/register`) and use `pnpm` for chaining, so they do not depend on the `.cmd` launchers in `node_modules/.bin`. The `optimizer:*`, `agent:demo` and `*:debug` scripts (`ts-node`, `cross-env`, `nodemon`) still use those launchers.
+>
+> Playwright browsers must be installed once (and again after a Playwright update). Because `pnpm exec playwright` goes through a `.cmd` launcher, run: `node node_modules/@playwright/test/cli.js install chromium`. The tests also need the server running (`pnpm start` or `pnpm run dev`) on <http://localhost:3002>.
 
 #### **Troubleshooting the build (group policy)**
 
