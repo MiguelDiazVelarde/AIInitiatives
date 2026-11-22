@@ -818,7 +818,9 @@ pnpm run clean           # Remove all build artifacts (dist folders)
 
 > This repository uses pnpm only. All scripts that used tool launchers (`build*`, `dev*`, `test*`, `clean`, `optimizer:*`, `agent:demo` and `*:debug`) call `node` directly on the entry points of TypeScript, Vite, concurrently, Cucumber, Playwright, rimraf, start-server-and-test, `ts-node/register` and cross-env (the backend uses `node --watch`) and use `pnpm` for chaining, so they do not depend on the `.cmd` launchers in `node_modules/.bin`. If you add a new script, follow the same pattern (`node node_modules/<package>/<bin-file>`), or it will be blocked by the group policy.
 >
-> Playwright browsers must be installed once (and again after a Playwright update). Because `pnpm exec playwright` goes through a `.cmd` launcher, run: `node node_modules/@playwright/test/cli.js install chromium`. The tests also need the server running (`pnpm start` or `pnpm run dev`) on <http://localhost:3002>.
+> Playwright browsers must be installed once (and again after a Playwright update). Because `pnpm exec playwright` goes through a `.cmd` launcher, run: `node node_modules/@playwright/test/cli.js install chromium`.
+>
+> `pnpm run test` runs Cucumber and does not start the server; by default, it connects to <http://localhost:3002>. To run it against the development app, start `pnpm run dev`, then in a second PowerShell terminal run `$env:TEST_BASE_URL = "http://localhost:5173"` followed by `pnpm run test`. Vite serves the React app on port 5173 and proxies API requests to the backend. Alternatively, build the app with `pnpm run build` and start it with `pnpm start` before running the tests.
 
 #### **Troubleshooting the build (group policy)**
 
